@@ -1,142 +1,279 @@
-<!DOCTYPE html>
+ html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Raptors Play-by-Play</title>
+  <meta name="theme-color" content="#10131c">
+  <title>Raptors Play-by-Play — Replay</title>
   <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-      margin: 0;
-      padding: 16px;
-      background: #f3f4f6;
-      color: #171717;
-    }
-    h1 { margin-top: 4px; }
-    select {
-      width: 100%;
-      padding: 14px;
-      font-size: 16px;
-      border-radius: 10px;
-      border: 1px solid #ccc;
-      background: white;
-    }
-    #status { color: #666; margin: 12px 0; }
-    .play {
-      background: white;
-      padding: 12px;
-      margin: 8px 0;
-      border-radius: 10px;
-      border-left: 4px solid #ce1141;
-    }
-    .time { color: #777; font-size: 13px; }
-    .desc { margin-top: 5px; font-weight: 500; }
-    .score { font-weight: bold; margin-top: 5px; }
+    :root { color-scheme: dark; --red:#ce1141; --ink:#10131c; --panel:#191e2a; --muted:#aab1c0; }
+    * { box-sizing:border-box; }
+    body { margin:0; min-height:100vh; padding:20px; color:#f7f8fb; background:radial-gradient(ellipse at top,#252b3a,var(--ink) 65%); font-family:system-ui,-apple-system,"Segoe UI",sans-serif; }
+    main { max-width:1100px; margin:auto; }
+    h1 { margin:0; font-size:clamp(2rem,5vw,3rem); }
+    .sub { margin:6px 0 20px; color:var(--muted); }
+    .setup,.controls,.timeline { background:var(--panel); border:1px solid #ffffff18; border-radius:16px; padding:16px; }
+    .setup { display:flex; flex-wrap:wrap; gap:12px; align-items:center; }
+    select,button { min-height:46px; border:1px solid #ffffff25; border-radius:10px; padding:10px 14px; color:#fff; background:#10141e; font:inherit; }
+    select { flex:1 1 280px; }
+    button { cursor:pointer; font-weight:700; }
+    button:disabled { opacity:.45; cursor:not-allowed; }
+    .start { flex:1 1 200px; min-height:64px; border:0; background:linear-gradient(120deg,#ce1141,#fa4772); font-size:1.35rem; box-shadow:0 10px 30px #0006; }
+    .jumbo { margin-top:16px; padding:clamp(20px,5vw,54px); min-height:55vh; border:2px solid #ffffff20; border-radius:24px; background:linear-gradient(145deg,#222a3a,#10141e); box-shadow:0 24px 70px #0008; display:flex; flex-direction:column; justify-content:space-between; }
+    .jumbo[hidden],.timeline[hidden],.controls[hidden] { display:none; }
+    .game-meta { display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; color:var(--muted); font-weight:650; }
+    .score { color:white; background:#ffffff12; border:1px solid #ffffff20; border-radius:999px; padding:9px 16px; font-size:1.15rem; }
+    .clock { margin-top:30px; color:#ffb5c6; font-size:clamp(1rem,2vw,1.4rem); font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
+    .play-text { display:flex; align-items:center; min-height:22vh; margin:14px 0 28px; font-size:clamp(2rem,7vw,6.5rem); line-height:1.04; font-weight:850; letter-spacing:-.045em; overflow-wrap:anywhere; }
+    .progress { height:8px; overflow:hidden; background:#ffffff20; border-radius:99px; }
+    .progress > span { display:block; height:100%; width:0; background:var(--red); transition:width .2s ease; }
+    .controls { display:flex; flex-wrap:wrap; gap:9px; align-items:center; margin-top:12px; }
+    .controls label { color:var(--muted); display:flex; align-items:center; gap:8px; }
+    .controls select { flex:0 1 115px; min-height:42px; }
+    .timeline { margin-top:12px; }
+    .timeline h2 { margin:0 0 10px; font-size:1.1rem; }
+    .play-list { max-height:40vh; overflow:auto; display:grid; gap:6px; }
+    .play-row { display:grid; grid-template-columns:100px 1fr; gap:12px; padding:10px; border-radius:8px; color:#e7eaf0; background:#ffffff08; }
+    .play-row.current { outline:2px solid var(--red); background:#ce114122; }
+    .play-time { color:var(--muted); font-size:.85rem; font-weight:700; }
+    .status { min-height:1.4em; margin:12px 2px; color:var(--muted); }
+    .fullscreen .jumbo { min-height:72vh; }
+    @media(max-width:600px) { body{padding:12px}.play-row{grid-template-columns:1fr;gap:4px}.jumbo{min-height:48vh}.play-text{min-height:20vh} }
   </style>
 </head>
 <body>
+<main>
   <h1>Toronto Raptors</h1>
-  <p>Last 5 games · Play-by-play</p>
+  <p class="sub">Choose a game, then start the play-by-play jumbotron replay.</p>
 
-  <select id="games">
-    <option>Loading games...</option>
-  </select>
+  <section class="setup" aria-label="Game selection">
+    <select id="gameSelect" aria-label="Select a game"><option>Loading games…</option></select>
+    <button id="startButton" class="start" disabled>▶ Start Jumbotron</button>
+  </section>
+  <p id="status" class="status" role="status" aria-live="polite">Loading game index…</p>
 
-  <div id="status">Loading data...</div>
-  <div id="plays"></div>
+  <section id="jumbotron" class="jumbo" hidden aria-live="polite">
+    <div class="game-meta"><span id="gameTitle"></span><span id="score" class="score">Score unavailable</span></div>
+    <div>
+      <div id="clock" class="clock">Ready</div>
+      <div id="playText" class="play-text">Select a game and press Start.</div>
+    </div>
+    <div>
+      <div class="game-meta"><span id="counter">0 / 0</span><span id="playState">Paused</span></div>
+      <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+    </div>
+  </section>
 
-  <script>
-    const DATA_URL = "data/index.json";
+  <section id="controls" class="controls" hidden aria-label="Replay controls">
+    <button id="back10" title="Back 10 plays">⏪ RWD 10</button>
+    <button id="back1" title="Previous play">◀ Prev</button>
+    <button id="pauseButton">▶ Play</button>
+    <button id="next1" title="Next play">Next ▶</button>
+    <button id="forward10" title="Forward 10 plays">FWD 10 ⏩</button>
+    <label>Speed
+      <select id="speedSelect" aria-label="Playback speed">
+        <option value="3000">0.5×</option>
+        <option value="1500" selected>1×</option>
+        <option value="750">2×</option>
+        <option value="375">4×</option>
+      </select>
+    </label>
+    <button id="fullscreenButton">⛶ Fullscreen</button>
+  </section>
 
-    async function loadData() {
-      const status = document.getElementById("status");
+  <section id="timeline" class="timeline" hidden>
+    <h2>Play-by-play</h2>
+    <div id="playList" class="play-list"></div>
+  </section>
+</main>
+<script>
+  const INDEX_URL = "data/index.json";
+  const $ = (id) => document.getElementById(id);
+  let games = [];
+  let plays = [];
+  let index = 0;
+  let timer = null;
+  let playing = false;
+  let requestToken = 0;
 
-      try {
-        const response = await fetch(DATA_URL + "?t=" + Date.now());
-        if (!response.ok) throw new Error("Could not load JSON");
+  function textValue(value, fallback = "") {
+    if (value == null) return fallback;
+    if (typeof value === "object") return value.displayValue ?? value.value ?? value.number ?? fallback;
+    return value;
+  }
 
-        const data = await response.json();
-        const games = Array.isArray(data.games) ? data.games : [];
+  function normalizePlay(play, i) {
+    const period = textValue(play.period, textValue(play.quarter, textValue(play.periodNumber, "?")));
+    const clock = textValue(play.clock, textValue(play.gameClock, textValue(play.time, "")));
+    const description = play.text ?? play.description ?? play.desc ?? play.playText ?? play.actionDescription ?? `Play ${i + 1}`;
+    return { raw: play, period, clock, description: String(description) };
+  }
 
-        const selector = document.getElementById("games");
-        selector.innerHTML = "";
+  function getPlays(payload) {
+    // ESPN summary responses place play-by-play entries in the top-level "plays" array.
+    const possible = [payload?.plays, payload?.playByPlay, payload?.play_by_play, payload?.events, payload?.actions];
+    const source = possible.find(Array.isArray);
+    return source ? source.map(normalizePlay) : [];
+  }
 
-        if (!games.length) {
-          status.textContent = "No games found in data/index.json";
-          return;
-        }
+  function safeFileUrl(file) {
+    // Game paths in index.json are repository-relative (e.g. data/raw/espn/ID.json).
+    return new URL(file, document.baseURI).toString();
+  }
 
-        games.forEach((game, i) => {
-          const option = document.createElement("option");
-          option.value = i;
-          option.textContent =
-            game.short_name ||
-            game.name ||
-            game.game_id ||
-            game.gameId ||
-            `Game ${i + 1}`;
-          selector.appendChild(option);
-        });
+  function render() {
+    if (!plays.length) return;
+    index = Math.max(0, Math.min(index, plays.length - 1));
+    const item = plays[index];
+    $("clock").textContent = `QUARTER ${item.period}  ·  ${item.clock || ""}`;
+    $("playText").textContent = item.description;
+    $("counter").textContent = `${index + 1} / ${plays.length} plays`;
+    $("progressBar").style.width = `${((index + 1) / plays.length) * 100}%`;
+    const rows = $("playList").children;
+    for (let i = 0; i < rows.length; i++) rows[i].classList.toggle("current", i === index);
+    rows[index]?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+  }
 
-        selector.onchange = () => showGame(games[selector.value]);
-        await showGame(games[0]);
-      } catch (error) {
-        status.textContent = "Error: " + error.message;
-      }
+  function stop() {
+    clearInterval(timer);
+    timer = null;
+    playing = false;
+    $("playState").textContent = "Paused";
+    $("pauseButton").textContent = "▶ Play";
+  }
+
+  function step(amount) {
+    if (!plays.length) return;
+    stop();
+    index = Math.max(0, Math.min(index + amount, plays.length - 1));
+    render();
+  }
+
+  function tick() {
+    if (index >= plays.length - 1) {
+      stop();
+      return;
     }
+    index++;
+    render();
+  }
 
-    async function showGame(game) {
-      const container = document.getElementById("plays");
-      const status = document.getElementById("status");
-      container.innerHTML = "";
+  function play() {
+    if (!plays.length) return;
+    clearInterval(timer);
+    playing = true;
+    $("playState").textContent = "Playing";
+    $("pauseButton").textContent = "Ⅱ Pause";
+    timer = setInterval(tick, Number($("speedSelect").value));
+  }
 
-      if (!game) {
-        status.textContent = "No game selected.";
-        return;
-      }
+  function renderList() {
+    const list = $("playList");
+    list.replaceChildren();
+    const fragment = document.createDocumentFragment();
+    plays.forEach((item, i) => {
+      const row = document.createElement("div");
+      row.className = "play-row";
+      const time = document.createElement("span");
+      time.className = "play-time";
+      time.textContent = `Q${item.period} · ${item.clock}`;
+      const desc = document.createElement("span");
+      desc.textContent = item.description;
+      row.append(time, desc);
+      row.addEventListener("click", () => step(i - index));
+      fragment.appendChild(row);
+    });
+    list.appendChild(fragment);
+  }
 
-      let plays = game.plays || game.playByPlay || game.play_by_play || game.actions || [];
+  async function loadSelectedGame() {
+    stop();
+    const game = games[Number($("gameSelect").value)];
+    if (!game) return;
+    const thisRequest = ++requestToken;
+    $("startButton").disabled = true;
+    $("status").textContent = "Loading game play-by-play…";
+    $("jumbotron").hidden = true;
+    $("controls").hidden = true;
+    $("timeline").hidden = true;
+    plays = [];
 
-      if ((!plays || !plays.length) && game.file) {
-        try {
-          const playFile = await fetch(game.file + "?t=" + Date.now());
-          if (!playFile.ok) throw new Error("Game file not found");
+    try {
+      if (!game.file) throw new Error("This game entry has no JSON file path.");
+      const response = await fetch(safeFileUrl(game.file) + `?t=${Date.now()}`);
+      if (!response.ok) throw new Error(`Game JSON request failed (${response.status}).`);
+      const payload = await response.json();
+      if (thisRequest !== requestToken) return;
+      plays = getPlays(payload);
+      if (!plays.length) throw new Error("The game JSON loaded, but no play array was found.");
 
-          const gameData = await playFile.json();
-          plays = gameData.plays || gameData.events || gameData.playByPlay || gameData.play_by_play || [];
-        } catch (error) {
-          status.textContent = "Game loaded. No plays found. " + error.message;
-          return;
-        }
-      }
+      index = 0;
+      $("gameTitle").textContent = game.short_name || game.name || game.game_id || "Raptors game";
+      const competitors = game.competitors || [];
+      const scoreText = competitors.map((team) => {
+        const name = team.team?.abbreviation || "Team";
+        const score = team.score?.displayValue ?? team.score?.value;
+        return score == null ? name : `${name} ${score}`;
+      }).join("  ·  ");
+      $("score").textContent = scoreText || "Score unavailable";
+      renderList();
+      render();
+      $("status").textContent = `${plays.length} plays loaded. Press Start Jumbotron to begin.`;
+      $("startButton").disabled = false;
+    } catch (error) {
+      if (thisRequest !== requestToken) return;
+      $("status").textContent = `Could not load plays: ${error.message}`;
+      $("startButton").disabled = true;
+    }
+  }
 
-      status.textContent = plays.length
-        ? `${plays.length} plays`
-        : "Game loaded. No plays found. JSON structure may need adjustment.";
-
-      plays.forEach((play) => {
-        const div = document.createElement("div");
-        div.className = "play";
-
-        const period = play.period || play.quarter || "";
-        const clock = play.clock || play.gameClock || play.time || "";
-        const description =
-          play.description ||
-          play.desc ||
-          play.text ||
-          play.actionDescription ||
-          "Play";
-
-        div.innerHTML = `
-          <div class="time">Q${period} · ${clock}</div>
-          <div class="desc">${description}</div>
-        `;
-
-        container.appendChild(div);
+  async function loadIndex() {
+    try {
+      const response = await fetch(INDEX_URL + `?t=${Date.now()}`);
+      if (!response.ok) throw new Error(`Index request failed (${response.status}).`);
+      const data = await response.json();
+      games = Array.isArray(data.games) ? data.games : [];
+      const select = $("gameSelect");
+      select.replaceChildren();
+      games.forEach((game, i) => {
+        const option = document.createElement("option");
+        option.value = i;
+        option.textContent = game.short_name || game.name || game.game_id || `Game ${i + 1}`;
+        select.appendChild(option);
       });
+      if (!games.length) throw new Error("No games listed in data/index.json.");
+      select.addEventListener("change", loadSelectedGame);
+      await loadSelectedGame();
+    } catch (error) {
+      $("status").textContent = `Could not load games: ${error.message}`;
+      $("gameSelect").innerHTML = "<option>No games available</option>";
     }
+  }
 
-    loadData();
-  </script>
+  $("startButton").addEventListener("click", () => {
+    $("jumbotron").hidden = false;
+    $("controls").hidden = false;
+    $("timeline").hidden = false;
+    index = 0;
+    render();
+    play();
+  });
+  $("pauseButton").addEventListener("click", () => playing ? stop() : play());
+  $("back10").addEventListener("click", () => step(-10));
+  $("back1").addEventListener("click", () => step(-1));
+  $("next1").addEventListener("click", () => step(1));
+  $("forward10").addEventListener("click", () => step(10));
+  $("speedSelect").addEventListener("change", () => { if (playing) play(); });
+  $("fullscreenButton").addEventListener("click", async () => {
+    try {
+      if (!document.fullscreenElement) await $("jumbotron").requestFullscreen();
+      else await document.exitFullscreen();
+    } catch (_) {
+      $("status").textContent = "Fullscreen is unavailable in this browser.";
+    }
+  });
+
+  loadIndex();
+</script>
 </body>
 </html>
