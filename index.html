@@ -6,396 +6,493 @@
   <meta name="theme-color" content="#10131c">
   <title>Raptors Play-by-Play — Replay</title>
   <style>
-    :root { color-scheme:dark; --red:#ce1141; --ink:#10131c; --panel:#191e2a; --muted:#aab1c0; }
-    * { box-sizing:border-box; }
-    body { margin:0; min-height:100vh; padding:20px 20px 150px; color:#f7f8fb; background:radial-gradient(ellipse at top,#252b3a,var(--ink) 65%); font-family:system-ui,-apple-system,"Segoe UI",sans-serif; }
-    main { max-width:1100px; margin:auto; }
-    h1 { margin:0; font-size:clamp(2rem,5vw,3rem); }
-    .sub { margin:6px 0 20px; color:var(--muted); }
-    .setup,.controls { background:var(--panel); border:1px solid #ffffff18; border-radius:16px; padding:16px; }
-    .setup { display:flex; flex-wrap:wrap; gap:12px; align-items:center; }
-    select,button { min-height:44px; border:1px solid #ffffff25; border-radius:10px; padding:9px 13px; color:#fff; background:#10141e; font:inherit; }
-    select { flex:1 1 280px; }
-    button { cursor:pointer; font-weight:700; }
-    button:disabled { opacity:.45; cursor:not-allowed; }
-    .start { flex:1 1 200px; min-height:58px; border:0; background:linear-gradient(120deg,#ce1141,#fa4772); font-size:1.2rem; box-shadow:0 10px 30px #0006; }
-    .controls { display:flex; flex-wrap:wrap; gap:9px; align-items:center; margin-top:12px; }
-    .controls label { color:var(--muted); display:flex; align-items:center; gap:8px; }
-    .controls select { flex:0 1 105px; }
-    .status { min-height:1.4em; margin:12px 2px; color:var(--muted); }
-    .stage { min-height:44vh; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:24px 12px 40px; }
-    .game-date { color:var(--muted); font-weight:650; margin-bottom:22px; }
-    .clock-label { color:#ffb5c6; font-size:1rem; text-transform:uppercase; font-weight:800; letter-spacing:.14em; }
-    .game-clock { margin:2px 0 20px; font-size:clamp(5rem,18vw,12rem); line-height:.95; font-variant-numeric:tabular-nums; font-weight:900; letter-spacing:-.07em; text-shadow:0 8px 40px #0009; }
-    .play-text { max-width:900px; min-height:2.2em; font-size:clamp(1.5rem,4vw,3.2rem); line-height:1.18; font-weight:750; letter-spacing:-.025em; }
-    .play-count { color:var(--muted); margin-top:14px; }
-    .broadcast { position:fixed; z-index:5; left:0; right:0; bottom:0; padding:12px max(12px,env(safe-area-inset-left)) calc(12px + env(safe-area-inset-bottom)); background:linear-gradient(180deg,rgba(10,12,18,.96),#080a0f); border-top:2px solid var(--red); box-shadow:0 -12px 36px #0008; }
-    .broadcast-inner { max-width:1100px; margin:auto; display:grid; grid-template-columns:minmax(125px,1fr) auto minmax(125px,1fr); align-items:stretch; gap:12px; }
-    .team { display:grid; grid-template-columns:42px 1fr auto; align-items:center; gap:10px; min-width:0; padding:8px 12px; border-radius:10px; background:#ffffff0b; }
-    .team.away { grid-template-columns:auto 1fr 42px; }
-    .team-logo { width:38px; height:38px; object-fit:contain; }
-    .team-name { min-width:0; font-weight:800; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .team-score { font-size:clamp(1.6rem,4vw,2.4rem); line-height:1; font-weight:900; font-variant-numeric:tabular-nums; }
-    .team.away .team-name { text-align:right; }
-    .broadcast-center { display:flex; flex-direction:column; justify-content:center; align-items:center; min-width:180px; padding:5px 12px; border-radius:10px; background:#202633; text-align:center; }
-    .broadcast-period { font-size:.78rem; color:#ffb5c6; text-transform:uppercase; font-weight:850; letter-spacing:.1em; }
-    .quarter-row { display:flex; gap:10px; margin-top:5px; font-size:.75rem; font-variant-numeric:tabular-nums; }
-    .quarter-cell { color:var(--muted); min-width:26px; }
-    .quarter-cell.current { color:#fff; font-weight:900; }
-    .quarter-cell b { display:block; font-size:.95rem; color:#fff; }
-    .broadcast-date { max-width:1100px; margin:6px auto 0; color:#818998; font-size:.72rem; text-align:right; }
-    @media(max-width:650px) {
-      body { padding:14px 12px 145px; }
-      .stage { min-height:40vh; padding:12px 4px 28px; }
-      .broadcast-inner { grid-template-columns:1fr auto 1fr; gap:5px; }
-      .team,.team.away { grid-template-columns:1fr auto; gap:4px; padding:8px 6px; }
-      .team-logo { display:none; }
-      .team-name { font-size:.72rem; }
-      .team-score { font-size:1.6rem; }
-      .broadcast-center { min-width:104px; padding:5px 6px; }
-      .quarter-row { gap:5px; font-size:.65rem; }
-      .quarter-cell { min-width:20px; }
-      .quarter-cell b { font-size:.78rem; }
-      .controls { gap:6px; padding:10px; }
-      .controls button { padding:8px 9px; font-size:.83rem; }
+    :root {
+      color-scheme: dark;
+      --red: #ce1141;
+      --ink: #10131c;
+      --panel: #191e2a;
+      --muted: #aab1c0;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 20px 20px 150px;
+      color: #f7f8fb;
+      background: radial-gradient(ellipse at top, #252b3a, var(--ink) 65%);
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 5vw, 3rem);
+    }
+
+    .sub {
+      margin: 6px 0 20px;
+      color: var(--muted);
+    }
+
+    .setup, .controls {
+      background: var(--panel);
+      border: 1px solid #ffffff18;
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .setup {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    select, button {
+      min-height: 44px;
+      border: 1px solid #ffffff25;
+      border-radius: 10px;
+      padding: 9px 13px;
+      color: #fff;
+      background: #10141e;
+      font: inherit;
+    }
+
+    select { flex: 1 1 280px; }
+    button { cursor: pointer; font-weight: 700; }
+    button:disabled { opacity: .45; cursor: not-allowed; }
+
+    .start {
+      flex: 1 1 200px;
+      min-height: 58px;
+      border: 0;
+      background: linear-gradient(120deg, #ce1141, #fa4772);
+      font-size: 1.2rem;
+      box-shadow: 0 10px 30px #0006;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      align-items: center;
+      margin-top: 12px;
+    }
+
+    .controls label {
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .controls select { flex: 0 1 105px; }
+
+    .status {
+      min-height: 1.4em;
+      margin: 12px 2px;
+      color: var(--muted);
+    }
+
+    .stage {
+      min-height: 44vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 24px 12px 40px;
+    }
+
+    .game-date {
+      color: var(--muted);
+      font-weight: 650;
+      margin-bottom: 22px;
+    }
+
+    .clock-label {
+      color: #ffb5c6;
+      font-size: 1rem;
+      text-transform: uppercase;
+      font-weight: 800;
+      letter-spacing: .14em;
+    }
+
+    .game-clock {
+      margin: 2px 0 20px;
+      font-size: clamp(5rem, 18vw, 12rem);
+      line-height: .95;
+      font-variant-numeric: tabular-nums;
+      font-weight: 900;
+      letter-spacing: -.07em;
+      text-shadow: 0 8px 40px #0009;
+    }
+
+    .play-text {
+      max-width: 900px;
+      min-height: 2.2em;
+      font-size: clamp(1.5rem, 4vw, 3.2rem);
+      line-height: 1.18;
+      font-weight: 750;
+      letter-spacing: -.025em;
+    }
+
+    .play-count {
+      color: var(--muted);
+      margin-top: 14px;
+    }
+
+    .broadcast {
+      position: fixed;
+      z-index: 5;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 12px max(12px, env(safe-area-inset-left)) calc(12px + env(safe-area-inset-bottom));
+      background: linear-gradient(180deg, rgba(10,12,18,.96), #080a0f);
+      border-top: 2px solid var(--red);
+      box-shadow: 0 -12px 36px #0008;
+    }
+
+    .broadcast-inner {
+      max-width: 1100px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: minmax(125px, 1fr) auto minmax(125px, 1fr);
+      align-items: stretch;
+      gap: 12px;
+    }
+
+    .team {
+      display: grid;
+      grid-template-columns: 42px 1fr auto;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      padding: 8px 12px;
+      border-radius: 10px;
+      background: #ffffff0b;
+    }
+
+    .team.away {
+      grid-template-columns: auto 1fr 42px;
+    }
+
+    .team-logo {
+      width: 38px;
+      height: 38px;
+      object-fit: contain;
+    }
+
+    .team-name {
+      min-width: 0;
+      font-weight: 800;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .team-score {
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      line-height: 1;
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .team.away .team-name { text-align: right; }
+
+    .broadcast-center {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-width: 180px;
+      padding: 5px 12px;
+      border-radius: 10px;
+      background: #202633;
+      text-align: center;
+    }
+
+    .broadcast-period {
+      font-size: .78rem;
+      color: #ffb5c6;
+      text-transform: uppercase;
+      font-weight: 850;
+      letter-spacing: .1em;
+    }
+
+    .quarter-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 5px;
+      font-size: .75rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .quarter-cell {
+      color: var(--muted);
+      min-width: 26px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .quarter-cell.current {
+      color: #fff;
+      font-weight: 900;
+    }
+
+    .quarter-cell b {
+      display: block;
+      font-size: .95rem;
+      color: #fff;
+    }
+
+    .broadcast-date {
+      max-width: 1100px;
+      margin: 6px auto 0;
+      color: #818998;
+      font-size: .72rem;
+      text-align: right;
+    }
+
+    @media (max-width: 650px) {
+      body { padding: 14px 12px 145px; }
+      .stage { min-height: 40vh; padding: 12px 4px 28px; }
+      .broadcast-inner { grid-template-columns: 1fr auto 1fr; gap: 5px; }
+      .team, .team.away { grid-template-columns: 1fr auto; gap: 4px; padding: 8px 6px; }
+      .team-logo { display: none; }
+      .team-name { font-size: .72rem; }
+      .team-score { font-size: 1.6rem; }
+      .broadcast-center { min-width: 104px; padding: 5px 6px; }
+      .quarter-row { gap: 5px; font-size: .65rem; }
+      .quarter-cell { min-width: 20px; }
+      .quarter-cell b { font-size: .78rem; }
+      .controls { gap: 6px; padding: 10px; }
+      .controls button { padding: 8px 9px; font-size: .83rem; }
     }
   </style>
 </head>
 <body>
-<main>
-  <h1>Toronto Raptors</h1>
-  <p class="sub">Choose a game and replay its play-by-play on the game clock.</p>
+  <main>
+    <h1>Toronto Raptors</h1>
+    <p class="sub">Choose a game and replay its play-by-play on the game clock.</p>
 
-  <section class="setup" aria-label="Game selection">
-    <select id="gameSelect" aria-label="Select a game"><option>Loading games…</option></select>
-    <button id="startButton" class="start" disabled>▶ Start Replay</button>
-  </section>
-  <p id="status" class="status" role="status" aria-live="polite">Loading game index…</p>
+    <section class="setup" aria-label="Game selection">
+      <select id="gameSelect" aria-label="Select a game"><option>Loading games…</option></select>
+      <button id="startButton" class="start" disabled>▶ Start Replay</button>
+    </section>
 
-  <section id="stage" class="stage" hidden aria-live="polite">
-    <div id="gameDate" class="game-date"></div>
-    <div id="clockLabel" class="clock-label">Quarter 1</div>
-    <div id="gameClock" class="game-clock">12:00</div>
-    <div id="playText" class="play-text">Select a game and press Start.</div>
-    <div id="playCount" class="play-count">0 / 0 plays</div>
-  </section>
+    <p id="status" class="status" role="status" aria-live="polite">Loading game index…</p>
 
-  <section id="controls" class="controls" hidden aria-label="Replay controls">
-    <button id="back10" title="Back 10 plays">⏪ RWD 10</button>
-    <button id="back1" title="Previous play">◀ Prev</button>
-    <button id="pauseButton">▶ Play</button>
-    <button id="next1" title="Next play">Next ▶</button>
-    <button id="forward10" title="Forward 10 plays">FWD 10 ⏩</button>
-    <label>Replay speed
-      <select id="speedSelect" aria-label="Replay speed">
-        <option value="0.5">0.5×</option>
-        <option value="1" selected>1×</option>
-        <option value="2">2×</option>
-        <option value="4">4×</option>
-      </select>
-    </label>
-  </section>
-</main>
+    <section id="stage" class="stage" hidden aria-live="polite">
+      <div id="gameDate" class="game-date"></div>
+      <div id="clockLabel" class="clock-label">Quarter 1</div>
+      <div id="gameClock" class="game-clock">12:00</div>
+      <div id="playText" class="play-text">Select a game and press Start.</div>
+      <div id="playCount" class="play-count">0 / 0 plays</div>
+    </section>
 
-<footer id="broadcast" class="broadcast" hidden aria-label="Broadcast scoreboard">
-  <div class="broadcast-inner">
-    <div id="awayTeam" class="team away"></div>
-    <div class="broadcast-center">
-      <div id="broadcastPeriod" class="broadcast-period">Q1</div>
-      <div id="quarterRow" class="quarter-row"></div>
+    <section id="controls" class="controls" hidden aria-label="Replay controls">
+      <button id="back10" title="Back 10 plays">⏪ RWD 10</button>
+      <button id="back1" title="Previous play">◀ Prev</button>
+      <button id="pauseButton">▶ Play</button>
+      <button id="next1" title="Next play">Next ▶</button>
+      <button id="forward10" title="Forward 10 plays">FWD 10 ⏩</button>
+      <label>Replay speed
+        <select id="speedSelect" aria-label="Replay speed">
+          <option value="0.5">0.5×</option>
+          <option value="1" selected>1×</option>
+          <option value="2">2×</option>
+          <option value="4">4×</option>
+        </select>
+      </label>
+    </section>
+  </main>
+
+  <footer id="broadcast" class="broadcast" hidden aria-label="Broadcast scoreboard">
+    <div class="broadcast-inner">
+      <div id="awayTeam" class="team away"></div>
+      <div class="broadcast-center">
+        <div id="broadcastPeriod" class="broadcast-period">Q1</div>
+        <div id="quarterRow" class="quarter-row"></div>
+      </div>
+      <div id="homeTeam" class="team home"></div>
     </div>
-    <div id="homeTeam" class="team home"></div>
-  </div>
-  <div id="broadcastDate" class="broadcast-date"></div>
-</footer>
+    <div id="broadcastDate" class="broadcast-date"></div>
+  </footer>
 
-<script>
-  const INDEX_URL = "data/index.json";
-  const $ = (id) => document.getElementById(id);
+  <script>
+    const INDEX_URL = "data/index.json";
+    const $ = (id) => document.getElementById(id);
 
-  let games = [];
-  let plays = [];
-  let index = 0;
-  let timer = null;
-  let clockTimer = null;
-  let playing = false;
-  let requestToken = 0;
-  let teams = { home: null, away: null };
-  let currentDisplaySeconds = null;
-  const GAME_SECOND_MS = 250;
+    let games = [];
+    let plays = [];
+    let index = 0;
+    let replayTimer = null;
+    let clockTimer = null;
+    let playing = false;
+    let requestToken = 0;
+    let teams = { home: null, away: null };
 
-  function textValue(value, fallback = "") {
-    if (value == null) return fallback;
-    if (typeof value === "object") return value.displayValue ?? value.value ?? value.number ?? fallback;
-    return value;
-  }
-
-  function scoreNumber(value) {
-    if (value == null || value === "") return null;
-    const n = Number(value);
-    return Number.isFinite(n) ? n : null;
-  }
-
-  function clockSeconds(value) {
-    const match = String(textValue(value, "")).match(/(\d+):(\d{1,2})/);
-    if (!match) return null;
-    const mins = Number(match[1]);
-    const secs = Number(match[2]);
-    return mins * 60 + secs;
-  }
-
-  function normalizePlay(play, i) {
-    const period = textValue(play.period?.number, textValue(play.period, textValue(play.quarter, textValue(play.periodNumber, 1))));
-    const clock = textValue(play.clock?.displayValue, textValue(play.clock, textValue(play.gameClock, textValue(play.time, "00:00"))));
-    const description = play.text ?? play.description ?? play.desc ?? play.playText ?? play.actionDescription ?? `Play ${i + 1}`;
-    return {
-      period: String(period),
-      clock: String(clock),
-      seconds: clockSeconds(clock),
-      description: String(description),
-      homeScore: scoreNumber(play.homeScore ?? play.home_score ?? play.score?.home ?? play.score?.homeScore),
-      awayScore: scoreNumber(play.awayScore ?? play.away_score ?? play.score?.away ?? play.score?.awayScore)
-    };
-  }
-
-  function getPlays(payload) {
-    const source = [payload?.plays, payload?.playByPlay, payload?.play_by_play, payload?.events, payload?.actions].find(Array.isArray);
-    return source ? source.map(normalizePlay) : [];
-  }
-
-  function formatDate(value) {
-    if (!value) return "Date unavailable";
-    const d = new Date(value);
-    return Number.isNaN(d.getTime()) ? String(value) : d.toLocaleDateString(undefined, { weekday: "short", month: "long", day: "numeric", year: "numeric" });
-  }
-
-  function periodName(period) {
-    const p = Number(period || 1);
-    if (p > 4) return `OT${p - 4}`;
-    return `Q${p}`;
-  }
-
-  function setTeamMarkup(element, team, side) {
-    if (!element || !team) return;
-    const name = team.team?.abbreviation || team.team?.shortDisplayName || (side === "home" ? "HOME" : "AWAY");
-    const logo = team.team?.logos?.find(item => item.rel?.includes("scoreboard"))?.href || team.team?.logos?.[0]?.href || "";
-
-    element.replaceChildren();
-
-    const score = document.createElement("span");
-    score.className = "team-score";
-    score.textContent = "0";
-
-    const label = document.createElement("span");
-    label.className = "team-name";
-    label.textContent = name;
-
-    element.append(score, label);
-
-    if (logo) {
-      const img = document.createElement("img");
-      img.className = "team-logo";
-      img.src = logo;
-      img.alt = `${name} logo`;
-      element.appendChild(img);
-    }
-  }
-
-  function updateScoreboardFromIndex(baseIndex) {
-    const displayScores = { home: 0, away: 0 };
-    const quarterScores = {};
-
-    for (let i = 0; i <= baseIndex && i < plays.length; i++) {
-      const p = plays[i];
-      if (p.homeScore !== null) displayScores.home = p.homeScore;
-      if (p.awayScore !== null) displayScores.away = p.awayScore;
-      const q = String(p.period || "1");
-      quarterScores[q] = `${displayScores.away} - ${displayScores.home}`;
+    function textValue(value, fallback = "") {
+      if (value == null) return fallback;
+      if (typeof value === "object") {
+        return value.displayValue ?? value.value ?? value.number ?? fallback;
+      }
+      return value;
     }
 
-    const homeEl = $("homeTeam").querySelector(".team-score");
-    const awayEl = $("awayTeam").querySelector(".team-score");
-    if (homeEl) homeEl.textContent = String(displayScores.home);
-    if (awayEl) awayEl.textContent = String(displayScores.away);
-
-    const period = String(plays[baseIndex]?.period || "1");
-    $("broadcastPeriod").textContent = periodName(period);
-    const row = $("quarterRow");
-    row.replaceChildren();
-
-    ["1", "2", "3", "4"].forEach((q) => {
-      const cell = document.createElement("span");
-      cell.className = "quarter-cell" + (q === period ? " current" : "");
-      const tag = document.createElement("span");
-      tag.textContent = `Q${q}`;
-      const val = document.createElement("b");
-      val.textContent = quarterScores[q] || "0 - 0";
-      cell.append(tag, val);
-      row.appendChild(cell);
-    });
-  }
-
-  function renderGameClock(seconds, period) {
-    const total = Math.max(0, Math.ceil(Number(seconds) || 0));
-    const minutes = String(Math.floor(total / 60)).padStart(2, "0");
-    const secs = String(total % 60).padStart(2, "0");
-    $("gameClock").textContent = `${minutes}:${secs}`;
-    $("clockLabel").textContent = periodName(period);
-    currentDisplaySeconds = total;
-  }
-
-  function render() {
-    if (!plays.length) return;
-    index = Math.max(0, Math.min(index, plays.length - 1));
-    const play = plays[index];
-    renderGameClock(play.seconds ?? 0, play.period);
-    $("playText").textContent = play.description;
-    $("playCount").textContent = `${index + 1} / ${plays.length} plays`;
-    updateScoreboardFromIndex(index);
-  }
-
-  function stop() {
-    clearTimeout(timer);
-    clearInterval(clockTimer);
-    timer = null;
-    clockTimer = null;
-    playing = false;
-    $("pauseButton").textContent = "▶ Play";
-  }
-
-  function step(amount) {
-    if (!plays.length) return;
-    stop();
-    index = Math.max(0, Math.min(index + amount, plays.length - 1));
-    render();
-  }
-
-  function animateToNext() {
-    if (!playing || index >= plays.length - 1) {
-      stop();
-      return;
+    function scoreNumber(value) {
+      if (value == null || value === "") return null;
+      const n = Number(value);
+      return Number.isFinite(n) ? n : null;
     }
 
-    const current = plays[index];
-    const next = plays[index + 1];
-    const currentTime = Number(current.seconds ?? 0);
-    const nextTime = Number(next.seconds ?? currentTime + 1);
-
-    const start = currentTime;
-    const end = nextTime;
-    const durationSec = Math.max(0.5, Math.abs(end - start) || 1);
-    const speed = Number($("speedSelect").value) || 1;
-    const delayMs = Math.max(160, durationSec * GAME_SECOND_MS / speed);
-    const started = Date.now();
-
-    clearInterval(clockTimer);
-    clockTimer = setInterval(() => {
-      const elapsed = (Date.now() - started) / 1000;
-      const ratio = Math.min(1, elapsed / (delayMs / 1000));
-      const value = start + (end - start) * ratio;
-      renderGameClock(value, current.period);
-    }, 50);
-
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      index += 1;
-      render();
-      animateToNext();
-    }, delayMs);
-  }
-
-  function play() {
-    if (!plays.length) return;
-    if (index >= plays.length - 1) index = 0;
-    playing = true;
-    $("pauseButton").textContent = "Ⅱ Pause";
-    render();
-    animateToNext();
-  }
-
-  async function loadSelectedGame() {
-    stop();
-    const game = games[Number($("gameSelect").value)];
-    if (!game) return;
-    const token = ++requestToken;
-    $("startButton").disabled = true;
-    $("status").textContent = "Loading game play-by-play…";
-    $("stage").hidden = true;
-    $("controls").hidden = true;
-    $("broadcast").hidden = true;
-    plays = [];
-
-    try {
-      if (!game.file) throw new Error("This game entry has no JSON file path.");
-      const response = await fetch(new URL(game.file, document.baseURI).toString() + `?t=${Date.now()}`);
-      if (!response.ok) throw new Error(`Game JSON request failed (${response.status}).`);
-      const payload = await response.json();
-      if (token !== requestToken) return;
-
-      plays = getPlays(payload);
-      if (!plays.length) throw new Error("No play array was found in the game JSON.");
-
-      teams.home = game.competitors?.find(t => t.homeAway === "home") || game.competitors?.[0] || null;
-      teams.away = game.competitors?.find(t => t.homeAway === "away") || game.competitors?.[1] || null;
-
-      setTeamMarkup($("homeTeam"), teams.home, "home");
-      setTeamMarkup($("awayTeam"), teams.away, "away");
-
-      index = 0;
-      $("gameDate").textContent = formatDate(game.date);
-      $("broadcastDate").textContent = formatDate(game.date);
-      render();
-      $("stage").hidden = false;
-      $("broadcast").hidden = false;
-      $("startButton").disabled = false;
-      $("status").textContent = `${plays.length} plays loaded. Press Start Replay to begin.`;
-    } catch (error) {
-      if (token !== requestToken) return;
-      $("status").textContent = `Could not load plays: ${error.message}`;
+    function parseClock(value) {
+      const str = String(textValue(value, "0:00"));
+      const match = str.match(/(\d+):(\d{1,2})/);
+      if (!match) return 0;
+      const mins = Number(match[1]);
+      const secs = Number(match[2]);
+      return mins * 60 + secs;
     }
-  }
 
-  async function loadIndex() {
-    try {
-      const response = await fetch(INDEX_URL + `?t=${Date.now()}`);
-      if (!response.ok) throw new Error(`Index request failed (${response.status}).`);
-      const data = await response.json();
-      games = Array.isArray(data.games) ? data.games : [];
-      const select = $("gameSelect");
-      select.replaceChildren();
-      games.forEach((game, i) => {
-        const option = document.createElement("option");
-        option.value = i;
-        option.textContent = game.short_name || game.name || game.game_id || `Game ${i + 1}`;
-        select.appendChild(option);
-      });
-      if (!games.length) throw new Error("No games listed in data/index.json.");
-      select.addEventListener("change", loadSelectedGame);
-      await loadSelectedGame();
-    } catch (error) {
-      $("status").textContent = `Could not load games: ${error.message}`;
-      $("gameSelect").innerHTML = "<option>No games available</option>";
+    function normalizePlay(play, i) {
+      const period = textValue(
+        play.period?.number,
+        textValue(play.period, textValue(play.quarter, textValue(play.periodNumber, 1)))
+      );
+      const clock = textValue(
+        play.clock?.displayValue,
+        textValue(play.clock, textValue(play.gameClock, textValue(play.time, "12:00")))
+      );
+      const description =
+        play.text ??
+        play.description ??
+        play.desc ??
+        play.playText ??
+        play.actionDescription ??
+        `Play ${i + 1}`;
+
+      return {
+        period: String(period),
+        clock: String(clock),
+        seconds: parseClock(clock),
+        description: String(description),
+        homeScore: scoreNumber(play.homeScore ?? play.home_score ?? play.score?.home ?? play.score?.homeScore),
+        awayScore: scoreNumber(play.awayScore ?? play.away_score ?? play.score?.away ?? play.score?.awayScore)
+      };
     }
-  }
 
-  $("startButton").addEventListener("click", () => {
-    $("controls").hidden = false;
-    index = 0;
-    render();
-    play();
-  });
-  $("pauseButton").addEventListener("click", () => playing ? stop() : play());
-  $("back10").addEventListener("click", () => step(-10));
-  $("back1").addEventListener("click", () => step(-1));
-  $("next1").addEventListener("click", () => step(1));
-  $("forward10").addEventListener("click", () => step(10));
-  $("speedSelect").addEventListener("change", () => {
-    if (playing) {
-      animateToNext();
+    function getPlays(payload) {
+      const source = [
+        payload?.plays,
+        payload?.playByPlay,
+        payload?.play_by_play,
+        payload?.events,
+        payload?.actions
+      ].find(Array.isArray);
+
+      return source ? source.map(normalizePlay) : [];
     }
-  });
 
-  loadIndex();
-</script>
-</body>
-</html>
+    function formatDate(value) {
+      if (!value) return "Date unavailable";
+      const d = new Date(value);
+      return Number.isNaN(d.getTime())
+        ? String(value)
+        : d.toLocaleDateString(undefined, { weekday: "short", month: "long", day: "numeric", year: "numeric" });
+    }
+
+    function periodName(period) {
+      const p = Number(period || 1);
+      if (p > 4) return `OT${p - 4}`;
+      return `Q${p}`;
+    }
+
+    function setTeamMarkup(element, team, side) {
+      if (!element || !team) return;
+
+      const name = team.team?.abbreviation || team.team?.shortDisplayName || (side === "home" ? "HOME" : "AWAY");
+      const logo = team.team?.logos?.find(item => item.rel?.includes("scoreboard"))?.href || team.team?.logos?.[0]?.href || "";
+
+      element.replaceChildren();
+
+      const score = document.createElement("span");
+      score.className = "team-score";
+      score.textContent = "0";
+
+      const label = document.createElement("span");
+      label.className = "team-name";
+      label.textContent = name;
+
+      element.append(score, label);
+
+      if (logo) {
+        const img = document.createElement("img");
+        img.className = "team-logo";
+        img.src = logo;
+        img.alt = `${name} logo`;
+        element.appendChild(img);
+      }
+    }
+
+    function updateBroadcastScores() {
+      const score = { home: 0, away: 0 };
+      const quarterScores = { "1": "0 - 0", "2": "0 - 0", "3": "0 - 0", "4": "0 - 0" };
+
+      for (let i = 0; i <= index && i < plays.length; i++) {
+        const p = plays[i];
+        if (p.homeScore !== null) score.home = p.homeScore;
+        if (p.awayScore !== null) score.away = p.awayScore;
+        if (p.period) {
+          quarterScores[String(p.period)] = `${score.away} - ${score.home}`;
+        }
+      }
+
+      const homeScoreEl = $(\"homeTeam\").querySelector(\".team-score\");
+      const awayScoreEl = $(\"awayTeam\").querySelector(\".team-score\");
+      if (homeScoreEl) homeScoreEl.textContent = String(score.home);
+      if (awayScoreEl) awayScoreEl.textContent = String(score.away);
+
+      const currentPeriod = String(plays[index]?.period || \"1\");
+      $(\"broadcastPeriod\").textContent = periodName(currentPeriod);
+
+      const row = $(\"quarterRow\");
+      row.replaceChildren();
+
+      [\"1\", \"2\", \"3\", \"4\"].forEach((q) => {
+        const cell = document.createElement(\"span\");\n        cell.className = \"quarter-cell\" + (q === currentPeriod ? \" current\" : \"\");\n\n        const label = document.createElement(\"span\");\n        label.textContent = `Q${q}`;\n\n        const value = document.createElement(\"b\");\n        value.textContent = quarterScores[q] || \"0 - 0\";\n\n        cell.append(label, value);\n        row.appendChild(cell);\n      });
+    }
+
+    function renderClock(seconds, period) {
+      const total = Math.max(0, Math.ceil(Number(seconds) || 0));\n      const mins = String(Math.floor(total / 60)).padStart(2, \"0\");\n      const secs = String(total % 60).padStart(2, \"0\");\n      $(\"gameClock\").textContent = `${mins}:${secs}`;\n      $(\"clockLabel\").textContent = periodName(period);\n    }
+
+    function render() {\n      if (!plays.length) return;\n      index = Math.max(0, Math.min(index, plays.length - 1));\n      const play = plays[index];\n      renderClock(play.seconds ?? 0, play.period);\n      $(\"playText\").textContent = play.description;\n      $(\"playCount\").textContent = `${index + 1} / ${plays.length} plays`;\n      updateBroadcastScores();\n    }
+
+    function stop() {\n      clearTimeout(replayTimer);\n      clearInterval(clockTimer);\n      replayTimer = null;\n      clockTimer = null;\n      playing = false;\n      $(\"pauseButton\").textContent = \"▶ Play\";\n    }
+
+    function step(amount) {\n      if (!plays.length) return;\n      stop();\n      index = Math.max(0, Math.min(index + amount, plays.length - 1));\n      render();\n    }
+
+    function waitBetweenPlays(currentPlay, nextPlay) {\n      const currentSeconds = Number(currentPlay?.seconds ?? 0);\n      const nextSeconds = Number(nextPlay?.seconds ?? currentSeconds + 1);\n      const delta = Math.abs(nextSeconds - currentSeconds) || 1;\n      const speed = Number($(\"speedSelect\").value) || 1;\n      return Math.max(180, delta * 250 / speed);\n    }
+
+    function animateClock(currentPlay, nextPlay) {\n      const start = Number(currentPlay.seconds ?? 0);\n      const end = Number(nextPlay.seconds ?? start + 1);\n      const duration = waitBetweenPlays(currentPlay, nextPlay);\n      const startedAt = Date.now();\n\n      clearInterval(clockTimer);\n      clockTimer = setInterval(() => {\n        const elapsed = (Date.now() - startedAt) / 1000;\n        const ratio = Math.min(1, elapsed / (duration / 1000));\n        const value = start + (end - start) * ratio;\n        renderClock(value, currentPlay.period);\n      }, 50);\n    }
+
+    function scheduleNextPlay() {\n      if (!playing || index >= plays.length - 1) {\n        stop();\n        return;\n      }\n\n      const currentPlay = plays[index];\n      const nextPlay = plays[index + 1];\n      const wait = waitBetweenPlays(currentPlay, nextPlay);\n\n      animateClock(currentPlay, nextPlay);\n\n      clearTimeout(replayTimer);\n      replayTimer = setTimeout(() => {\n        index += 1;\n        render();\n        scheduleNextPlay();\n      }, wait);\n    }
+
+    function play() {\n      if (!plays.length) return;\n      if (index >= plays.length - 1) index = 0;\n      playing = true;\n      $(\"pauseButton\").textContent = \"Ⅱ Pause\";\n      render();\n      scheduleNextPlay();\n    }
+
+    async function loadSelectedGame() {\n      stop();\n      const game = games[Number($(\"gameSelect\").value)];\n      if (!game) return;\n\n      const token = ++requestToken;\n      $(\"startButton\").disabled = true;\n      $(\"status\").textContent = \"Loading game play-by-play…\";\n      $(\"stage\").hidden = true;\n      $(\"controls\").hidden = true;\n      $(\"broadcast\").hidden = true;\n      plays = [];\n\n      try {\n        if (!game.file) throw new Error(\"This game entry has no JSON file path.\");\n\n        const response = await fetch(new URL(game.file, document.baseURI).toString() + `?t=${Date.now()}`);\n        if (!response.ok) throw new Error(`Game JSON request failed (${response.status}).`);\n\n        const payload = await response.json();\n        if (token !== requestToken) return;\n\n        plays = getPlays(payload);\n        if (!plays.length) throw new Error(\"No play array was found in the game JSON.\");\n\n        teams.home = game.competitors?.find(t => t.homeAway === \"home\") || game.competitors?.[0] || null;\n        teams.away = game.competitors?.find(t => t.homeAway === \"away\") || game.competitors?.[1] || null;\n\n        setTeamMarkup($(\"homeTeam\"), teams.home, \"home\");\n        setTeamMarkup($(\"awayTeam\"), teams.away, \"away\");\n\n        index = 0;\n        $(\"gameDate\").textContent = formatDate(game.date);\n        $(\"broadcastDate\").textContent = formatDate(game.date);\n\n        render();\n        $(\"stage\").hidden = false;\n        $(\"broadcast\").hidden = false;\n        $(\"status\").textContent = `${plays.length} plays loaded. Press Start Replay to begin.`;\n        $(\"startButton\").disabled = false;\n      } catch (error) {\n        if (token !== requestToken) return;\n        $(\"status\").textContent = `Could not load plays: ${error.message}`;\n      }\n    }\n\n    async function loadIndex() {\n      try {\n        const response = await fetch(INDEX_URL + `?t=${Date.now()}`);\n        if (!response.ok) throw new Error(`Index request failed (${response.status}).`);\n\n        const data = await response.json();\n        games = Array.isArray(data.games) ? data.games : [];\n\n        const select = $(\"gameSelect\");\n        select.replaceChildren();\n\n        games.forEach((game, i) => {\n          const option = document.createElement(\"option\");\n          option.value = i;\n          option.textContent = game.short_name || game.name || game.game_id || `Game ${i + 1}`;\n          select.appendChild(option);\n        });\n\n        if (!games.length) throw new Error(\"No games listed in data/index.json.\");\n\n        select.addEventListener(\"change\", loadSelectedGame);\n        await loadSelectedGame();\n      } catch (error) {\n        $(\"status\").textContent = `Could not load games: ${error.message}`;\n        $(\"gameSelect\").innerHTML = \"<option>No games available</option>\";\n      }\n    }\n\n    $(\"startButton\").addEventListener(\"click\", () => {\n      $(\"controls\").hidden = false;\n      index = 0;\n      render();\n      play();\n    });\n\n    $(\"pauseButton\").addEventListener(\"click\", () => playing ? stop() : play());\n    $(\"back10\").addEventListener(\"click\", () => step(-10));\n    $(\"back1\").addEventListener(\"click\", () => step(-1));\n    $(\"next1\").addEventListener(\"click\", () => step(1));\n    $(\"forward10\").addEventListener(\"click\", () => step(10));\n\n    $(\"speedSelect\").addEventListener(\"change\", () => {\n      if (playing) {\n        scheduleNextPlay();\n      }\n    });\n\n    loadIndex();\n  </script>\n</body>\n</html>\n```
+
+If you want, I can also give you a second version with:
+- team logos bigger
+- a more ESPN-like bottom bar
+- a darker “live game” look with a red ticker and minimal HUD
