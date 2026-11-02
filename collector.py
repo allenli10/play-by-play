@@ -43,16 +43,12 @@ def get_recent_games():
 
     events = schedule.get("events", [])
     completed = [event for event in events if is_completed(event)]
-    completed.sort(
-        key=lambda event: event.get("date", ""),
-        reverse=True
-    )
+    completed.sort(key=lambda event: event.get("date", ""), reverse=True)
     return completed[:5]
 
 
 def collect_game(event):
     game_id = str(event["id"])
-
     url = f"{BASE_URL}/summary?event={game_id}"
     summary = get_json(url)
     plays = summary.get("plays", [])
@@ -62,20 +58,11 @@ def collect_game(event):
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     output_file = OUTPUT_DIR / f"{game_id}.json"
     with output_file.open("w", encoding="utf-8") as file:
-        json.dump(
-            summary,
-            file,
-            indent=2,
-            ensure_ascii=False
-        )
+        json.dump(summary, file, indent=2, ensure_ascii=False)
 
     competition = event.get("competitions", [{}])[0]
     competitors = competition.get("competitors", [])
-    print(
-        f"Saved {game_id}: "
-        f"{event.get('name', 'Unknown matchup')} "
-        f"({len(plays)} plays)"
-    )
+    print(f"Saved {game_id}: {event.get('name', 'Unknown matchup')} ({len(plays)} plays)")
     return {
         "game_id": game_id,
         "date": event.get("date"),
@@ -86,7 +73,7 @@ def collect_game(event):
         "source": "ESPN",
         "file": str(output_file),
         "competitors": competitors,
-        "collected_at": datetime.now(timezone.utc).isoformat()
+        "collected_at": datetime.now(timezone.utc).isoformat(),
     }
 
 
@@ -109,17 +96,12 @@ def main():
         "team_abbreviation": "TOR",
         "collected_at": datetime.now(timezone.utc).isoformat(),
         "game_count": len(results),
-        "games": results
+        "games": results,
     }
 
     Path("data").mkdir(exist_ok=True)
     with open("data/index.json", "w", encoding="utf-8") as file:
-        json.dump(
-            index,
-            file,
-            indent=2,
-            ensure_ascii=False
-        )
+        json.dump(index, file, indent=2, ensure_ascii=False)
 
     print(f"Collection complete: {len(results)} games saved.")
 
