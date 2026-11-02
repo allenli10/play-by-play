@@ -1,32 +1,36 @@
 name: Raptors Play-by-Play Data
 
 on:
-workflow_dispatch:
-schedule:
-- cron: “0 11 * * *”
+  workflow_dispatch:
+  schedule:
+    - cron: "0 11 * * *"
 
 permissions:
-contents: write
+  contents: write
 
 jobs:
-collect:
-runs-on: ubuntu-latest
+  collect:
+    runs-on: ubuntu-latest
 
-steps:
-  - name: Checkout repository
-    uses: actions/checkout@v4
-  - name: Set up Python
-    uses: actions/setup-python@v5
-    with:
-      python-version: "3.12"
-  - name: Install dependencies
-    run: pip install -r requirements.txt
-  - name: Collect Raptors games
-    run: python collector.py
-  - name: Save collected data
-    run: |
-      git config user.name "github-actions[bot]"
-      git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-      git add data/
-      git diff --cached --quiet || git commit -m "Update Raptors game data"
-      git push
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Collect Raptors games
+        run: python collector.py
+
+      - name: Save collected data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/
+          git diff --cached --quiet || git commit -m "Update Raptors game data"
+          git push
