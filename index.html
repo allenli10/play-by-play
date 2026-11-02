@@ -1,193 +1,142 @@
-
-
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>Raptors Play-by-Play</title>
-
-<style>
-
-body {
-
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-
-  margin: 0;
-
-  padding: 16px;
-
-  background: #f3f4f6;
-
-  color: #171717;
-
-}
-
-h1 { margin-top: 4px; }
-
-select {
-
-  width: 100%;
-
-  padding: 14px;
-
-  font-size: 16px;
-
-  border-radius: 10px;
-
-  border: 1px solid #ccc;
-
-  background: white;
-
-}
-
-#status { color: #666; margin: 12px 0; }
-
-.play {
-
-  background: white;
-
-  padding: 12px;
-
-  margin: 8px 0;
-
-  border-radius: 10px;
-
-  border-left: 4px solid #ce1141;
-
-}
-
-.time { color: #777; font-size: 13px; }
-
-.desc { margin-top: 5px; font-weight: 500; }
-
-.score { font-weight: bold; margin-top: 5px; }
-
-</style>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Raptors Play-by-Play</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      margin: 0;
+      padding: 16px;
+      background: #f3f4f6;
+      color: #171717;
+    }
+    h1 { margin-top: 4px; }
+    select {
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      background: white;
+    }
+    #status { color: #666; margin: 12px 0; }
+    .play {
+      background: white;
+      padding: 12px;
+      margin: 8px 0;
+      border-radius: 10px;
+      border-left: 4px solid #ce1141;
+    }
+    .time { color: #777; font-size: 13px; }
+    .desc { margin-top: 5px; font-weight: 500; }
+    .score { font-weight: bold; margin-top: 5px; }
+  </style>
 </head>
-
 <body>
+  <h1>Toronto Raptors</h1>
+  <p>Last 5 games · Play-by-play</p>
 
-<h1>Toronto Raptors</h1>
+  <select id="games">
+    <option>Loading games...</option>
+  </select>
 
-<p>Last 5 games · Play-by-play</p>
+  <div id="status">Loading data...</div>
+  <div id="plays"></div>
 
-<select id="games">
+  <script>
+    const DATA_URL = "data/index.json";
 
-<option>Loading games...</option>
+    async function loadData() {
+      const status = document.getElementById("status");
 
-</select>
+      try {
+        const response = await fetch(DATA_URL + "?t=" + Date.now());
+        if (!response.ok) throw new Error("Could not load JSON");
 
-<div id="status">Loading data...</div>
+        const data = await response.json();
+        const games = Array.isArray(data.games) ? data.games : [];
 
-<div id="plays"></div>
+        const selector = document.getElementById("games");
+        selector.innerHTML = "";
 
-<script>
+        if (!games.length) {
+          status.textContent = "No games found in data/index.json";
+          return;
+        }
 
-const DATA_URL = "data/index.json";
+        games.forEach((game, i) => {
+          const option = document.createElement("option");
+          option.value = i;
+          option.textContent =
+            game.short_name ||
+            game.name ||
+            game.game_id ||
+            game.gameId ||
+            `Game ${i + 1}`;
+          selector.appendChild(option);
+        });
 
-async function loadData() {
+        selector.onchange = () => showGame(games[selector.value]);
+        await showGame(games[0]);
+      } catch (error) {
+        status.textContent = "Error: " + error.message;
+      }
+    }
 
-  const status = document.getElementById("status");
+    async function showGame(game) {
+      const container = document.getElementById("plays");
+      const status = document.getElementById("status");
+      container.innerHTML = "";
 
-  try {
+      if (!game) {
+        status.textContent = "No game selected.";
+        return;
+      }
 
-    const response = await fetch(DATA_URL + "?t=" + Date.now());
+      let plays = game.plays || game.playByPlay || game.play_by_play || game.actions || [];
 
-    if (!response.ok) throw new Error("Could not load JSON");
+      if ((!plays || !plays.length) && game.file) {
+        try {
+          const playFile = await fetch(game.file + "?t=" + Date.now());
+          if (!playFile.ok) throw new Error("Game file not found");
 
-    const data = await response.json();
+          const gameData = await playFile.json();
+          plays = gameData.plays || gameData.events || gameData.playByPlay || gameData.play_by_play || [];
+        } catch (error) {
+          status.textContent = "Game loaded. No plays found. " + error.message;
+          return;
+        }
+      }
 
-    const games = data.games || data;
+      status.textContent = plays.length
+        ? `${plays.length} plays`
+        : "Game loaded. No plays found. JSON structure may need adjustment.";
 
-    const selector = document.getElementById("games");
+      plays.forEach((play) => {
+        const div = document.createElement("div");
+        div.className = "play";
 
-    selector.innerHTML = "";
+        const period = play.period || play.quarter || "";
+        const clock = play.clock || play.gameClock || play.time || "";
+        const description =
+          play.description ||
+          play.desc ||
+          play.text ||
+          play.actionDescription ||
+          "Play";
 
-    games.forEach((game, i) => {
+        div.innerHTML = `
+          <div class="time">Q${period} · ${clock}</div>
+          <div class="desc">${description}</div>
+        `;
 
-      const option = document.createElement("option");
+        container.appendChild(div);
+      });
+    }
 
-      option.value = i;
-
-      option.textContent =
-
-        game.gameId || game.game_id || game.gameCode || `Game ${i+1}`;
-
-      selector.appendChild(option);
-
-    });
-
-    selector.onchange = () => showGame(games[selector.value]);
-
-    showGame(games[0]);
-
-  } catch (error) {
-
-    status.textContent = "Error: " + error.message;
-
-  }
-
-}
-
-function showGame(game) {
-
-  const container = document.getElementById("plays");
-
-  const status = document.getElementById("status");
-
-  container.innerHTML = "";
-
-  const plays = game.plays || game.playByPlay ||
-
-                game.play_by_play || game.actions || [];
-
-  status.textContent = plays.length
-
-    ? plays.length + " plays"
-
-    : "Game loaded. No plays found. JSON structure may need adjustment.";
-
-  plays.forEach(play => {
-
-    const div = document.createElement("div");
-
-    div.className = "play";
-
-    const period = play.period || play.quarter || "";
-
-    const clock = play.clock || play.gameClock || play.time || "";
-
-    const description = play.description ||
-
-      play.desc || play.actionDescription || play.text || "Play";
-
-    div.innerHTML = `
-
-      <div class="time">Q${period} · ${clock}</div>
-
-      <div class="desc"></div>
-
-    `;
-
-    div.querySelector(".desc").textContent = description;
-
-    container.appendChild(div);
-
-  });
-
-}
-
-loadData();
-
-</script>
-
+    loadData();
+  </script>
 </body>
-
 </html>
