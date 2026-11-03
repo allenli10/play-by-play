@@ -1,290 +1,361 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#101114">
-  <title>Game Finder</title>
-  <style>
-    :root{color-scheme:dark;--bg:#0d0f13;--line:rgba(255,255,255,.1);--text:#f4f5f7;--muted:#a2a7b1;--accent:#ce1141;--panel:#11151d;--glow:rgba(125,151,255,.28);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
-    *{box-sizing:border-box}body{min-height:100vh;margin:0;padding:32px 18px;background:radial-gradient(ellipse at top,rgba(125,151,255,.14),transparent 28%),var(--bg);color:var(--text)}main{width:min(1040px,100%);margin:0 auto}header{display:flex;align-items:flex-end;justify-content:space-between;gap:18px}.page-header{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}.eyebrow{color:var(--muted);font-size:10px;letter-spacing:.16em;text-transform:uppercase}.page-header h1{margin:0;font-size:clamp(1.8rem,5vw,2.4rem);font-weight:700;letter-spacing:-.04em;line-height:1.1}.date-caption{margin:0;color:var(--muted);font-size:11px;letter-spacing:.08em;text-transform:uppercase}.controls{display:flex;align-items:center;gap:8px}button,input{font:inherit}button{cursor:pointer}.icon-button{width:36px;height:36px;display:grid;place-items:center;padding:0;color:var(--text);background:transparent;border:1px solid var(--line);border-radius:10px}.icon-button svg{width:18px;height:18px;stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}.calendar-wrap{position:relative;width:36px;height:36px}.date-input{position:absolute;inset:0;width:36px;height:36px;opacity:0;cursor:pointer}.search-field{width:min(220px,38vw);padding:9px 12px;border:1px solid var(--line);border-radius:10px;background:#11151b;color:var(--text)}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.status{min-height:18px;margin:9px 0 12px;color:var(--muted);font-size:12px}.status.error{color:#ffb4c6}.legend,.game-row{display:grid;grid-template-columns:minmax(0,1fr) 150px minmax(0,1fr);gap:16px;align-items:center}.legend{padding:0 12px 8px;color:var(--muted);font-size:11px;letter-spacing:.08em;text-transform:uppercase}.legend .home{text-align:right}.legend .center{text-align:center}.game-row{align-items:center;width:100%;min-height:64px;padding:14px 12px;color:var(--text);text-align:left;background:transparent;border:1px solid transparent;border-bottom:1px solid var(--line);border-radius:12px;transition:background .15s ease,border-color .15s ease,box-shadow .15s ease,transform .15s ease}.game-row:hover{background:rgba(255,255,255,.02)}.game-row:active{transform:translateY(1px)}.game-row.is-selected{background:rgba(255,255,255,.02);border-color:rgba(255,255,255,.12);box-shadow:0 0 0 1px rgba(255,255,255,.04),0 0 22px var(--glow)}.team{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.team.away{text-align:left}.team.home{text-align:right}.game-date{justify-self:center;color:var(--muted);font-size:12px;font-weight:600;text-align:center}.game-date strong{display:block;color:var(--text);font-size:14px}.message{padding:14px 12px;color:var(--muted)}
-    .broadcast-shell{margin-top:18px;padding:0;border:1px solid #ffffff18;border-radius:24px;background:linear-gradient(145deg,#222a3a,#10141e);box-shadow:0 24px 70px rgba(0,0,0,.45)}
-    .broadcast-shell[hidden]{display:none}.jumbo{padding:clamp(20px,4vw,54px);min-height:52vh}.game-meta{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;color:var(--muted);font-weight:650}.score{color:white;background:#ffffff12;border:1px solid #ffffff20;border-radius:999px;padding:9px 16px;font-size:1.15rem}.clock{margin-top:30px;color:#ffb5c6;font-size:clamp(1rem,2vw,1.4rem);font-weight:800;letter-spacing:.08em;text-transform:uppercase}.play-text{display:flex;align-items:center;min-height:22vh;margin:14px 0 28px;font-size:clamp(2rem,7vw,6.5rem);line-height:1.04;font-weight:850;letter-spacing:-.045em;overflow-wrap:anywhere}.progress{height:8px;overflow:hidden;background:#ffffff20;border-radius:99px}.progress > span{display:block;height:100%;width:0;background:var(--accent);transition:width .2s ease}.controls-row{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin-top:12px}.controls-row label{color:var(--muted);display:flex;align-items:center;gap:8px}.controls-row select{flex:0 1 115px;min-height:42px;border:1px solid #ffffff25;border-radius:10px;padding:10px 14px;color:#fff;background:#10141e;font:inherit}.button-row{display:flex;flex-wrap:wrap;gap:9px}.button-row button{min-height:46px;border:1px solid #ffffff25;border-radius:10px;padding:10px 14px;color:#fff;background:#10141e;font:inherit}.button-row .start{flex:1 1 200px;min-height:64px;border:0;background:linear-gradient(120deg,#ce1141,#fa4772);font-size:1.35rem;box-shadow:0 10px 30px #0006}.timeline{margin-top:12px}.timeline h2{margin:0 0 10px;font-size:1.1rem}.play-list{max-height:40vh;overflow:auto;display:grid;gap:6px}.play-row{display:grid;grid-template-columns:100px 1fr;gap:12px;padding:10px;border-radius:8px;color:#e7eaf0;background:#ffffff08}.play-row.current{outline:2px solid var(--accent);background:#ce114122}.play-time{color:var(--muted);font-size:.85rem;font-weight:700}.status-line{min-height:1.4em;margin:12px 2px;color:var(--muted)}
-    @media(max-width:560px){body{padding:24px 14px}.header{align-items:center;flex-wrap:wrap}.legend,.game-row{grid-template-columns:minmax(0,1fr) 112px minmax(0,1fr);gap:10px}.search-field{width:150px}.play-row{grid-template-columns:1fr;gap:4px}.jumbo{min-height:48vh}.play-text{min-height:20vh}}@media(max-width:420px){.team{font-size:13px}.legend,.game-row{grid-template-columns:minmax(0,1fr) 88px minmax(0,1fr);gap:7px}.search-field{width:125px}}
-  </style>
-</head>
-<body>
-  <main>
-    <header>
-      <div class="page-header">
-        <div class="eyebrow">Game Finder</div>
-        <h1 id="selectedDateTitle">Game Finder</h1>
-        <p id="selectedDateMeta" class="date-caption">Loading…</p>
-      </div>
-      <div class="controls">
-        <div class="calendar-wrap">
-          <button class="icon-button" id="calendarButton" type="button" aria-label="Choose date"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg></button>
-          <input class="date-input" id="dayPicker" type="date" aria-label="Choose a game date">
-        </div>
-        <button class="icon-button" id="searchToggle" type="button" aria-label="Search games" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="5.5"/><path d="m15 15 5 5"/></svg></button>
-        <label class="sr-only" for="gameSearch">Search games</label><input id="gameSearch" class="search-field" type="search" placeholder="Search games" autocomplete="off" hidden>
-      </div>
-    </header>
-    <div id="status" class="status" role="status" aria-live="polite">Loading schedule…</div>
-    <div class="legend" aria-hidden="true"><span class="away">Away</span><span class="center">Date</span><span class="home">Home</span></div>
-    <section id="gameList" class="list" aria-label="NBA schedule" aria-live="polite"><div class="message">Loading schedule…</div></section>
-
-    <section id="broadcastPanel" class="broadcast-shell" hidden>
-      <div class="jumbo" aria-live="polite">
-        <div class="game-meta"><span id="gameTitle">Game</span><span id="score" class="score">Score unavailable</span></div>
-        <div>
-          <div id="clock" class="clock">Ready</div>
-          <div id="playText" class="play-text">Select a game and press Start.</div>
-        </div>
-        <div>
-          <div class="game-meta"><span id="counter">0 / 0</span><span id="playState">Paused</span></div>
-          <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
-        </div>
-      </div>
-
-      <div class="button-row" style="padding:16px;">
-        <button id="startButton" class="start">▶ Start Jumbotron</button>
-      </div>
-
-      <div class="controls-row" style="padding:0 16px 16px;">
-        <button id="back10" title="Back 10 plays">⏪ RWD 10</button>
-        <button id="back1" title="Previous play">◀ Prev</button>
-        <button id="pauseButton">▶ Play</button>
-        <button id="next1" title="Next play">Next ▶</button>
-        <button id="forward10" title="Forward 10 plays">FWD 10 ⏩</button>
-        <label>Speed
-          <select id="speedSelect" aria-label="Playback speed">
-            <option value="3000">0.5×</option>
-            <option value="1500" selected>1×</option>
-            <option value="750">2×</option>
-            <option value="375">4×</option>
-          </select>
-        </label>
-        <button id="fullscreenButton">⛶ Fullscreen</button>
-      </div>
-
-      <div class="timeline" style="padding:0 16px 16px;">
-        <h2>Play-by-play</h2>
-        <div id="playList" class="play-list"></div>
-      </div>
-    </section>
-  </main>
-
-  <script>
-    const ESPN_URL="https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard";
-    const INDEX_URL="data/index.json";
-    const $=id=>document.getElementById(id);
-    const list=$("gameList"),status=$("status"),search=$("gameSearch"),searchToggle=$("searchToggle"),dayPicker=$("dayPicker"),title=$("selectedDateTitle"),dateMeta=$("selectedDateMeta");
-    let games=[],localGames=new Map(),selectedDate="",selectedId="",scheduleRequest=0;
-    let plays=[], index=0, timer=null, playing=false, requestToken=0, selectedGame=null;
-
-    function dateKey(value){if(!value)return"";const d=new Date(value);return Number.isNaN(d.getTime())?"":d.toISOString().slice(0,10)}
-    function dateLabel(value,options){const d=new Date(`${value}T12:00:00Z`);return Number.isNaN(d.getTime())?"Select a date":new Intl.DateTimeFormat(undefined,{...options,timeZone:"UTC"}).format(d)}
-    function titleDate(value){dateMeta.textContent=value?dateLabel(value,{month:"long",day:"numeric",year:"numeric"}):"No games"}
-    function teamName(game,side){const c=(game.competitors||[]).find(x=>String(x.homeAway).toLowerCase()===side);return c?.team?.shortDisplayName||c?.team?.displayName||c?.team?.abbreviation||(side==="home"?"Home":"Away")}
-    function setStatus(message,error=false){status.textContent=message;status.classList.toggle("error",error)}
-    function chooseDefaultDate(){const today=new Date().toISOString().slice(0,10);const dates=[...new Set(games.map(g=>dateKey(g.date)).filter(Boolean))].sort();return dates.includes(today)?today:dates.filter(d=>d<=today).at(-1)||dates[0]||""}
-
-    function render(){
-      const query=search.value.trim().toLowerCase();
-      const matches=games.filter(g=>dateKey(g.date)===selectedDate&&(!query||`${g.name} ${g.shortName} ${teamName(g,"away")} ${teamName(g,"home")}`.toLowerCase().includes(query)));
-      list.replaceChildren();
-      if(!matches.length){const empty=document.createElement("div");empty.className="message";empty.textContent="No games scheduled for this date.";list.append(empty);return}
-      matches.forEach(game=>{
-        const row=document.createElement("button");row.type="button";row.className="game-row";row.setAttribute("aria-pressed",String(game.id===selectedId));row.classList.toggle("is-selected",game.id===selectedId);
-        const away=document.createElement("span");away.className="team away";away.textContent=teamName(game,"away");
-        const date=document.createElement("span");date.className="game-date";const strong=document.createElement("strong");strong.textContent=dateLabel(dateKey(game.date),{month:"short",day:"numeric"});date.append(strong,document.createElement("br"));date.append(document.createTextNode(game.shortName||"Game"));
-        const home=document.createElement("span");home.className="team home";home.textContent=teamName(game,"home");row.append(away,date,home);
-        row.addEventListener("click",()=>selectGame(game));
-        list.append(row);
-      });
-    }
-
-    function selectGame(game){
-      selectedId=game.id;
-      selectedGame=game;
-      if(!localGames.has(game.id)){
-        setStatus("Game data not found for this matchup.",true);
-        $("broadcastPanel").hidden=true;
-      }else{
-        setStatus("Game data is available. Press Start Jumbotron to load the replay UI.");
-        showGamePreview(game);
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#101114" />
+    <title>Raptors Play-by-Play</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --background: #101114;
+        --surface: #1b1c20;
+        --surface-raised: #24252a;
+        --line: rgba(255, 255, 255, 0.12);
+        --text: #f5f5f6;
+        --muted: #a4a5aa;
+        --raptors: #ce1141;
+        --away: #4b78d1;
+        --progress: 0%;
       }
+      * { box-sizing: border-box; }
+      html, body { min-height: 100%; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        padding: clamp(16px, 4vw, 48px);
+        display: grid;
+        place-items: center;
+        background: #08090b;
+        color: var(--text);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+      .player { width: min(1440px, 100%); }
+      .game-heading {
+        display: grid;
+        gap: 5px;
+        width: 100%;
+        margin: 0 0 16px;
+        padding: 0;
+        color: inherit;
+        text-align: left;
+        background: none;
+        border: 0;
+        cursor: pointer;
+      }
+      .game-heading:hover .game-title { color: #fff; }
+      .game-heading:focus-visible { outline: 2px solid #fff; outline-offset: 6px; border-radius: 2px; }
+      .game-title {
+        margin: 0;
+        font-size: clamp(20px, 3vw, 28px);
+        font-weight: 650;
+        letter-spacing: -0.04em;
+      }
+      .game-details { margin: 0; color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
+      .broadcast {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        min-height: 300px;
+        overflow: hidden;
+        background: var(--background);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+      }
+      .broadcast-screen { position: absolute; inset: 0; background: #101114; }
+      .scorebug {
+        position: absolute;
+        left: clamp(18px, 4vw, 56px);
+        bottom: clamp(18px, 4vw, 52px);
+        display: grid;
+        grid-template-columns: minmax(155px, 1fr) minmax(155px, 1fr) auto;
+        align-items: stretch;
+        max-width: calc(100% - 36px);
+        min-height: 82px;
+        overflow: hidden;
+        background: rgba(25, 26, 30, 0.97);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        box-shadow: 0 12px 36px rgba(0, 0, 0, 0.28);
+      }
+      .team { display: grid; grid-template-columns: 4px minmax(0, 1fr) auto; align-items: center; gap: 14px; min-width: 0; padding: 14px 18px 14px 0; }
+      .team + .team { border-left: 1px solid var(--line); }
+      .team-accent { align-self: stretch; background: var(--raptors); }
+      .team.away .team-accent { background: var(--away); }
+      .team-info { min-width: 0; }
+      .team-label { overflow: hidden; color: var(--muted); font-size: 10px; font-weight: 700; letter-spacing: 0.12em; line-height: 1.2; text-overflow: ellipsis; text-transform: uppercase; white-space: nowrap; }
+      .team-name { margin-top: 5px; overflow: hidden; font-size: 15px; font-weight: 650; letter-spacing: -0.02em; text-overflow: ellipsis; white-space: nowrap; }
+      .score { padding-left: 6px; font-size: 30px; font-variant-numeric: tabular-nums; font-weight: 750; letter-spacing: -0.06em; line-height: 1; }
+      .game-state { display: grid; grid-template-columns: auto auto; align-items: center; gap: 14px; padding: 12px 18px; background: var(--surface-raised); border-left: 1px solid var(--line); }
+      .period, .clock { display: grid; gap: 4px; text-align: center; }
+      .clock { min-width: 65px; }
+      .period-label, .clock-label { color: var(--muted); font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+      .period-value { font-size: 16px; font-weight: 700; white-space: nowrap; }
+      .clock-value { font-size: 22px; font-variant-numeric: tabular-nums; font-weight: 750; letter-spacing: -0.04em; line-height: 1; }
+      .broadcast-label { position: absolute; top: 20px; right: 22px; color: rgba(255, 255, 255, 0.36); font-size: 10px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; }
+
+      .game-dialog {
+        width: min(440px, calc(100% - 32px));
+        max-height: min(620px, calc(100% - 32px));
+        padding: 0;
+        color: var(--text);
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        box-shadow: 0 24px 80px rgba(0, 0, 0, .55);
+      }
+      .game-dialog::backdrop { background: rgba(0, 0, 0, .68); backdrop-filter: blur(3px); }
+      .dialog-content { padding: 22px; }
+      .dialog-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
+      .dialog-title { margin: 0; font-size: 18px; font-weight: 650; letter-spacing: -0.03em; }
+      .dialog-close { display: grid; width: 32px; height: 32px; place-items: center; color: var(--muted); background: transparent; border: 1px solid var(--line); border-radius: 50%; font-size: 19px; cursor: pointer; }
+      .dialog-close:hover { color: var(--text); background: var(--surface-raised); }
+      .game-search { width: 100%; padding: 11px 12px; color: var(--text); background: #111215; border: 1px solid var(--line); border-radius: 7px; font: inherit; font-size: 14px; }
+      .game-search:focus-visible, .dialog-close:focus-visible, .game-option:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+      .list-heading { display: flex; justify-content: space-between; gap: 12px; margin: 20px 0 8px; color: var(--muted); font-size: 11px; font-weight: 650; letter-spacing: .08em; text-transform: uppercase; }
+      .sample-label { color: #74757b; font-size: 10px; font-weight: 500; letter-spacing: .04em; }
+      .game-list { display: grid; gap: 2px; max-height: 330px; overflow-y: auto; }
+      .game-option { display: flex; align-items: center; justify-content: space-between; gap: 16px; width: 100%; padding: 12px 10px; color: var(--text); text-align: left; background: transparent; border: 0; border-radius: 6px; cursor: pointer; }
+      .game-option:hover, .game-option[aria-current="true"] { background: var(--surface-raised); }
+      .game-matchup { font-size: 13px; font-weight: 550; }
+      .game-time { flex: 0 0 auto; color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+      .no-games { padding: 18px 10px; color: var(--muted); font-size: 13px; }
+      .controls { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 18px; padding: 16px 4px 0; }
+      .transport { display: flex; align-items: center; gap: 9px; }
+      .control-button { display: inline-grid; width: 38px; height: 38px; place-items: center; padding: 0; color: var(--text); background: transparent; border: 1px solid var(--line); border-radius: 50%; cursor: pointer; transition: background 140ms ease, border-color 140ms ease, transform 140ms ease; }
+      .control-button:hover { background: var(--surface); border-color: rgba(255,255,255,.28); }
+      .control-button:active { transform: scale(.96); }
+      .control-button:focus-visible, .timeline:focus-visible, .speed-select:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+      .control-button.primary { width: 44px; height: 44px; color: #fff; background: var(--raptors); border-color: var(--raptors); }
+      .control-button.primary:hover { background: #e0194c; }
+      .control-button svg { width: 16px; height: 16px; fill: currentColor; }
+      .control-button.primary svg { width: 18px; height: 18px; }
+      .pause-icon { display: none; }
+      .is-playing .play-icon { display: none; }
+      .is-playing .pause-icon { display: block; }
+      .timeline-wrap { display: grid; grid-template-columns: 42px minmax(0, 1fr) 42px; align-items: center; gap: 12px; min-width: 0; }
+      .timeline-time { color: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+      .timeline-time:last-child { text-align: right; }
+      .timeline { width: 100%; height: 16px; margin: 0; appearance: none; background: transparent; cursor: pointer; }
+      .timeline::-webkit-slider-runnable-track { height: 3px; border-radius: 99px; background: linear-gradient(to right, var(--raptors) 0 var(--progress), rgba(255,255,255,.2) var(--progress) 100%); }
+      .timeline::-moz-range-track { height: 3px; border-radius: 99px; background: rgba(255,255,255,.2); }
+      .timeline::-moz-range-progress { height: 3px; border-radius: 99px; background: var(--raptors); }
+      .timeline::-webkit-slider-thumb { width: 12px; height: 12px; margin-top: -4.5px; appearance: none; border: 0; border-radius: 50%; background: var(--text); }
+      .timeline::-moz-range-thumb { width: 12px; height: 12px; border: 0; border-radius: 50%; background: var(--text); }
+      .speed-select { min-width: 58px; padding: 8px 22px 8px 9px; color: var(--text); background: transparent; border: 1px solid var(--line); border-radius: 6px; font: inherit; font-size: 12px; cursor: pointer; }
+      .speed-select option { color: var(--text); background: var(--surface); }
+      .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+      @media (max-width: 620px) {
+        body { padding: 0; place-items: stretch; }
+        .player { width: 100%; min-height: 100svh; display: flex; flex-direction: column; justify-content: center; }
+        .game-heading { margin: 0; padding: 16px; }
+        .broadcast { width: 100%; min-height: 58svh; aspect-ratio: auto; border: 0; border-radius: 0; }
+        .scorebug { right: 14px; bottom: 20px; left: 14px; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; max-width: none; min-height: 72px; }
+        .team { gap: 9px; padding-right: 10px; }
+        .team-label { font-size: 8px; }
+        .team-name { font-size: 12px; }
+        .score { font-size: 25px; }
+        .game-state { gap: 9px; padding: 10px; }
+        .period-value { font-size: 13px; }
+        .clock { min-width: 51px; }
+        .clock-value { font-size: 19px; }
+        .broadcast-label { top: 16px; right: 16px; }
+        .controls { grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; padding: 18px 14px 0; }
+        .transport { gap: 6px; }
+        .control-button { width: 34px; height: 34px; }
+        .control-button.primary { width: 40px; height: 40px; }
+        .timeline-wrap { grid-template-columns: 36px minmax(0, 1fr) 36px; gap: 7px; }
+        .dialog-content { padding: 18px; }
+      }
+      @media (max-width: 390px) {
+        .team { gap: 7px; }
+        .team-name { font-size: 11px; }
+        .game-state { gap: 7px; padding: 8px; }
+        .period-label, .clock-label { font-size: 8px; }
+        .clock { min-width: 46px; }
+        .controls { gap: 7px; }
+        .control-button { width: 31px; height: 31px; }
+        .control-button.primary { width: 38px; height: 38px; }
+        .timeline-wrap { grid-template-columns: 32px minmax(0, 1fr) 32px; gap: 5px; }
+        .timeline-time { font-size: 10px; }
+        .speed-select { min-width: 52px; padding-left: 6px; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="player">
+      <button class="game-heading" id="openGameDialog" type="button" aria-haspopup="dialog" aria-label="Choose a game. Raptors at Timberwolves, November 2, 2026, tip-off 7:30 PM ET">
+        <span class="game-title" id="gameTitle">Raptors at Timberwolves</span>
+        <span class="game-details"><time id="gameDate" datetime="2026-11-02">November 2, 2026</time> · Tip-off <span id="gameTipoff">7:30 PM ET</span></span>
+      </button>
+      <dialog class="game-dialog" id="gameDialog" aria-labelledby="dialogTitle">
+        <div class="dialog-content">
+          <div class="dialog-header">
+            <h2 class="dialog-title" id="dialogTitle">Choose a game</h2>
+            <button class="dialog-close" id="closeGameDialog" type="button" aria-label="Close game search">×</button>
+          </div>
+          <label class="sr-only" for="gameSearch">Search games or teams</label>
+          <input class="game-search" id="gameSearch" type="search" placeholder="Search games or teams" autocomplete="off" />
+          <div class="list-heading"><span id="lastNightLabel">Last night</span><span class="sample-label">Sample games</span></div>
+          <div class="game-list" id="gameList" role="listbox" aria-label="Games played last night"></div>
+        </div>
+      </dialog>
+      <section class="broadcast" aria-label="Basketball broadcast">
+        <div class="broadcast-screen" aria-hidden="true"></div>
+        <div class="broadcast-label">NBA · Broadcast</div>
+        <section class="scorebug" aria-label="Game score">
+          <div class="team home"><span class="team-accent" aria-hidden="true"></span><div class="team-info"><div class="team-label" id="homeCity">Toronto</div><div class="team-name" id="homeTeam">Raptors</div></div><div class="score" id="homeScore">0</div></div>
+          <div class="team away"><span class="team-accent" aria-hidden="true"></span><div class="team-info"><div class="team-label" id="awayCity">Minnesota</div><div class="team-name" id="awayTeam">Timberwolves</div></div><div class="score" id="awayScore">0</div></div>
+          <div class="game-state">
+            <div class="period"><span class="period-label">Period</span><span class="period-value" id="period">1st</span></div>
+            <div class="clock"><span class="clock-label">Game clock</span><span class="clock-value" id="gameClock" aria-live="off">12:00</span></div>
+          </div>
+        </section>
+      </section>
+
+      <div class="controls" role="group" aria-label="Playback controls">
+        <div class="transport">
+          <button class="control-button" id="restartButton" type="button" aria-label="Restart game" title="Restart game"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5V1L6 7l6 6V9a7 7 0 1 1-6.32 4H3.52A9 9 0 1 0 12 5Z"/></svg></button>
+          <button class="control-button primary" id="playButton" type="button" aria-label="Start playback" title="Start playback"><svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><svg class="pause-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg></button>
+          <button class="control-button" id="stepButton" type="button" aria-label="Advance 10 seconds" title="Advance 10 seconds"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5v14l10-7zm11 0v14l9-7z"/></svg></button>
+        </div>
+        <div class="timeline-wrap"><span class="timeline-time" id="elapsedTime">0:00</span><label class="sr-only" for="timeline">Seek through game</label><input class="timeline" id="timeline" type="range" min="0" max="2880" step="1" value="0" aria-valuetext="0 minutes elapsed" /><span class="timeline-time">48:00</span></div>
+        <label class="sr-only" for="speedSelect">Playback speed</label>
+        <select class="speed-select" id="speedSelect" aria-label="Playback speed"><option value="1">1×</option><option value="2">2×</option><option value="4">4×</option><option value="8">8×</option></select>
+        <span class="sr-only" id="playbackStatus" aria-live="polite">Paused</span>
+      </div>
+    </main>
+
+    <script>
+      const QUARTER_SECONDS = 12 * 60;
+      const GAME_SECONDS = QUARTER_SECONDS * 4;
+      const clockEl = document.getElementById('gameClock');
+      const periodEl = document.getElementById('period');
+      const playButton = document.getElementById('playButton');
+      const restartButton = document.getElementById('restartButton');
+      const stepButton = document.getElementById('stepButton');
+      const timeline = document.getElementById('timeline');
+      const elapsedEl = document.getElementById('elapsedTime');
+      const speedSelect = document.getElementById('speedSelect');
+      const playbackStatus = document.getElementById('playbackStatus');
+      const gameDialog = document.getElementById('gameDialog');
+      const gameSearch = document.getElementById('gameSearch');
+      const gameList = document.getElementById('gameList');
+      const lastNight = new Date();
+      lastNight.setDate(lastNight.getDate() - 1);
+      const dateLabel = new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).format(lastNight);
+      const dateISO = [lastNight.getFullYear(), String(lastNight.getMonth() + 1).padStart(2, '0'), String(lastNight.getDate()).padStart(2, '0')].join('-');
+      document.getElementById('lastNightLabel').textContent = `Last night · ${dateLabel}`;
+      document.getElementById('gameDate').dateTime = dateISO;
+      document.getElementById('gameDate').textContent = dateLabel;
+
+      // Placeholder matchups for the wireframe; connect these to game data later.
+      const games = [
+        { awayCity: 'Toronto', away: 'Raptors', homeCity: 'Minnesota', home: 'Timberwolves', time: '7:30 PM ET' },
+        { awayCity: 'Boston', away: 'Celtics', homeCity: 'New York', home: 'Knicks', time: '7:00 PM ET' },
+        { awayCity: 'Los Angeles', away: 'Lakers', homeCity: 'Phoenix', home: 'Suns', time: '10:00 PM ET' }
+      ];
+      let selectedGame = games[0];
+      function renderGames(query = '') {
+        const normalizedQuery = query.trim().toLowerCase();
+        const matches = games.filter(game => `${game.awayCity} ${game.away} at ${game.homeCity} ${game.home}`.toLowerCase().includes(normalizedQuery));
+        gameList.replaceChildren();
+        if (!matches.length) {
+          const empty = document.createElement('div');
+          empty.className = 'no-games';
+          empty.textContent = 'No games found.';
+          gameList.append(empty);
+          return;
+        }
+        matches.forEach(game => {
+          const option = document.createElement('button');
+          option.type = 'button';
+          option.className = 'game-option';
+          option.setAttribute('role', 'option');
+          option.setAttribute('aria-current', String(game === selectedGame));
+          const matchup = document.createElement('span');
+          matchup.className = 'game-matchup';
+          matchup.textContent = `${game.away} at ${game.home}`;
+          const time = document.createElement('span');
+          time.className = 'game-time';
+          time.textContent = game.time;
+          option.append(matchup, time);
+          option.addEventListener('click', () => selectGame(game));
+          gameList.append(option);
+        });
+      }
+      function selectGame(game) {
+        selectedGame = game;
+        document.getElementById('gameTitle').textContent = `${game.away} at ${game.home}`;
+        document.getElementById('gameTipoff').textContent = game.time;
+        document.getElementById('openGameDialog').setAttribute('aria-label', `Choose a game. ${game.away} at ${game.home}, ${dateLabel}, tip-off ${game.time}`);
+        document.getElementById('homeCity').textContent = game.homeCity;
+        document.getElementById('homeTeam').textContent = game.home;
+        document.getElementById('awayCity').textContent = game.awayCity;
+        document.getElementById('awayTeam').textContent = game.away;
+        document.getElementById('homeScore').textContent = '0';
+        document.getElementById('awayScore').textContent = '0';
+        gameDialog.close();
+      }
+      document.getElementById('openGameDialog').addEventListener('click', () => {
+        renderGames(gameSearch.value);
+        gameDialog.showModal();
+        gameSearch.focus();
+      });
+      document.getElementById('closeGameDialog').addEventListener('click', () => gameDialog.close());
+      gameSearch.addEventListener('input', () => renderGames(gameSearch.value));
+      gameDialog.addEventListener('click', event => {
+        if (event.target === gameDialog) gameDialog.close();
+      });
+      renderGames();
+
+      let elapsed = 0;
+      let isPlaying = false;
+      let lastTick = 0;
+      let timerId = null;
+      function formatClock(seconds) {
+        const wholeSeconds = Math.max(0, Math.ceil(seconds));
+        return `${Math.floor(wholeSeconds / 60)}:${String(wholeSeconds % 60).padStart(2, '0')}`;
+      }
+      function ordinalPeriod(period) { return ['1st', '2nd', '3rd', '4th'][period] || '4th'; }
+      function render() {
+        elapsed = Math.min(GAME_SECONDS, Math.max(0, elapsed));
+        const finished = elapsed >= GAME_SECONDS;
+        const periodIndex = finished ? 3 : Math.floor(elapsed / QUARTER_SECONDS);
+        const secondsIntoPeriod = finished ? QUARTER_SECONDS : elapsed % QUARTER_SECONDS;
+        const remaining = finished ? 0 : QUARTER_SECONDS - secondsIntoPeriod;
+        const seekPosition = Math.floor(elapsed);
+        clockEl.textContent = formatClock(remaining);
+        periodEl.textContent = ordinalPeriod(periodIndex);
+        timeline.value = String(seekPosition);
+        elapsedEl.textContent = formatClock(seekPosition);
+        timeline.style.setProperty('--progress', `${(elapsed / GAME_SECONDS) * 100}%`);
+        timeline.setAttribute('aria-valuetext', `${Math.floor(elapsed / 60)} minutes ${Math.floor(elapsed % 60)} seconds elapsed`);
+        if (finished) { setPlaying(false); playbackStatus.textContent = 'Game ended'; }
+      }
+      function setPlaying(playing) {
+        isPlaying = playing && elapsed < GAME_SECONDS;
+        playButton.classList.toggle('is-playing', isPlaying);
+        playButton.setAttribute('aria-label', isPlaying ? 'Pause playback' : 'Start playback');
+        playButton.title = isPlaying ? 'Pause playback' : 'Start playback';
+        playbackStatus.textContent = isPlaying ? 'Playing' : 'Paused';
+        if (timerId !== null) { window.clearInterval(timerId); timerId = null; }
+        if (isPlaying) {
+          lastTick = performance.now();
+          timerId = window.setInterval(() => {
+            const now = performance.now();
+            elapsed += ((now - lastTick) / 1000) * Number(speedSelect.value);
+            lastTick = now;
+            render();
+          }, 100);
+        }
+      }
+      playButton.addEventListener('click', () => setPlaying(!isPlaying));
+      restartButton.addEventListener('click', () => { setPlaying(false); elapsed = 0; render(); });
+      stepButton.addEventListener('click', () => { setPlaying(false); elapsed = Math.min(GAME_SECONDS, elapsed + 10); render(); });
+      timeline.addEventListener('input', () => { elapsed = Number(timeline.value); render(); });
+      speedSelect.addEventListener('change', () => { if (isPlaying) lastTick = performance.now(); });
       render();
-    }
-
-    function setDate(value){selectedDate=value;dayPicker.value=value;titleDate(value);selectedId="";render()}
-
-    searchToggle.addEventListener("click",()=>{const show=search.hidden;search.hidden=!show;searchToggle.setAttribute("aria-expanded",String(show));if(show)search.focus();else{search.value="";render()}});
-    search.addEventListener("input",render);
-    dayPicker.addEventListener("change",()=>{const date=dayPicker.value;if(!date)return;setDate(date);loadSchedule(date)});
-    $("calendarButton").addEventListener("click",()=>{if(dayPicker.showPicker)dayPicker.showPicker();else dayPicker.click()});
-
-    async function loadLocalIndex(){try{const r=await fetch(`${INDEX_URL}?t=${Date.now()}`);if(!r.ok)return;const data=await r.json();for(const game of Array.isArray(data.games)?data.games:[]){const id=String(game.game_id||game.id||"");if(id)localGames.set(id,game)}}catch(_){/* Local data is checked on selection; schedule remains ESPN sourced. */}}
-    async function loadSchedule(date=""){
-      const thisRequest=++scheduleRequest;
-      if(date){setStatus(`Loading games for ${dateLabel(date,{month:"long",day:"numeric",year:"numeric"})}…`)}
-      try{
-        if(!date)await loadLocalIndex();
-        const url=new URL(ESPN_URL);
-        if(date)url.searchParams.set("dates",date.replaceAll("-",""));
-        url.searchParams.set("t",String(Date.now()));
-        const response=await fetch(url);
-        if(!response.ok)throw new Error(`ESPN request failed (${response.status}).`);
-        const data=await response.json();
-        if(thisRequest!==scheduleRequest)return;
-        const events=Array.isArray(data.events)?data.events:[];
-        games=events.map(event=>{const competition=(event.competitions||[])[0]||{};return{id:String(event.id||competition.id||""),name:event.name||"",shortName:event.shortName||"",date:event.date||competition.date||"",competitors:competition.competitors||[]}}).filter(g=>g.id&&g.date).sort((a,b)=>b.date.localeCompare(a.date));
-        if(!date){if(!games.length)throw new Error("ESPN returned no scheduled games.");setDate(chooseDefaultDate())}
-        else render();
-        setStatus("Schedule from ESPN. Select a game to check for play-by-play data.");
-      }catch(error){
-        if(thisRequest!==scheduleRequest)return;
-        games=[];render();setStatus(`Could not load ESPN schedule: ${error.message}. Check your connection and try again.`,true);
-      }
-    }
-
-    function textValue(value, fallback = "") {
-      if (value == null) return fallback;
-      if (typeof value === "object") return value.displayValue ?? value.value ?? value.number ?? fallback;
-      return value;
-    }
-
-    function normalizePlay(play, i) {
-      const period = textValue(play.period, textValue(play.quarter, textValue(play.periodNumber, "?")));
-      const clock = textValue(play.clock, textValue(play.gameClock, textValue(play.time, "")));
-      const description = play.text ?? play.description ?? play.desc ?? play.playText ?? play.actionDescription ?? `Play ${i + 1}`;
-      return { raw: play, period, clock, description: String(description) };
-    }
-
-    function getPlays(payload) {
-      const possible = [payload?.plays, payload?.playByPlay, payload?.play_by_play, payload?.events, payload?.actions];
-      const source = possible.find(Array.isArray);
-      return source ? source.map(normalizePlay) : [];
-    }
-
-    function safeFileUrl(file) {
-      return new URL(file, document.baseURI).toString();
-    }
-
-    function renderBroadcast() {
-      if (!plays.length) return;
-      index = Math.max(0, Math.min(index, plays.length - 1));
-      const item = plays[index];
-      $("clock").textContent = `QUARTER ${item.period}  ·  ${item.clock || ""}`;
-      $("playText").textContent = item.description;
-      $("counter").textContent = `${index + 1} / ${plays.length} plays`;
-      $("progressBar").style.width = `${((index + 1) / plays.length) * 100}%`;
-      const rows = $("playList").children;
-      for (let i = 0; i < rows.length; i++) rows[i].classList.toggle("current", i === index);
-      rows[index]?.scrollIntoView({ block: "nearest", behavior: "smooth" });
-    }
-
-    function stop() {
-      clearInterval(timer); timer=null; playing=false; $("playState").textContent="Paused"; $("pauseButton").textContent="▶ Play";
-    }
-
-    function step(amount) {
-      if (!plays.length) return;
-      stop();
-      index = Math.max(0, Math.min(index + amount, plays.length - 1));
-      renderBroadcast();
-    }
-
-    function tick() {
-      if (index >= plays.length - 1) { stop(); return; }
-      index++; renderBroadcast();
-    }
-
-    function play() {
-      if (!plays.length) return;
-      clearInterval(timer); playing=true; $("playState").textContent="Playing"; $("pauseButton").textContent="Ⅱ Pause"; timer=setInterval(tick, Number($("speedSelect").value));
-    }
-
-    function renderList() {
-      const listEl = $("playList"); listEl.replaceChildren();
-      const fragment = document.createDocumentFragment();
-      plays.forEach((item, i) => {
-        const row = document.createElement("div"); row.className = "play-row";
-        const time = document.createElement("span"); time.className = "play-time"; time.textContent = `Q${item.period} · ${item.clock}`;
-        const desc = document.createElement("span"); desc.textContent = item.description;
-        row.append(time, desc);
-        row.addEventListener("click", () => step(i - index));
-        fragment.appendChild(row);
-      });
-      listEl.appendChild(fragment);
-    }
-
-    function showGamePreview(game) {
-      const titleText = game?.short_name || game?.name || game?.game_id || "NBA game";
-      $("gameTitle").textContent = titleText;
-      const competitors = game?.competitors || [];
-      const scoreText = competitors.map((team) => {
-        const name = team.team?.abbreviation || "Team";
-        const score = team.score?.displayValue ?? team.score?.value;
-        return score == null ? name : `${name} ${score}`;
-      }).join("  ·  ");
-      $("score").textContent = scoreText || "Score unavailable";
-      $("clock").textContent = "Game ready";
-      $("playText").textContent = "Press Start to load play-by-play.";
-      $("counter").textContent = "0 / 0 plays";
-      $("progressBar").style.width = "0%";
-      $("broadcastPanel").hidden = false;
-      $("playState").textContent = "Paused";
-      $("pauseButton").textContent = "▶ Play";
-      $("playList").replaceChildren();
-    }
-
-    async function loadSelectedGameData() {
-      if (!selectedGame) return;
-      const thisRequest = ++requestToken;
-      $("startButton").disabled = true;
-      setStatus("Loading game play-by-play…");
-      stop();
-      try {
-        if (!selectedGame.file) throw new Error("This game entry has no JSON file path.");
-        const response = await fetch(safeFileUrl(selectedGame.file) + `?t=${Date.now()}`);
-        if (!response.ok) throw new Error(`Game JSON request failed (${response.status}).`);
-        const payload = await response.json();
-        if (thisRequest !== requestToken) return;
-        plays = getPlays(payload);
-        if (!plays.length) throw new Error("The game JSON loaded, but no play array was found.");
-        index = 0; renderList(); renderBroadcast();
-        $("status").textContent = `${plays.length} plays loaded. Press Start Jumbotron to begin.`;
-        $("startButton").disabled = false;
-      } catch (error) {
-        if (thisRequest !== requestToken) return;
-        $("status").textContent = `Could not load plays: ${error.message}`;
-        $("startButton").disabled = false;
-      }
-    }
-
-    $("startButton").addEventListener("click", async () => {
-      if (!selectedGame) return;
-      $("broadcastPanel").hidden = false;
-      await loadSelectedGameData();
-      if (!plays.length) return;
-      index = 0; renderBroadcast(); play();
-    });
-    $("pauseButton").addEventListener("click", () => playing ? stop() : play());
-    $("back10").addEventListener("click", () => step(-10));
-    $("back1").addEventListener("click", () => step(-1));
-    $("next1").addEventListener("click", () => step(1));
-    $("forward10").addEventListener("click", () => step(10));
-    $("speedSelect").addEventListener("change", () => { if (playing) play(); });
-    $("fullscreenButton").addEventListener("click", async () => {
-      try {
-        if (!document.fullscreenElement) await $("broadcastPanel").requestFullscreen();
-        else await document.exitFullscreen();
-      } catch (_) { $("status").textContent = "Fullscreen is unavailable in this browser."; }
-    });
-
-    loadSchedule();
-  </script>
-</body>
+    </script>
+  </body>
 </html>
