@@ -62,6 +62,30 @@
         border-radius: 12px;
       }
       .broadcast-screen { position: absolute; inset: 0; background: #101114; }
+      .broadcast-callout {
+        position: absolute;
+        left: clamp(18px, 4vw, 56px);
+        top: clamp(18px, 4vw, 52px);
+        right: clamp(18px, 4vw, 56px);
+        max-width: min(900px, calc(100% - 140px));
+        padding: 12px 18px;
+        border: 1px solid rgba(255,255,255,0.12);
+        border-radius: 12px;
+        background: rgba(21, 22, 26, 0.78);
+        color: var(--text);
+        font-size: clamp(18px, 2vw, 30px);
+        font-weight: 700;
+        line-height: 1.2;
+        letter-spacing: -0.03em;
+        opacity: 0;
+        transform: translateY(-8px);
+        transition: opacity 180ms ease, transform 180ms ease;
+        pointer-events: none;
+      }
+      .broadcast-callout.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
       .scorebug {
         position: absolute;
         left: clamp(18px, 4vw, 56px);
@@ -263,6 +287,9 @@
         .player { width: 100%; min-height: 100svh; display: flex; flex-direction: column; justify-content: center; }
         .game-heading { align-items: flex-start; flex-direction: column; gap: 4px; margin: 0; padding: 16px; }
         .broadcast { width: 100%; min-height: 58svh; aspect-ratio: auto; border: 0; border-radius: 0; }
+        .broadcast-callout {
+          left: 14px; right: 14px; top: 16px; max-width: none; padding: 10px 12px; font-size: 16px;
+        }
         .scorebug {
           right: 14px;
           bottom: 20px;
@@ -309,17 +336,18 @@
       </header>
       <section class="broadcast" aria-label="Basketball broadcast">
         <div class="broadcast-screen" aria-hidden="true"></div>
+        <div id="broadcastText" class="broadcast-callout" aria-live="polite">Game on</div>
         <div class="broadcast-label">NBA · Broadcast</div>
         <section class="scorebug" aria-label="Game score">
           <div class="team home">
             <span class="team-accent" aria-hidden="true"></span>
             <div class="team-info"><div class="team-label">Los Angeles</div><div class="team-name">Lakers</div></div>
-            <div class="score">0</div>
+            <div class="score" id="homeScore">0</div>
           </div>
           <div class="team away">
             <span class="team-accent" aria-hidden="true"></span>
             <div class="team-info"><div class="team-label">Toronto</div><div class="team-name">Raptors</div></div>
-            <div class="score">0</div>
+            <div class="score" id="awayScore">0</div>
           </div>
           <div class="game-state">
             <div class="period"><span class="period-label">Period</span><span class="period-value" id="period">1st</span></div>
@@ -360,7 +388,12 @@
 
     <script>
       const QUARTER_SECONDS = 12 * 60;
+      const OVERTIME_SECONDS = 5 * 60;
       const GAME_SECONDS = QUARTER_SECONDS * 4;
+      const EVENT_MATCH_TOLERANCE = 0.45;
+      const EVENT_DISPLAY_MS = 2600;
+      const BAD_EVENTS = [];
+
       const clockEl = document.getElementById('gameClock');
       const periodEl = document.getElementById('period');
       const playButton = document.getElementById('playButton');
@@ -370,11 +403,19 @@
       const elapsedEl = document.getElementById('elapsedTime');
       const speedSelect = document.getElementById('speedSelect');
       const playbackStatus = document.getElementById('playbackStatus');
+      const broadcastTextEl = document.getElementById('broadcastText');
+      const homeScoreEl = document.getElementById('homeScore');
+      const awayScoreEl = document.getElementById('awayScore');
 
       let elapsed = 0;
       let isPlaying = false;
       let lastTick = 0;
       let timerId = null;
+      let playList = [];
+      let currentEventSequence = [];
+      let eventQueueTimer = null;
+      let hasLoadedGame = false;
+      let resumePlaybackAfterQueue = false;
 
       function formatClock(seconds) {
         const wholeSeconds = Math.max(0, Math.ceil(seconds));
@@ -382,7 +423,277 @@
       }
 
       function ordinalPeriod(period) {
+        if (period >= 5) return `${period}th`;
         return ['1st', '2nd', '3rd', '4th'][period] || '4th';
+      }
+
+      function parseNumber(value) {
+        if (value === null || value === undefined) return null;
+        if (typeof value === 'number' && Number.isFinite(value)) return value;
+        if (typeof value === 'string') {
+          const trimmed = value.trim();
+          if (!trimmed) return null;
+          const normalized = trimmed.replace(/[^0-9.-]/g, '');
+          if (!normalized) return null;
+          const parsed = Number(normalized);
+          return Number.isFinite(parsed) ? parsed : null;
+        }
+        if (typeof value === 'object') {
+          return parseNumber(value.value ?? value.displayValue ?? value.amount ?? value.score ?? value.number);
+        }
+        return null;
+      }
+
+      function normalizeText(value, fallback = 'Play') {
+        if (value === null || value === undefined || value === '') return fallback;
+        if (typeof value === 'string') return value.trim() || fallback;
+        if (typeof value === 'object') {
+          const pick = value.text ?? value.description ?? value.displayValue ?? value.shortText ?? value.value;
+          return normalizeText(pick, fallback);
+        }
+        return String(value);
+      }
+
+      function parseClockToSeconds(rawClock) {
+        if (rawClock === null || rawClock === undefined || rawClock === '') return 0;
+        if (typeof rawClock === 'number') return rawClock;
+        if (typeof rawClock === 'string') {
+          const text = rawClock.trim();
+          if (!text) return 0;
+          const match = text.match(/(\d+):(\d{1,2})/);
+          if (match) {
+            return Number(match[1]) * 60 + Number(match[2]);
+          }
+          const plain = Number(text.replace(/[^0-9.]/g, ''));
+          if (Number.isFinite(plain)) return plain;
+        }
+        if (typeof rawClock === 'object') {
+          return parseClockToSeconds(rawClock.value ?? rawClock.displayValue ?? rawClock.text ?? rawClock.clock);
+        }
+        return 0;
+      }
+
+      function parsePeriodValue(rawPeriod) {
+        if (rawPeriod === null || rawPeriod === undefined) return 1;
+        if (typeof rawPeriod === 'number') return rawPeriod;
+        if (typeof rawPeriod === 'string') {
+          const clean = rawPeriod.trim().toLowerCase();
+          if (clean.includes('ot')) {
+            const number = Number(clean.replace(/[^0-9]/g, '')) || 1;
+            return 4 + number;
+          }
+          const match = clean.match(/(\d+)/);
+          if (match) return Number(match[1]);
+          if (clean === '1st') return 1;
+          if (clean === '2nd') return 2;
+          if (clean === '3rd') return 3;
+          if (clean === '4th') return 4;
+        }
+        if (typeof rawPeriod === 'object') {
+          return parsePeriodValue(rawPeriod.value ?? rawPeriod.displayValue ?? rawPeriod.number ?? rawPeriod.label);
+        }
+        return 1;
+      }
+
+      function getEventScore(play) {
+        if (!play || typeof play !== 'object') {
+          return { home: 0, away: 0 };
+        }
+
+        const homeValue = parseNumber(
+          play.homeScore ??
+          play.home_score ??
+          play.home?.score ??
+          play.home?.value ??
+          play.score?.home ??
+          play.scoreValue?.home ??
+          play.teamScores?.home ??
+          play.scoreboard?.home ??
+          play.points?.home
+        );
+
+        const awayValue = parseNumber(
+          play.awayScore ??
+          play.away_score ??
+          play.away?.score ??
+          play.away?.value ??
+          play.score?.away ??
+          play.scoreValue?.away ??
+          play.teamScores?.away ??
+          play.scoreboard?.away ??
+          play.points?.away
+        );
+
+        if (homeValue !== null || awayValue !== null) {
+          return {
+            home: homeValue ?? 0,
+            away: awayValue ?? 0,
+          };
+        }
+
+        const summary = normalizeText(play.summary ?? play.text ?? play.description ?? play.detail ?? '', '');
+        const scoreMatch = summary.match(/(\d+)\s*-\s*(\d+)/);
+        if (scoreMatch) {
+          return {
+            home: Number(scoreMatch[1]),
+            away: Number(scoreMatch[2]),
+          };
+        }
+
+        return { home: 0, away: 0 };
+      }
+
+      function normalizePlay(rawPlay, index) {
+        const play = rawPlay || {};
+        const period = parsePeriodValue(play.period ?? play.quarter ?? play.periodNumber ?? play.periodValue ?? play.periodName ?? play.displayPeriod);
+        const remainingClock = parseClockToSeconds(play.clock ?? play.gameClock ?? play.clockText ?? play.time ?? play.displayClock ?? play.remainingTime ?? play.game_clock);
+        const periodStartSeconds = (period - 1) * QUARTER_SECONDS + (period > 4 ? (period - 4) * OVERTIME_SECONDS : 0);
+        const absoluteSeconds = periodStartSeconds + (QUARTER_SECONDS - remainingClock);
+
+        const text = normalizeText(play.text ?? play.description ?? play.desc ?? play.playText ?? play.summary ?? play.detail ?? play.message ?? `Play ${index + 1}`);
+        const score = getEventScore(play);
+
+        return {
+          index,
+          original: play,
+          period,
+          clock: remainingClock,
+          text,
+          absoluteSeconds,
+          score,
+        };
+      }
+
+      function setBroadcastText(message) {
+        if (!message) {
+          broadcastTextEl.classList.remove('visible');
+          broadcastTextEl.textContent = 'Game on';
+          return;
+        }
+
+        broadcastTextEl.textContent = message;
+        broadcastTextEl.classList.add('visible');
+      }
+
+      function updateScoreHomeAway(score) {
+        const homeValue = Number.isFinite(score.home) ? score.home : 0;
+        const awayValue = Number.isFinite(score.away) ? score.away : 0;
+        homeScoreEl.textContent = String(homeValue);
+        awayScoreEl.textContent = String(awayValue);
+      }
+
+      function getScoreAtTime(targetSeconds) {
+        let currentScore = { home: 0, away: 0 };
+        if (!playList.length) return currentScore;
+
+        for (const play of playList) {
+          if (play.absoluteSeconds <= targetSeconds + EVENT_MATCH_TOLERANCE) {
+            currentScore = play.score;
+          }
+        }
+
+        return currentScore;
+      }
+
+      function applyScoreToCurrentTime() {
+        const currentScore = getScoreAtTime(elapsed);
+        updateScoreHomeAway(currentScore);
+      }
+
+      function clearEventQueue() {
+        if (eventQueueTimer !== null) {
+          window.clearTimeout(eventQueueTimer);
+          eventQueueTimer = null;
+        }
+        currentEventSequence = [];
+      }
+
+      function showEventSequence(events) {
+        if (!events || !events.length) return;
+
+        clearEventQueue();
+        currentEventSequence = [...events];
+        resumePlaybackAfterQueue = isPlaying;
+
+        if (resumePlaybackAfterQueue) {
+          setPlaying(false);
+        }
+
+        const nextEvent = currentEventSequence.shift();
+        if (nextEvent) {
+          setBroadcastText(nextEvent.text);
+          updateScoreHomeAway(nextEvent.score);
+        }
+
+        if (currentEventSequence.length) {
+          eventQueueTimer = window.setTimeout(() => {
+            const event = currentEventSequence.shift();
+            if (event) {
+              setBroadcastText(event.text);
+              updateScoreHomeAway(event.score);
+            }
+            if (currentEventSequence.length) {
+              eventQueueTimer = window.setTimeout(() => {
+                const lateEvent = currentEventSequence.shift();
+                if (lateEvent) {
+                  setBroadcastText(lateEvent.text);
+                  updateScoreHomeAway(lateEvent.score);
+                }
+                if (currentEventSequence.length) {
+                  do { /* keep processing sequentially */ }
+                  while (false);
+                }
+                finaliseEventSequence();
+              }, EVENT_DISPLAY_MS);
+            } else {
+              finaliseEventSequence();
+            }
+          }, EVENT_DISPLAY_MS);
+        } else {
+          finaliseEventSequence();
+        }
+      }
+
+      function finaliseEventSequence() {
+        currentEventSequence = [];
+        eventQueueTimer = null;
+        const resume = resumePlaybackAfterQueue;
+        resumePlaybackAfterQueue = false;
+        if (resume) {
+          setPlaying(true);
+        }
+      }
+
+      function triggerEventDisplayAtCurrentTime() {
+        const tolerance = EVENT_MATCH_TOLERANCE;
+        const activeEvents = playList.filter((play) => {
+          return Math.abs(play.absoluteSeconds - elapsed) <= tolerance;
+        });
+
+        if (!activeEvents.length) return;
+
+        const unique = activeEvents.filter((play, i, arr) => arr.findIndex((entry) => entry.text === play.text && entry.absoluteSeconds === play.absoluteSeconds) === i);
+        if (!unique.length) return;
+
+        showEventSequence(unique);
+      }
+
+      function handleTimeSeek(value) {
+        clearEventQueue();
+        elapsed = Number(value);
+        applyScoreToCurrentTime();
+
+        const matchedEvent = playList.find((play) => {
+          return Math.abs(play.absoluteSeconds - elapsed) <= EVENT_MATCH_TOLERANCE;
+        });
+
+        if (matchedEvent) {
+          setBroadcastText(matchedEvent.text);
+        } else {
+          setBroadcastText('');
+        }
+
+        render();
       }
 
       function render() {
@@ -422,31 +733,77 @@
             const now = performance.now();
             elapsed += ((now - lastTick) / 1000) * Number(speedSelect.value);
             lastTick = now;
+            triggerEventDisplayAtCurrentTime();
+            applyScoreToCurrentTime();
             render();
           }, 100);
         }
       }
 
+      function loadPlayData() {
+        fetch('data/raw/espn/401909906.json?t=' + Date.now())
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error('Unable to load game data');
+            }
+            return response.json();
+          })
+          .then((payload) => {
+            const rawPlays = Array.isArray(payload.plays) ? payload.plays : [];
+            const normalized = rawPlays.map((entry, index) => {
+              try {
+                return normalizePlay(entry, index);
+              } catch (error) {
+                BAD_EVENTS.push({ index, error: String(error), entry });
+                console.warn('Bad play event', { index, entry, error });
+                return null;
+              }
+            }).filter(Boolean);
+
+            if (!normalized.length) {
+              console.warn('No valid plays found in payload');
+              setBroadcastText('No plays available');
+              return;
+            }
+
+            playList = normalized.sort((a, b) => a.absoluteSeconds - b.absoluteSeconds);
+            hasLoadedGame = true;
+            applyScoreToCurrentTime();
+            render();
+          })
+          .catch((error) => {
+            console.error(error);
+            setBroadcastText('Game data unavailable');
+          });
+      }
+
       playButton.addEventListener('click', () => setPlaying(!isPlaying));
       restartButton.addEventListener('click', () => {
+        clearEventQueue();
         setPlaying(false);
         elapsed = 0;
+        setBroadcastText('');
+        applyScoreToCurrentTime();
         render();
       });
       stepButton.addEventListener('click', () => {
+        clearEventQueue();
         setPlaying(false);
         elapsed = Math.min(GAME_SECONDS, elapsed + 10);
+        applyScoreToCurrentTime();
         render();
       });
       timeline.addEventListener('input', () => {
-        elapsed = Number(timeline.value);
-        render();
+        if (hasLoadedGame) {
+          handleTimeSeek(Number(timeline.value));
+        }
       });
       speedSelect.addEventListener('change', () => {
         if (isPlaying) lastTick = performance.now();
       });
 
       render();
+      loadPlayData();
     </script>
   </body>
 </html>
