@@ -6,7 +6,7 @@ from pathlib import Path
 import requests
 
 BASE_URL = "https://site.api.espn.com/apis/site/v2/sports/basketball/nba"
-TEAM = "tor"
+TEAM = None
 OUTPUT_DIR = Path("data/raw/espn")
 
 SESSION = requests.Session()
@@ -37,14 +37,14 @@ def is_completed(event):
     return status.get("type", {}).get("completed", False)
 
 
-def get_recent_games():
-    url = f"{BASE_URL}/teams/{TEAM}/schedule"
-    schedule = get_json(url)
+def get_recent_games(limit=10):
+    url = f"{BASE_URL}/scoreboard"
+    scoreboard = get_json(url)
 
-    events = schedule.get("events", [])
+    events = scoreboard.get("events", [])
     completed = [event for event in events if is_completed(event)]
     completed.sort(key=lambda event: event.get("date", ""), reverse=True)
-    return completed[:5]
+    return completed[:limit]
 
 
 def collect_game(event):
@@ -78,13 +78,11 @@ def collect_game(event):
 
 
 def main():
-    print("Starting Raptors data collection...")
+    print("Starting NBA data collection...")
 
     games = get_recent_games()
-    if len(games) < 5:
-        print(f"Warning: Only {len(games)} completed games found.")
-    if not games:
-        raise RuntimeError("No completed Raptors games found.")
+    if len(games) < 1:
+        raise RuntimeError("No completed NBA games found.")
 
     results = []
     for event in games:
@@ -92,8 +90,8 @@ def main():
         time.sleep(1)
 
     index = {
-        "team": "Toronto Raptors",
-        "team_abbreviation": "TOR",
+        "team": "NBA",
+        "team_abbreviation": "NBA",
         "collected_at": datetime.now(timezone.utc).isoformat(),
         "game_count": len(results),
         "games": results,
