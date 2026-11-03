@@ -3,629 +3,278 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#101114" />
     <title>Raptors Play-by-Play</title>
     <style>
       :root {
-        --bg: #0a0f18;
-        --bg-2: #121a29;
-        --panel: rgba(19, 25, 36, 0.94);
-        --panel-2: rgba(15, 21, 31, 0.8);
-        --line: rgba(255,255,255,0.12);
-        --text: #edf3ff;
-        --muted: #9daac0;
-        --red: #ce1141;
-        --red-2: #ef517d;
-        --white: #f4f7fb;
-        --dark: #0c1523;
-        --blue: #1d4ed8;
-        --green: #32d399;
-        --amber: #fbbf24;
-        --shadow: 0 18px 50px rgba(0,0,0,0.45);
+        color-scheme: dark;
+        --background: #101114;
+        --surface: #1b1c20;
+        --surface-raised: #24252a;
+        --line: rgba(255, 255, 255, 0.12);
+        --text: #f5f5f6;
+        --muted: #a4a5aa;
+        --raptors: #ce1141;
+        --away: #4b78d1;
       }
 
       * { box-sizing: border-box; }
 
-      html, body {
-        margin: 0;
-        min-height: 100%;
-        font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        background:
-          radial-gradient(circle at top, rgba(54, 73, 110, 0.38), transparent 40%),
-          linear-gradient(180deg, #101923 0%, #090d15 100%);
-        color: var(--text);
-      }
+      html, body { min-height: 100%; }
 
       body {
+        margin: 0;
         min-height: 100vh;
+        padding: clamp(16px, 4vw, 48px);
         display: grid;
         place-items: center;
-        padding: 32px 20px;
+        background: #08090b;
+        color: var(--text);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       }
 
-      .app {
-        width: min(1200px, 100%);
-        border: 1px solid var(--line);
-        border-radius: 20px;
+      .broadcast {
+        position: relative;
+        width: min(1440px, 100%);
+        aspect-ratio: 16 / 9;
+        min-height: 300px;
         overflow: hidden;
-        background: rgba(13, 18, 28, 0.9);
-        box-shadow: var(--shadow);
+        background: var(--background);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
       }
 
-      .topbar {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 16px;
-        padding: 14px 18px;
-        background: rgba(255,255,255,0.02);
-        border-bottom: 1px solid var(--line);
+      /* Intentionally empty: this first pass is only the broadcast HUD. */
+      .broadcast-screen {
+        position: absolute;
+        inset: 0;
+        background: #101114;
       }
 
-      .brand {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        font-weight: 800;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        font-size: 12px;
-      }
-
-      .live-pill {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 7px 12px;
-        background: rgba(206, 17, 65, 0.14);
-        border: 1px solid rgba(206, 17, 65, 0.4);
-        border-radius: 999px;
-        color: #ffdce8;
-      }
-
-      .live-dot {
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        background: var(--red);
-        box-shadow: 0 0 12px rgba(206,17,65,0.9);
-        animation: pulse 1.4s infinite ease-in-out;
-      }
-
-      @keyframes pulse {
-        0%, 100% { transform: scale(1); opacity: 1; }
-        50% { transform: scale(1.5); opacity: 0.7; }
-      }
-
-      .status {
-        color: var(--muted);
-        font-size: 12px;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-      }
-
-      .game-shell {
+      .scorebug {
+        position: absolute;
+        left: clamp(18px, 4vw, 56px);
+        bottom: clamp(18px, 4vw, 52px);
         display: grid;
-        grid-template-columns: 1.6fr 0.9fr;
-      }
-
-      .main-stage {
-        padding: 20px 20px 10px;
-        border-right: 1px solid var(--line);
-      }
-
-      .score-row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 18px;
-        padding: 6px 6px 16px;
+        grid-template-columns: minmax(155px, 1fr) minmax(155px, 1fr) auto;
+        align-items: stretch;
+        max-width: calc(100% - 36px);
+        min-height: 82px;
+        overflow: hidden;
+        background: rgba(25, 26, 30, 0.97);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        box-shadow: 0 12px 36px rgba(0, 0, 0, 0.28);
       }
 
       .team {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        min-width: 180px;
-      }
-
-      .team-mark {
-        width: 54px;
-        height: 54px;
-        border-radius: 14px;
         display: grid;
-        place-items: center;
-        font-size: 1.1rem;
-        font-weight: 900;
-        letter-spacing: 0.06em;
-        border: 1px solid rgba(255,255,255,0.2);
-        background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+        grid-template-columns: 4px minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 14px;
+        min-width: 0;
+        padding: 14px 18px 14px 0;
       }
 
-      .team-mark.red {
-        background: linear-gradient(135deg, rgba(206,17,65,0.44), rgba(206,17,65,0.18));
-      }
+      .team + .team { border-left: 1px solid var(--line); }
 
-      .team-mark.blue {
-        background: linear-gradient(135deg, rgba(29,78,216,0.44), rgba(29,78,216,0.18));
+      .team-accent { align-self: stretch; background: var(--raptors); }
+      .team.away .team-accent { background: var(--away); }
+
+      .team-info { min-width: 0; }
+
+      .team-label {
+        overflow: hidden;
+        color: var(--muted);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        line-height: 1.2;
+        text-overflow: ellipsis;
+        text-transform: uppercase;
+        white-space: nowrap;
       }
 
       .team-name {
-        font-size: 11px;
-        color: var(--muted);
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
-        margin-bottom: 4px;
+        margin-top: 5px;
+        overflow: hidden;
+        font-size: 15px;
+        font-weight: 650;
+        letter-spacing: -0.02em;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
-      .team-score {
-        font-size: clamp(2rem, 3vw, 3rem);
-        font-weight: 900;
+      .score {
+        padding-left: 6px;
+        font-size: 30px;
+        font-variant-numeric: tabular-nums;
+        font-weight: 750;
         letter-spacing: -0.06em;
+        line-height: 1;
       }
 
-      .score-separator {
-        font-size: 1.4rem;
+      .game-state {
+        display: grid;
+        grid-template-columns: auto auto;
+        align-items: center;
+        gap: 14px;
+        padding: 12px 18px;
+        background: var(--surface-raised);
+        border-left: 1px solid var(--line);
+      }
+
+      .period {
+        display: grid;
+        gap: 4px;
+        text-align: center;
+      }
+
+      .period-label,
+      .clock-label {
         color: var(--muted);
+        font-size: 9px;
         font-weight: 700;
-      }
-
-      .game-meta {
-        font-size: 12px;
-        color: #dfe9ff;
         letter-spacing: 0.12em;
         text-transform: uppercase;
-        text-align: right;
       }
 
-      .court-wrap {
-        position: relative;
-        border: 1px solid var(--line);
-        border-radius: 20px;
-        overflow: hidden;
-        min-height: 440px;
-        background:
-          linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.00)),
-          linear-gradient(180deg, #1b2d46 0%, #091822 100%);
+      .period-value {
+        font-size: 16px;
+        font-weight: 700;
+        white-space: nowrap;
       }
 
-      .court {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        min-height: 440px;
-        background:
-          linear-gradient(180deg, rgba(60,110,76,0.2), rgba(42,75,68,0.2)),
-          linear-gradient(90deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.00) 100%);
+      .clock {
+        display: grid;
+        gap: 4px;
+        min-width: 65px;
+        text-align: center;
       }
 
-      .court::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background:
-          linear-gradient(90deg, transparent 0 12%, rgba(255,255,255,0.06) 12% 13%, transparent 13% 87%, rgba(255,255,255,0.06) 87% 88%, transparent 88%),
-          linear-gradient(180deg, transparent 0 18%, rgba(255,255,255,0.08) 18% 19%, transparent 19% 81%, rgba(255,255,255,0.08) 81% 82%, transparent 82%),
-          radial-gradient(circle at center, transparent 0 16%, rgba(255,255,255,0.08) 16% 16.5%, transparent 16.5% 100%);
-        opacity: 0.9;
-      }
-
-      .half-court {
-        position: absolute;
-        left: 50%;
-        top: 0;
-        transform: translateX(-50%);
-        width: 2px;
-        height: 100%;
-        background: rgba(255,255,255,0.12);
-      }
-
-      .half-court::before,
-      .half-court::after {
-        content: "";
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 60%;
-        height: 60%;
-        border: 2px solid rgba(255,255,255,0.12);
-        border-radius: 50%;
-      }
-
-      .half-court::before {
-        top: 20%;
-      }
-
-      .half-court::after {
-        bottom: 20%;
+      .clock-value {
+        font-size: 22px;
+        font-variant-numeric: tabular-nums;
+        font-weight: 750;
+        letter-spacing: -0.04em;
+        line-height: 1;
       }
 
       .shot-clock {
         position: absolute;
-        left: 18px;
-        top: 18px;
-        display: inline-flex;
+        left: clamp(18px, 4vw, 56px);
+        bottom: calc(clamp(18px, 4vw, 52px) + 96px);
+        display: flex;
         align-items: center;
-        gap: 10px;
-        padding: 8px 12px;
-        border-radius: 10px;
-        background: rgba(6,9,15,0.5);
-        border: 1px solid rgba(255,255,255,0.12);
-        font-size: 11px;
-        letter-spacing: 0.14em;
-        text-transform: uppercase;
+        gap: 8px;
+        padding: 7px 10px;
         color: var(--muted);
+        background: rgba(25, 26, 30, 0.94);
+        border: 1px solid var(--line);
+        border-radius: 5px;
+        font-size: 10px;
+        font-weight: 650;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
       }
 
-      .clock-value {
-        color: var(--white);
-        font-size: 1.2rem;
-        font-weight: 900;
+      .shot-clock strong {
+        color: var(--text);
+        font-size: 14px;
+        font-variant-numeric: tabular-nums;
         letter-spacing: 0;
       }
 
-      .moment-tag {
+      .broadcast-label {
         position: absolute;
-        right: 18px;
-        bottom: 18px;
-        padding: 10px 14px;
-        border-radius: 12px;
-        background: rgba(206,17,65,0.14);
-        border: 1px solid rgba(206,17,65,0.42);
-        color: #ffdce8;
-        font-size: 12px;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-      }
-
-      .player-bubble {
-        position: absolute;
-        width: 74px;
-        height: 74px;
-        border-radius: 50%;
-        display: grid;
-        place-items: center;
-        font-weight: 900;
-        border: 4px solid rgba(255,255,255,0.2);
-        box-shadow: 0 12px 25px rgba(0,0,0,0.34);
-      }
-
-      .player-bubble.red {
-        background: linear-gradient(135deg, rgba(206,17,65,0.95), rgba(206,17,65,0.78));
-        left: 18%;
-        top: 42%;
-      }
-
-      .player-bubble.blue {
-        background: linear-gradient(135deg, rgba(29,78,216,0.95), rgba(70,121,255,0.8));
-        right: 18%;
-        top: 42%;
-      }
-
-      .player-bubble .num {
-        font-size: 1.4rem;
-      }
-
-      .play-summary {
-        padding: 16px 18px 14px;
-        border-top: 1px solid var(--line);
-      }
-
-      .play-kicker {
-        color: var(--muted);
-        font-size: 11px;
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
-        margin-bottom: 8px;
-      }
-
-      .play-text {
-        margin: 0;
-        font-size: clamp(2.1rem, 3vw, 3.6rem);
-        line-height: 0.95;
-        letter-spacing: -0.05em;
-        font-weight: 900;
-      }
-
-      .play-sub {
-        margin-top: 12px;
-        color: var(--muted);
-        font-size: 0.95rem;
-      }
-
-      .side-panel {
-        background: rgba(255,255,255,0.02);
-        padding: 18px 18px 12px;
-      }
-
-      .panel-top {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 12px;
-      }
-
-      .panel-title {
-        font-size: 11px;
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
-        color: var(--muted);
-      }
-
-      .mini-badge {
-        font-size: 11px;
-        color: #dfe9ff;
-        padding: 6px 8px;
-        border: 1px solid rgba(255,255,255,0.12);
-        border-radius: 999px;
-        background: rgba(255,255,255,0.02);
-      }
-
-      .playlist {
-        display: grid;
-        gap: 10px;
-        max-height: 400px;
-        overflow: auto;
-        padding-right: 2px;
-      }
-
-      .play-item {
-        display: grid;
-        grid-template-columns: 22px 1fr auto;
-        gap: 10px;
-        align-items: center;
-        background: rgba(255,255,255,0.02);
-        border: 1px solid rgba(255,255,255,0.08);
-        border-radius: 12px;
-        padding: 10px 10px;
-        transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
-      }
-
-      .play-item.active {
-        border-color: rgba(206,17,65,0.52);
-        background: rgba(206,17,65,0.12);
-        transform: translateX(2px);
-      }
-
-      .play-index {
-        display: grid;
-        place-items: center;
-        width: 22px;
-        height: 22px;
-        border-radius: 8px;
+        top: 20px;
+        right: 22px;
+        color: rgba(255, 255, 255, 0.36);
         font-size: 10px;
-        font-weight: 800;
-        background: rgba(255,255,255,0.04);
-        color: var(--muted);
-      }
-
-      .play-item.active .play-index {
-        background: rgba(206,17,65,0.22);
-        color: #ffeaf0;
-      }
-
-      .play-copy {
-        font-size: 0.84rem;
-        line-height: 1.35;
-        color: #edf3ff;
-      }
-
-      .play-score {
-        font-size: 0.78rem;
-        color: var(--muted);
-      }
-
-      .stats-box {
-        margin-top: 16px;
-        background: rgba(255,255,255,0.03);
-        border: 1px solid rgba(255,255,255,0.08);
-        border-radius: 14px;
-        padding: 12px 12px 10px;
-      }
-
-      .stats-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 8px;
-      }
-
-      .stat-row {
-        display: flex;
-        justify-content: space-between;
-        gap: 14px;
-        padding: 8px 0;
-        border-top: 1px solid rgba(255,255,255,0.08);
-        color: var(--muted);
-      }
-
-      .stat-row strong {
-        color: var(--text);
-      }
-
-      @media (max-width: 920px) {
-        .game-shell {
-          grid-template-columns: 1fr;
-        }
-
-        .main-stage {
-          border-right: 0;
-          border-bottom: 1px solid var(--line);
-        }
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
       }
 
       @media (max-width: 620px) {
-        .topbar {
-          flex-direction: column;
-          align-items: flex-start;
-        }
-
-        .score-row {
-          align-items: flex-start;
-          gap: 12px;
-          flex-wrap: wrap;
-        }
-
-        .team {
-          min-width: auto;
-        }
-
-        .game-meta {
+        body { padding: 0; place-items: stretch; }
+        .broadcast {
           width: 100%;
-          text-align: left;
+          min-height: 100svh;
+          aspect-ratio: auto;
+          border: 0;
+          border-radius: 0;
         }
+        .scorebug {
+          right: 14px;
+          bottom: 20px;
+          left: 14px;
+          grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+          max-width: none;
+          min-height: 72px;
+        }
+        .team { gap: 9px; padding-right: 10px; }
+        .team-label { font-size: 8px; }
+        .team-name { font-size: 12px; }
+        .score { font-size: 25px; }
+        .game-state { gap: 9px; padding: 10px; }
+        .period-value { font-size: 13px; }
+        .clock { min-width: 51px; }
+        .clock-value { font-size: 19px; }
+        .shot-clock { bottom: 104px; left: 14px; }
+        .broadcast-label { top: 16px; right: 16px; }
+      }
 
-        .play-text {
-          font-size: 2.6rem;
-        }
+      @media (max-width: 390px) {
+        .scorebug { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; }
+        .team { gap: 7px; }
+        .team-name { font-size: 11px; }
+        .game-state { gap: 7px; padding: 8px; }
+        .period-label, .clock-label { font-size: 8px; }
+        .clock { min-width: 46px; }
       }
     </style>
   </head>
   <body>
-    <div class="app">
-      <div class="topbar">
-        <div class="brand">
-          <span class="live-pill"><span class="live-dot"></span> Live</span>
-          <span>NBA</span>
-        </div>
-        <div class="status">Raptors @ Timberwolves • 3rd quarter • 08:42</div>
+    <main class="broadcast" aria-label="Basketball broadcast">
+      <div class="broadcast-screen" aria-hidden="true"></div>
+      <div class="broadcast-label">NBA · Broadcast</div>
+
+      <div class="shot-clock" aria-label="Shot clock: 9 seconds">
+        <span>Shot clock</span>
+        <strong>09</strong>
       </div>
 
-      <div class="game-shell">
-        <div class="main-stage">
-          <div class="score-row">
-            <div class="team">
-              <div class="team-mark red">TOR</div>
-              <div>
-                <div class="team-name">Toronto</div>
-                <div class="team-score">117</div>
-              </div>
-            </div>
-
-            <div class="score-separator">:</div>
-
-            <div class="team" style="justify-content:flex-end; text-align:right;">
-              <div>
-                <div class="team-name">Minnesota</div>
-                <div class="team-score">112</div>
-              </div>
-              <div class="team-mark blue">MIN</div>
-            </div>
+      <section class="scorebug" aria-label="Toronto Raptors 117, Minnesota Timberwolves 112. Third quarter, 8 minutes 42 seconds remaining.">
+        <div class="team home">
+          <span class="team-accent" aria-hidden="true"></span>
+          <div class="team-info">
+            <div class="team-label">Toronto</div>
+            <div class="team-name">Raptors</div>
           </div>
-
-          <div class="game-meta">
-            3Q • 08:42 • Target center • Tied game in the stretch run
-          </div>
-
-          <div class="court-wrap">
-            <div class="court">
-              <div class="half-court"></div>
-              <div class="shot-clock"><span>Shot Clock</span> <span class="clock-value">09</span></div>
-              <div class="player-bubble red"><span class="num">4</span></div>
-              <div class="player-bubble blue"><span class="num">5</span></div>
-              <div class="moment-tag">Momentum • TOR</div>
-            </div>
-          </div>
-
-          <div class="play-summary">
-            <div class="play-kicker">Play-by-play</div>
-            <p id="playText" class="play-text">Barnes drives baseline and drops it to Siakam for the floater.</p>
-            <div id="playSub" class="play-sub">Toronto opens the lane, forces the switch, and Siakam gets the clean look.</div>
-          </div>
+          <div class="score">117</div>
         </div>
 
-        <aside class="side-panel">
-          <div class="panel-top">
-            <div class="panel-title">Game Feed</div>
-            <div class="mini-badge">Q3</div>
+        <div class="team away">
+          <span class="team-accent" aria-hidden="true"></span>
+          <div class="team-info">
+            <div class="team-label">Minnesota</div>
+            <div class="team-name">Timberwolves</div>
           </div>
+          <div class="score">112</div>
+        </div>
 
-          <div id="playlist" class="playlist" aria-live="polite"></div>
-
-          <div class="stats-box">
-            <div class="stats-header">
-              <div class="panel-title">Leaders</div>
-              <div class="mini-badge">Live</div>
-            </div>
-
-            <div class="stat-row"><span>Siakam</span><strong>28 PTS</strong></div>
-            <div class="stat-row"><span>Harden</span><strong>9 AST</strong></div>
-            <div class="stat-row"><span>Gobert</span><strong>14 REB</strong></div>
+        <div class="game-state">
+          <div class="period">
+            <span class="period-label">Period</span>
+            <span class="period-value">3rd</span>
           </div>
-        </aside>
-      </div>
-    </div>
-
-    <script>
-      const plays = [
-        {
-          text: "Barnes drives baseline and drops it to Siakam for the floater.",
-          sub: "Toronto opens the lane, forces the switch, and Siakam gets the clean look.",
-          score: "TOR 117 - MIN 112",
-          index: 1
-        },
-        {
-          text: "Raptors force a turnover and push ahead in transition.",
-          sub: "Quick outlet, one pass, and the defense is sprinting back to create the fast break.",
-          score: "TOR 115 - MIN 110",
-          index: 2
-        },
-        {
-          text: "McDaniels buries the corner three and the crowd erupts.",
-          sub: "The defense rotates too late and the spot-up look is wide open.",
-          score: "TOR 112 - MIN 108",
-          index: 3
-        },
-        {
-          text: "Siakam takes the contact and converts at the rim.",
-          sub: "The Timberwolves are sending help, but he still finds the clean lane to finish.",
-          score: "TOR 109 - MIN 106",
-          index: 4
-        },
-        {
-          text: "Bennett swats the attempt and starts the break.",
-          sub: "The Raptors are getting stops with energy and scrappiness on the glass.",
-          score: "TOR 107 - MIN 104",
-          index: 5
-        },
-        {
-          text: "The offense resets, and the ball finds the open wing shooter.",
-          sub: "A patient possession ends with a clean triple from the right arc.",
-          score: "TOR 104 - MIN 101",
-          index: 6
-        }
-      ];
-
-      const playlistEl = document.getElementById('playlist');
-      const playTextEl = document.getElementById('playText');
-      const playSubEl = document.getElementById('playSub');
-
-      function renderPlaylist(activeIndex = 0) {
-        playlistEl.innerHTML = plays
-          .map((play, idx) => `
-            <div class="play-item ${idx === activeIndex ? 'active' : ''}">
-              <div class="play-index">${play.index}</div>
-              <div class="play-copy">${play.text}</div>
-              <div class="play-score">${play.score}</div>
-            </div>
-          `)
-          .join('');
-      }
-
-      let activePlay = 0;
-      function updatePlay() {
-        const play = plays[activePlay];
-        playTextEl.textContent = play.text;
-        playSubEl.textContent = play.sub;
-        renderPlaylist(activePlay);
-      }
-
-      renderPlaylist(activePlay);
-      updatePlay();
-
-      setInterval(() => {
-        activePlay = (activePlay + 1) % plays.length;
-        updatePlay();
-      }, 2600);
-    </script>
+          <div class="clock">
+            <span class="clock-label">Game clock</span>
+            <span class="clock-value">8:42</span>
+          </div>
+        </div>
+      </section>
+    </main>
   </body>
 </html>
