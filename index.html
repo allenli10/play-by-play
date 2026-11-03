@@ -65,26 +65,52 @@
       .broadcast-callout {
         position: absolute;
         left: clamp(18px, 4vw, 56px);
-        top: clamp(18px, 4vw, 52px);
         right: clamp(18px, 4vw, 56px);
+        bottom: clamp(110px, 14vw, 180px);
+        top: auto;
         max-width: min(900px, calc(100% - 140px));
         padding: 12px 18px;
         border: 1px solid rgba(255,255,255,0.12);
         border-radius: 12px;
         background: rgba(21, 22, 26, 0.78);
         color: var(--text);
-        font-size: clamp(18px, 2vw, 30px);
+        font-size: clamp(20px, 2.1vw, 32px);
         font-weight: 700;
-        line-height: 1.2;
+        line-height: 1.25;
         letter-spacing: -0.03em;
         opacity: 0;
-        transform: translateY(-8px);
+        transform: translateY(10px);
         transition: opacity 180ms ease, transform 180ms ease;
         pointer-events: none;
       }
       .broadcast-callout.visible {
         opacity: 1;
         transform: translateY(0);
+      }
+      .broadcast-team {
+        display: block;
+        margin-bottom: 4px;
+        color: rgba(255,255,255,0.72);
+        font-size: 0.7em;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+      .broadcast-player {
+        display: block;
+        margin-bottom: 4px;
+        color: #ffffff;
+        font-size: 0.82em;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+      }
+      .broadcast-player strong {
+        font-weight: 900;
+      }
+      .broadcast-body {
+        display: block;
+        font-size: 1em;
+        font-weight: 700;
       }
       .scorebug {
         position: absolute;
@@ -288,7 +314,7 @@
         .game-heading { align-items: flex-start; flex-direction: column; gap: 4px; margin: 0; padding: 16px; }
         .broadcast { width: 100%; min-height: 58svh; aspect-ratio: auto; border: 0; border-radius: 0; }
         .broadcast-callout {
-          left: 14px; right: 14px; top: 16px; max-width: none; padding: 10px 12px; font-size: 16px;
+          left: 14px; right: 14px; bottom: 84px; top: auto; max-width: none; padding: 10px 12px; font-size: 16px;
         }
         .scorebug {
           right: 14px;
@@ -332,7 +358,7 @@
     <main class="player">
       <header class="game-heading" aria-label="Game details">
         <h1 class="game-title">Raptors at Lakers</h1>
-        <p class="game-details"><time datetime="2026-11-10">November 10, 2026</time> · Tip-off 7:30 PM ET</p>
+        <p class="game-details"><time id="gameDate" datetime="">Loading date…</time></p>
       </header>
       <section class="broadcast" aria-label="Basketball broadcast">
         <div class="broadcast-screen" aria-hidden="true"></div>
@@ -406,6 +432,7 @@
       const broadcastTextEl = document.getElementById('broadcastText');
       const homeScoreEl = document.getElementById('homeScore');
       const awayScoreEl = document.getElementById('awayScore');
+      const gameDateEl = document.getElementById('gameDate');
 
       let elapsed = 0;
       let isPlaying = false;
@@ -420,6 +447,22 @@
       function formatClock(seconds) {
         const wholeSeconds = Math.max(0, Math.ceil(seconds));
         return `${Math.floor(wholeSeconds / 60)}:${String(wholeSeconds % 60).padStart(2, '0')}`;
+      }
+
+      function formatGameDate(rawDate) {
+        if (!rawDate) return 'Game date unavailable';
+
+        const date = new Date(rawDate);
+        if (Number.isNaN(date.getTime())) {
+          return rawDate;
+        }
+
+        return new Intl.DateTimeFormat('en-US', {
+          month: 'long',
+          day: 'numeric',
+          year: 'numeric',
+          timeZone: 'UTC'
+        }).format(date);
       }
 
       function ordinalPeriod(period) {
@@ -495,6 +538,73 @@
         return 1;
       }
 
+      function getEventTeamName(play) {
+        if (!play || typeof play !== 'object') return '';
+
+        const candidates = [
+          play.team,
+          play.teamName,
+          play.team_name,
+          play.teamDisplayName,
+          play.team?.name,
+          play.team?.displayName,
+          play.team?.shortName,
+          play.team?.abbreviation,
+          play.homeTeam,
+          play.awayTeam,
+          play.teamNameDisplay,
+          play.qualifyingTeam
+        ];
+
+        for (const value of candidates) {
+          if (!value) continue;
+          if (typeof value === 'string') {
+            const cleaned = value.trim();
+            if (cleaned) return cleaned;
+          }
+          if (typeof value === 'object') {
+            const candidate = value.displayName ?? value.name ?? value.shortName ?? value.abbreviation ?? value.location;
+            if (candidate) return String(candidate);
+          }
+        }
+
+        return '';
+      }
+
+      function getEventPlayerName(play) {
+        if (!play || typeof play !== 'object') return '';
+
+        const candidates = [
+          play.player,
+          play.athlete,
+          play.playerName,
+          play.athleteName,
+          play.player?.displayName,
+          play.athlete?.displayName,
+          play.player?.name,
+          play.athlete?.name,
+          play.person?.displayName,
+          play.person?.name,
+          play.participant?.displayName,
+          play.participant?.name,
+          play.participant?.athlete?.displayName
+        ];
+
+        for (const value of candidates) {
+          if (!value) continue;
+          if (typeof value === 'string') {
+            const cleaned = value.trim();
+            if (cleaned) return cleaned;
+          }
+          if (typeof value === 'object') {
+            const candidate = value.displayName ?? value.name ?? value.fullName ?? value.shortName;
+            if (candidate) return String(candidate);
+          }
+        }
+
+        return '';
+      }
+
       function getEventScore(play) {
         if (!play || typeof play !== 'object') {
           return { home: 0, away: 0 };
@@ -550,6 +660,8 @@
         const periodStartSeconds = (period - 1) * QUARTER_SECONDS + (period > 4 ? (period - 4) * OVERTIME_SECONDS : 0);
         const absoluteSeconds = periodStartSeconds + (QUARTER_SECONDS - remainingClock);
 
+        const team = getEventTeamName(play);
+        const player = getEventPlayerName(play);
         const text = normalizeText(play.text ?? play.description ?? play.desc ?? play.playText ?? play.summary ?? play.detail ?? play.message ?? `Play ${index + 1}`);
         const score = getEventScore(play);
 
@@ -559,6 +671,8 @@
           period,
           clock: remainingClock,
           text,
+          team,
+          player,
           absoluteSeconds,
           score,
         };
@@ -567,11 +681,27 @@
       function setBroadcastText(message) {
         if (!message) {
           broadcastTextEl.classList.remove('visible');
-          broadcastTextEl.textContent = 'Game on';
+          broadcastTextEl.innerHTML = '<span class="broadcast-status">Game on</span>';
           return;
         }
 
-        broadcastTextEl.textContent = message;
+        let team = '';
+        let player = '';
+        let text = 'Game on';
+
+        if (typeof message === 'string') {
+          text = message;
+        } else {
+          team = normalizeText(message.team ?? '', '');
+          player = normalizeText(message.player ?? '', '');
+          text = normalizeText(message.text ?? message.description ?? message.body ?? message.message ?? 'Game on', 'Game on');
+        }
+
+        const teamMarkup = team ? `<div class="broadcast-team">${team}</div>` : '';
+        const playerMarkup = player ? `<div class="broadcast-player"><strong>${player}</strong></div>` : '';
+        const textMarkup = `<div class="broadcast-body">${text}</div>`;
+
+        broadcastTextEl.innerHTML = `${teamMarkup}${playerMarkup}${textMarkup}`;
         broadcastTextEl.classList.add('visible');
       }
 
@@ -621,7 +751,11 @@
 
         const nextEvent = currentEventSequence.shift();
         if (nextEvent) {
-          setBroadcastText(nextEvent.text);
+          setBroadcastText({
+            team: nextEvent.team,
+            player: nextEvent.player,
+            text: nextEvent.text,
+          });
           updateScoreHomeAway(nextEvent.score);
         }
 
@@ -629,19 +763,23 @@
           eventQueueTimer = window.setTimeout(() => {
             const event = currentEventSequence.shift();
             if (event) {
-              setBroadcastText(event.text);
+              setBroadcastText({
+                team: event.team,
+                player: event.player,
+                text: event.text,
+              });
               updateScoreHomeAway(event.score);
             }
             if (currentEventSequence.length) {
               eventQueueTimer = window.setTimeout(() => {
                 const lateEvent = currentEventSequence.shift();
                 if (lateEvent) {
-                  setBroadcastText(lateEvent.text);
+                  setBroadcastText({
+                    team: lateEvent.team,
+                    player: lateEvent.player,
+                    text: lateEvent.text,
+                  });
                   updateScoreHomeAway(lateEvent.score);
-                }
-                if (currentEventSequence.length) {
-                  do { /* keep processing sequentially */ }
-                  while (false);
                 }
                 finaliseEventSequence();
               }, EVENT_DISPLAY_MS);
@@ -659,6 +797,7 @@
         eventQueueTimer = null;
         const resume = resumePlaybackAfterQueue;
         resumePlaybackAfterQueue = false;
+        broadcastTextEl.classList.remove('visible');
         if (resume) {
           setPlaying(true);
         }
@@ -688,7 +827,11 @@
         });
 
         if (matchedEvent) {
-          setBroadcastText(matchedEvent.text);
+          setBroadcastText({
+            team: matchedEvent.team,
+            player: matchedEvent.player,
+            text: matchedEvent.text,
+          });
         } else {
           setBroadcastText('');
         }
@@ -740,6 +883,18 @@
         }
       }
 
+      function updateGameHeader(game) {
+        if (!gameDateEl || !game) return;
+
+        const rawDate = game.date ?? game.gameDate ?? game.startTime ?? game.datetime ?? game.utcDate;
+        const formatted = formatGameDate(rawDate);
+
+        gameDateEl.textContent = formatted;
+        if (rawDate) {
+          gameDateEl.setAttribute('datetime', rawDate);
+        }
+      }
+
       function loadPlayData() {
         fetch('data/raw/espn/401909906.json?t=' + Date.now())
           .then((response) => {
@@ -767,6 +922,7 @@
             }
 
             playList = normalized.sort((a, b) => a.absoluteSeconds - b.absoluteSeconds);
+            updateGameHeader(payload);
             hasLoadedGame = true;
             applyScoreToCurrentTime();
             render();
