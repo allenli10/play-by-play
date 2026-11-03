@@ -6,15 +6,16 @@
   <meta name="theme-color" content="#101114">
   <title>Game Finder</title>
   <style>
-    :root{color-scheme:dark;--bg:#0d0f13;--line:rgba(255,255,255,.1);--text:#f4f5f7;--muted:#a2a7b1;--accent:#ce1141;--glow:rgba(125,151,255,.28);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
-    *{box-sizing:border-box}body{min-height:100vh;margin:0;padding:32px 18px;background:radial-gradient(ellipse at top,rgba(125,151,255,.14),transparent 28%),var(--bg);color:var(--text)}main{width:min(760px,100%);margin:0 auto}
-    .page-header{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}.eyebrow{color:var(--muted);font-size:10px;letter-spacing:.16em;text-transform:uppercase}.page-header h1{margin:0;font-size:clamp(1.8rem,5vw,2.4rem);font-weight:700;letter-spacing:-.04em;line-height:1.1}.date-caption{margin:0;color:var(--muted);font-size:11px;letter-spacing:.08em;text-transform:uppercase}.topbar{display:flex;align-items:flex-end;justify-content:space-between;gap:18px}.controls{display:flex;align-items:center;gap:8px}button,input{font:inherit}button{cursor:pointer}.icon-button{width:36px;height:36px;display:grid;place-items:center;padding:0;color:var(--text);background:transparent;border:1px solid var(--line);border-radius:10px}.icon-button svg{width:18px;height:18px;stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}.calendar-wrap{position:relative;width:36px;height:36px}.date-input{position:absolute;inset:0;width:36px;height:36px;opacity:0;cursor:pointer}.search-field{width:min(220px,38vw);padding:9px 12px;border:1px solid var(--line);border-radius:10px;background:#11151b;color:var(--text)}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.status{min-height:18px;margin:9px 0 12px;color:var(--muted);font-size:12px}.status.error{color:#ffb4c6}.legend,.game-row{display:grid;grid-template-columns:minmax(0,1fr) 150px minmax(0,1fr);gap:16px;align-items:center}.legend{padding:0 12px 8px;color:var(--muted);font-size:11px;letter-spacing:.08em;text-transform:uppercase}.legend .home{text-align:right}.legend .center{text-align:center}.game-row{align-items:center;width:100%;min-height:64px;padding:14px 12px;color:var(--text);text-align:left;background:transparent;border:1px solid transparent;border-bottom:1px solid var(--line);border-radius:12px;transition:background .15s,border-color .15s,box-shadow .15s,transform .15s}.game-row:hover{background:rgba(255,255,255,.02)}.game-row:active{transform:translateY(1px)}.game-row.is-selected{background:rgba(255,255,255,.02);border-color:rgba(255,255,255,.12);box-shadow:0 0 0 1px rgba(255,255,255,.04),0 0 22px var(--glow)}.team{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.team.away{text-align:left}.team.home{text-align:right}.game-date{justify-self:center;color:var(--muted);font-size:12px;font-weight:600;text-align:center}.game-date strong{display:block;color:var(--text);font-size:14px}.message{padding:14px 12px;color:var(--muted)}
-    @media(max-width:560px){body{padding:24px 14px}.topbar{align-items:center;flex-wrap:wrap}.legend,.game-row{grid-template-columns:minmax(0,1fr) 112px minmax(0,1fr);gap:10px}.search-field{width:150px}}@media(max-width:420px){.team{font-size:13px}.legend,.game-row{grid-template-columns:minmax(0,1fr) 88px minmax(0,1fr);gap:7px}.search-field{width:125px}}
+    :root{color-scheme:dark;--bg:#0d0f13;--line:rgba(255,255,255,.1);--text:#f4f5f7;--muted:#a2a7b1;--accent:#ce1141;--panel:#11151d;--glow:rgba(125,151,255,.28);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+    *{box-sizing:border-box}body{min-height:100vh;margin:0;padding:32px 18px;background:radial-gradient(ellipse at top,rgba(125,151,255,.14),transparent 28%),var(--bg);color:var(--text)}main{width:min(1040px,100%);margin:0 auto}header{display:flex;align-items:flex-end;justify-content:space-between;gap:18px}.page-header{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}.eyebrow{color:var(--muted);font-size:10px;letter-spacing:.16em;text-transform:uppercase}.page-header h1{margin:0;font-size:clamp(1.8rem,5vw,2.4rem);font-weight:700;letter-spacing:-.04em;line-height:1.1}.date-caption{margin:0;color:var(--muted);font-size:11px;letter-spacing:.08em;text-transform:uppercase}.controls{display:flex;align-items:center;gap:8px}button,input{font:inherit}button{cursor:pointer}.icon-button{width:36px;height:36px;display:grid;place-items:center;padding:0;color:var(--text);background:transparent;border:1px solid var(--line);border-radius:10px}.icon-button svg{width:18px;height:18px;stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}.calendar-wrap{position:relative;width:36px;height:36px}.date-input{position:absolute;inset:0;width:36px;height:36px;opacity:0;cursor:pointer}.search-field{width:min(220px,38vw);padding:9px 12px;border:1px solid var(--line);border-radius:10px;background:#11151b;color:var(--text)}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.status{min-height:18px;margin:9px 0 12px;color:var(--muted);font-size:12px}.status.error{color:#ffb4c6}.legend,.game-row{display:grid;grid-template-columns:minmax(0,1fr) 150px minmax(0,1fr);gap:16px;align-items:center}.legend{padding:0 12px 8px;color:var(--muted);font-size:11px;letter-spacing:.08em;text-transform:uppercase}.legend .home{text-align:right}.legend .center{text-align:center}.game-row{align-items:center;width:100%;min-height:64px;padding:14px 12px;color:var(--text);text-align:left;background:transparent;border:1px solid transparent;border-bottom:1px solid var(--line);border-radius:12px;transition:background .15s ease,border-color .15s ease,box-shadow .15s ease,transform .15s ease}.game-row:hover{background:rgba(255,255,255,.02)}.game-row:active{transform:translateY(1px)}.game-row.is-selected{background:rgba(255,255,255,.02);border-color:rgba(255,255,255,.12);box-shadow:0 0 0 1px rgba(255,255,255,.04),0 0 22px var(--glow)}.team{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.team.away{text-align:left}.team.home{text-align:right}.game-date{justify-self:center;color:var(--muted);font-size:12px;font-weight:600;text-align:center}.game-date strong{display:block;color:var(--text);font-size:14px}.message{padding:14px 12px;color:var(--muted)}
+    .broadcast-shell{margin-top:18px;padding:0;border:1px solid #ffffff18;border-radius:24px;background:linear-gradient(145deg,#222a3a,#10141e);box-shadow:0 24px 70px rgba(0,0,0,.45)}
+    .broadcast-shell[hidden]{display:none}.jumbo{padding:clamp(20px,4vw,54px);min-height:52vh}.game-meta{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;color:var(--muted);font-weight:650}.score{color:white;background:#ffffff12;border:1px solid #ffffff20;border-radius:999px;padding:9px 16px;font-size:1.15rem}.clock{margin-top:30px;color:#ffb5c6;font-size:clamp(1rem,2vw,1.4rem);font-weight:800;letter-spacing:.08em;text-transform:uppercase}.play-text{display:flex;align-items:center;min-height:22vh;margin:14px 0 28px;font-size:clamp(2rem,7vw,6.5rem);line-height:1.04;font-weight:850;letter-spacing:-.045em;overflow-wrap:anywhere}.progress{height:8px;overflow:hidden;background:#ffffff20;border-radius:99px}.progress > span{display:block;height:100%;width:0;background:var(--accent);transition:width .2s ease}.controls-row{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin-top:12px}.controls-row label{color:var(--muted);display:flex;align-items:center;gap:8px}.controls-row select{flex:0 1 115px;min-height:42px;border:1px solid #ffffff25;border-radius:10px;padding:10px 14px;color:#fff;background:#10141e;font:inherit}.button-row{display:flex;flex-wrap:wrap;gap:9px}.button-row button{min-height:46px;border:1px solid #ffffff25;border-radius:10px;padding:10px 14px;color:#fff;background:#10141e;font:inherit}.button-row .start{flex:1 1 200px;min-height:64px;border:0;background:linear-gradient(120deg,#ce1141,#fa4772);font-size:1.35rem;box-shadow:0 10px 30px #0006}.timeline{margin-top:12px}.timeline h2{margin:0 0 10px;font-size:1.1rem}.play-list{max-height:40vh;overflow:auto;display:grid;gap:6px}.play-row{display:grid;grid-template-columns:100px 1fr;gap:12px;padding:10px;border-radius:8px;color:#e7eaf0;background:#ffffff08}.play-row.current{outline:2px solid var(--accent);background:#ce114122}.play-time{color:var(--muted);font-size:.85rem;font-weight:700}.status-line{min-height:1.4em;margin:12px 2px;color:var(--muted)}
+    @media(max-width:560px){body{padding:24px 14px}.header{align-items:center;flex-wrap:wrap}.legend,.game-row{grid-template-columns:minmax(0,1fr) 112px minmax(0,1fr);gap:10px}.search-field{width:150px}.play-row{grid-template-columns:1fr;gap:4px}.jumbo{min-height:48vh}.play-text{min-height:20vh}}@media(max-width:420px){.team{font-size:13px}.legend,.game-row{grid-template-columns:minmax(0,1fr) 88px minmax(0,1fr);gap:7px}.search-field{width:125px}}
   </style>
 </head>
 <body>
   <main>
-    <header class="topbar">
+    <header>
       <div class="page-header">
         <div class="eyebrow">Game Finder</div>
         <h1 id="selectedDateTitle">Game Finder</h1>
@@ -25,20 +26,62 @@
           <button class="icon-button" id="calendarButton" type="button" aria-label="Choose date"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg></button>
           <input class="date-input" id="dayPicker" type="date" aria-label="Choose a game date">
         </div>
-        <button class="icon-button" id="searchToggle" type="button" aria-label="Search games" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="5.5"/><path d="M16 16l4 4"/></svg></button>
+        <button class="icon-button" id="searchToggle" type="button" aria-label="Search games" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="5.5"/><path d="m15 15 5 5"/></svg></button>
         <label class="sr-only" for="gameSearch">Search games</label><input id="gameSearch" class="search-field" type="search" placeholder="Search games" autocomplete="off" hidden>
       </div>
     </header>
     <div id="status" class="status" role="status" aria-live="polite">Loading schedule…</div>
     <div class="legend" aria-hidden="true"><span class="away">Away</span><span class="center">Date</span><span class="home">Home</span></div>
     <section id="gameList" class="list" aria-label="NBA schedule" aria-live="polite"><div class="message">Loading schedule…</div></section>
+
+    <section id="broadcastPanel" class="broadcast-shell" hidden>
+      <div class="jumbo" aria-live="polite">
+        <div class="game-meta"><span id="gameTitle">Game</span><span id="score" class="score">Score unavailable</span></div>
+        <div>
+          <div id="clock" class="clock">Ready</div>
+          <div id="playText" class="play-text">Select a game and press Start.</div>
+        </div>
+        <div>
+          <div class="game-meta"><span id="counter">0 / 0</span><span id="playState">Paused</span></div>
+          <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+        </div>
+      </div>
+
+      <div class="button-row" style="padding:16px;">
+        <button id="startButton" class="start">▶ Start Jumbotron</button>
+      </div>
+
+      <div class="controls-row" style="padding:0 16px 16px;">
+        <button id="back10" title="Back 10 plays">⏪ RWD 10</button>
+        <button id="back1" title="Previous play">◀ Prev</button>
+        <button id="pauseButton">▶ Play</button>
+        <button id="next1" title="Next play">Next ▶</button>
+        <button id="forward10" title="Forward 10 plays">FWD 10 ⏩</button>
+        <label>Speed
+          <select id="speedSelect" aria-label="Playback speed">
+            <option value="3000">0.5×</option>
+            <option value="1500" selected>1×</option>
+            <option value="750">2×</option>
+            <option value="375">4×</option>
+          </select>
+        </label>
+        <button id="fullscreenButton">⛶ Fullscreen</button>
+      </div>
+
+      <div class="timeline" style="padding:0 16px 16px;">
+        <h2>Play-by-play</h2>
+        <div id="playList" class="play-list"></div>
+      </div>
+    </section>
   </main>
+
   <script>
     const ESPN_URL="https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard";
     const INDEX_URL="data/index.json";
     const $=id=>document.getElementById(id);
     const list=$("gameList"),status=$("status"),search=$("gameSearch"),searchToggle=$("searchToggle"),dayPicker=$("dayPicker"),title=$("selectedDateTitle"),dateMeta=$("selectedDateMeta");
     let games=[],localGames=new Map(),selectedDate="",selectedId="",scheduleRequest=0;
+    let plays=[], index=0, timer=null, playing=false, requestToken=0, selectedGame=null;
 
     function dateKey(value){if(!value)return"";const d=new Date(value);return Number.isNaN(d.getTime())?"":d.toISOString().slice(0,10)}
     function dateLabel(value,options){const d=new Date(`${value}T12:00:00Z`);return Number.isNaN(d.getTime())?"Select a date":new Intl.DateTimeFormat(undefined,{...options,timeZone:"UTC"}).format(d)}
@@ -52,22 +95,29 @@
       const matches=games.filter(g=>dateKey(g.date)===selectedDate&&(!query||`${g.name} ${g.shortName} ${teamName(g,"away")} ${teamName(g,"home")}`.toLowerCase().includes(query)));
       list.replaceChildren();
       if(!matches.length){const empty=document.createElement("div");empty.className="message";empty.textContent="No games scheduled for this date.";list.append(empty);return}
-      for(const game of matches){
-        const row=document.createElement("button");row.type="button";row.className="game-row";row.setAttribute("aria-pressed",String(game.id===selectedId));
-        row.classList.toggle("is-selected",game.id===selectedId);
+      matches.forEach(game=>{
+        const row=document.createElement("button");row.type="button";row.className="game-row";row.setAttribute("aria-pressed",String(game.id===selectedId));row.classList.toggle("is-selected",game.id===selectedId);
         const away=document.createElement("span");away.className="team away";away.textContent=teamName(game,"away");
         const date=document.createElement("span");date.className="game-date";const strong=document.createElement("strong");strong.textContent=dateLabel(dateKey(game.date),{month:"short",day:"numeric"});date.append(strong,document.createElement("br"));date.append(document.createTextNode(game.shortName||"Game"));
         const home=document.createElement("span");home.className="team home";home.textContent=teamName(game,"home");row.append(away,date,home);
-        row.addEventListener("click",()=>selectGame(game));list.append(row);
-      }
+        row.addEventListener("click",()=>selectGame(game));
+        list.append(row);
+      });
     }
 
     function selectGame(game){
       selectedId=game.id;
-      if(!localGames.has(game.id)){setStatus("Game data not found for this matchup.",true)}
-      else{setStatus("Game data is available.")}
+      selectedGame=game;
+      if(!localGames.has(game.id)){
+        setStatus("Game data not found for this matchup.",true);
+        $("broadcastPanel").hidden=true;
+      }else{
+        setStatus("Game data is available. Press Start Jumbotron to load the replay UI.");
+        showGamePreview(game);
+      }
       render();
     }
+
     function setDate(value){selectedDate=value;dayPicker.value=value;titleDate(value);selectedId="";render()}
 
     searchToggle.addEventListener("click",()=>{const show=search.hidden;search.hidden=!show;searchToggle.setAttribute("aria-expanded",String(show));if(show)search.focus();else{search.value="";render()}});
@@ -98,6 +148,142 @@
         games=[];render();setStatus(`Could not load ESPN schedule: ${error.message}. Check your connection and try again.`,true);
       }
     }
+
+    function textValue(value, fallback = "") {
+      if (value == null) return fallback;
+      if (typeof value === "object") return value.displayValue ?? value.value ?? value.number ?? fallback;
+      return value;
+    }
+
+    function normalizePlay(play, i) {
+      const period = textValue(play.period, textValue(play.quarter, textValue(play.periodNumber, "?")));
+      const clock = textValue(play.clock, textValue(play.gameClock, textValue(play.time, "")));
+      const description = play.text ?? play.description ?? play.desc ?? play.playText ?? play.actionDescription ?? `Play ${i + 1}`;
+      return { raw: play, period, clock, description: String(description) };
+    }
+
+    function getPlays(payload) {
+      const possible = [payload?.plays, payload?.playByPlay, payload?.play_by_play, payload?.events, payload?.actions];
+      const source = possible.find(Array.isArray);
+      return source ? source.map(normalizePlay) : [];
+    }
+
+    function safeFileUrl(file) {
+      return new URL(file, document.baseURI).toString();
+    }
+
+    function renderBroadcast() {
+      if (!plays.length) return;
+      index = Math.max(0, Math.min(index, plays.length - 1));
+      const item = plays[index];
+      $("clock").textContent = `QUARTER ${item.period}  ·  ${item.clock || ""}`;
+      $("playText").textContent = item.description;
+      $("counter").textContent = `${index + 1} / ${plays.length} plays`;
+      $("progressBar").style.width = `${((index + 1) / plays.length) * 100}%`;
+      const rows = $("playList").children;
+      for (let i = 0; i < rows.length; i++) rows[i].classList.toggle("current", i === index);
+      rows[index]?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    }
+
+    function stop() {
+      clearInterval(timer); timer=null; playing=false; $("playState").textContent="Paused"; $("pauseButton").textContent="▶ Play";
+    }
+
+    function step(amount) {
+      if (!plays.length) return;
+      stop();
+      index = Math.max(0, Math.min(index + amount, plays.length - 1));
+      renderBroadcast();
+    }
+
+    function tick() {
+      if (index >= plays.length - 1) { stop(); return; }
+      index++; renderBroadcast();
+    }
+
+    function play() {
+      if (!plays.length) return;
+      clearInterval(timer); playing=true; $("playState").textContent="Playing"; $("pauseButton").textContent="Ⅱ Pause"; timer=setInterval(tick, Number($("speedSelect").value));
+    }
+
+    function renderList() {
+      const listEl = $("playList"); listEl.replaceChildren();
+      const fragment = document.createDocumentFragment();
+      plays.forEach((item, i) => {
+        const row = document.createElement("div"); row.className = "play-row";
+        const time = document.createElement("span"); time.className = "play-time"; time.textContent = `Q${item.period} · ${item.clock}`;
+        const desc = document.createElement("span"); desc.textContent = item.description;
+        row.append(time, desc);
+        row.addEventListener("click", () => step(i - index));
+        fragment.appendChild(row);
+      });
+      listEl.appendChild(fragment);
+    }
+
+    function showGamePreview(game) {
+      const titleText = game?.short_name || game?.name || game?.game_id || "NBA game";
+      $("gameTitle").textContent = titleText;
+      const competitors = game?.competitors || [];
+      const scoreText = competitors.map((team) => {
+        const name = team.team?.abbreviation || "Team";
+        const score = team.score?.displayValue ?? team.score?.value;
+        return score == null ? name : `${name} ${score}`;
+      }).join("  ·  ");
+      $("score").textContent = scoreText || "Score unavailable";
+      $("clock").textContent = "Game ready";
+      $("playText").textContent = "Press Start to load play-by-play.";
+      $("counter").textContent = "0 / 0 plays";
+      $("progressBar").style.width = "0%";
+      $("broadcastPanel").hidden = false;
+      $("playState").textContent = "Paused";
+      $("pauseButton").textContent = "▶ Play";
+      $("playList").replaceChildren();
+    }
+
+    async function loadSelectedGameData() {
+      if (!selectedGame) return;
+      const thisRequest = ++requestToken;
+      $("startButton").disabled = true;
+      setStatus("Loading game play-by-play…");
+      stop();
+      try {
+        if (!selectedGame.file) throw new Error("This game entry has no JSON file path.");
+        const response = await fetch(safeFileUrl(selectedGame.file) + `?t=${Date.now()}`);
+        if (!response.ok) throw new Error(`Game JSON request failed (${response.status}).`);
+        const payload = await response.json();
+        if (thisRequest !== requestToken) return;
+        plays = getPlays(payload);
+        if (!plays.length) throw new Error("The game JSON loaded, but no play array was found.");
+        index = 0; renderList(); renderBroadcast();
+        $("status").textContent = `${plays.length} plays loaded. Press Start Jumbotron to begin.`;
+        $("startButton").disabled = false;
+      } catch (error) {
+        if (thisRequest !== requestToken) return;
+        $("status").textContent = `Could not load plays: ${error.message}`;
+        $("startButton").disabled = false;
+      }
+    }
+
+    $("startButton").addEventListener("click", async () => {
+      if (!selectedGame) return;
+      $("broadcastPanel").hidden = false;
+      await loadSelectedGameData();
+      if (!plays.length) return;
+      index = 0; renderBroadcast(); play();
+    });
+    $("pauseButton").addEventListener("click", () => playing ? stop() : play());
+    $("back10").addEventListener("click", () => step(-10));
+    $("back1").addEventListener("click", () => step(-1));
+    $("next1").addEventListener("click", () => step(1));
+    $("forward10").addEventListener("click", () => step(10));
+    $("speedSelect").addEventListener("change", () => { if (playing) play(); });
+    $("fullscreenButton").addEventListener("click", async () => {
+      try {
+        if (!document.fullscreenElement) await $("broadcastPanel").requestFullscreen();
+        else await document.exitFullscreen();
+      } catch (_) { $("status").textContent = "Fullscreen is unavailable in this browser."; }
+    });
+
     loadSchedule();
   </script>
 </body>
