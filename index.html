@@ -1,230 +1,631 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#10131c">
-  <title>Raptors Play-by-Play — Replay</title>
-  <style>
-    :root { color-scheme:dark; --red:#ce1141; --ink:#10131c; --panel:#191e2a; --muted:#aab1c0; }
-    * { box-sizing:border-box; }
-    body { margin:0; min-height:100vh; padding:20px; color:#f7f8fb; background:radial-gradient(ellipse at top,#252b3a,var(--ink) 65%); font-family:system-ui,-apple-system,"Segoe UI",sans-serif; }
-    main { max-width:1100px; margin:auto; }
-    h1 { margin:0; font-size:clamp(2rem,5vw,3rem); }
-    .sub { margin:6px 0 20px; color:var(--muted); }
-    .setup,.controls { background:var(--panel); border:1px solid #ffffff18; border-radius:16px; padding:16px; }
-    .setup { display:flex; flex-wrap:wrap; gap:12px; align-items:center; }
-    select,button { min-height:46px; border:1px solid #ffffff25; border-radius:10px; padding:10px 14px; color:#fff; background:#10141e; font:inherit; }
-    select { flex:1 1 280px; }
-    button { cursor:pointer; font-weight:700; }
-    button:disabled { opacity:.45; cursor:not-allowed; }
-    .start { flex:1 1 200px; min-height:64px; border:0; background:linear-gradient(120deg,#ce1141,#fa4772); font-size:1.35rem; box-shadow:0 10px 30px #0006; }
-    .jumbo { margin-top:16px; padding:clamp(20px,5vw,54px); min-height:55vh; border:2px solid #ffffff20; border-radius:24px; background:linear-gradient(145deg,#222a3a,#10141e); box-shadow:0 24px 70px #0008; display:flex; flex-direction:column; justify-content:space-between; }
-    .jumbo[hidden],.controls[hidden] { display:none; }
-    .head-row { display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
-    .game-header { display:flex; flex-direction:column; gap:6px; }
-    .game-title { font-size:1.1rem; font-weight:700; color:#f4f6fb; }
-    .game-date { color:var(--muted); font-size:.92rem; }
-    .quarter-board { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); }
-    .quarter-box { min-width:78px; padding:10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.025); text-align:center; }
-    .quarter-box.active { background:rgba(206,17,65,.2); border-color:rgba(206,17,65,.55); }
-    .quarter-label { display:block; font-size:.7rem; letter-spacing:.08em; color:var(--muted); text-transform:uppercase; }
-    .quarter-score { display:block; font-weight:800; font-size:1.2rem; margin-top:3px; }
-    .clock { margin-top:18px; color:#ffb5c6; font-size:clamp(1rem,2vw,1.4rem); font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
-    .play-text { display:flex; align-items:center; min-height:22vh; margin:14px 0 28px; font-size:clamp(2rem,7vw,6.5rem); line-height:1.04; font-weight:850; letter-spacing:-.045em; overflow-wrap:anywhere; }
-    .progress { height:8px; overflow:hidden; background:#ffffff20; border-radius:99px; }
-    .progress > span { display:block; height:100%; width:0; background:var(--red); transition:width .2s ease; }
-    .controls { display:flex; flex-wrap:wrap; gap:9px; align-items:center; margin-top:12px; }
-    .controls label { color:var(--muted); display:flex; align-items:center; gap:8px; }
-    .controls select { flex:0 1 115px; min-height:42px; }
-    .status { min-height:1.4em; margin:12px 2px; color:var(--muted); }
-    @media(max-width:600px) { body{padding:12px}.jumbo{min-height:48vh}.play-text{min-height:20vh}.head-row{flex-direction:column;align-items:flex-start} }
-  </style>
-</head>
-<body>
-<main>
-  <h1>Toronto Raptors</h1>
-  <p class="sub">Choose a game, then start the live play-by-play jumbotron replay.</p>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Raptors Play-by-Play</title>
+    <style>
+      :root {
+        --bg: #0a0f18;
+        --bg-2: #121a29;
+        --panel: rgba(19, 25, 36, 0.94);
+        --panel-2: rgba(15, 21, 31, 0.8);
+        --line: rgba(255,255,255,0.12);
+        --text: #edf3ff;
+        --muted: #9daac0;
+        --red: #ce1141;
+        --red-2: #ef517d;
+        --white: #f4f7fb;
+        --dark: #0c1523;
+        --blue: #1d4ed8;
+        --green: #32d399;
+        --amber: #fbbf24;
+        --shadow: 0 18px 50px rgba(0,0,0,0.45);
+      }
 
-  <section class="setup" aria-label="Game selection">
-    <select id="gameSelect" aria-label="Select a game"><option>Loading games…</option></select>
-    <button id="startButton" class="start" disabled>▶ Start Jumbotron</button>
-  </section>
-  <p id="status" class="status" role="status" aria-live="polite">Loading game index…</p>
+      * { box-sizing: border-box; }
 
-  <section id="jumbotron" class="jumbo" hidden aria-live="polite">
-    <div class="head-row">
-      <div class="game-header">
-        <div id="gameTitle" class="game-title">Game</div>
-        <div id="gameDate" class="game-date">Date unavailable</div>
+      html, body {
+        margin: 0;
+        min-height: 100%;
+        font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        background:
+          radial-gradient(circle at top, rgba(54, 73, 110, 0.38), transparent 40%),
+          linear-gradient(180deg, #101923 0%, #090d15 100%);
+        color: var(--text);
+      }
+
+      body {
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 32px 20px;
+      }
+
+      .app {
+        width: min(1200px, 100%);
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        overflow: hidden;
+        background: rgba(13, 18, 28, 0.9);
+        box-shadow: var(--shadow);
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 14px 18px;
+        background: rgba(255,255,255,0.02);
+        border-bottom: 1px solid var(--line);
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        font-size: 12px;
+      }
+
+      .live-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 12px;
+        background: rgba(206, 17, 65, 0.14);
+        border: 1px solid rgba(206, 17, 65, 0.4);
+        border-radius: 999px;
+        color: #ffdce8;
+      }
+
+      .live-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--red);
+        box-shadow: 0 0 12px rgba(206,17,65,0.9);
+        animation: pulse 1.4s infinite ease-in-out;
+      }
+
+      @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.5); opacity: 0.7; }
+      }
+
+      .status {
+        color: var(--muted);
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .game-shell {
+        display: grid;
+        grid-template-columns: 1.6fr 0.9fr;
+      }
+
+      .main-stage {
+        padding: 20px 20px 10px;
+        border-right: 1px solid var(--line);
+      }
+
+      .score-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        padding: 6px 6px 16px;
+      }
+
+      .team {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        min-width: 180px;
+      }
+
+      .team-mark {
+        width: 54px;
+        height: 54px;
+        border-radius: 14px;
+        display: grid;
+        place-items: center;
+        font-size: 1.1rem;
+        font-weight: 900;
+        letter-spacing: 0.06em;
+        border: 1px solid rgba(255,255,255,0.2);
+        background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+      }
+
+      .team-mark.red {
+        background: linear-gradient(135deg, rgba(206,17,65,0.44), rgba(206,17,65,0.18));
+      }
+
+      .team-mark.blue {
+        background: linear-gradient(135deg, rgba(29,78,216,0.44), rgba(29,78,216,0.18));
+      }
+
+      .team-name {
+        font-size: 11px;
+        color: var(--muted);
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        margin-bottom: 4px;
+      }
+
+      .team-score {
+        font-size: clamp(2rem, 3vw, 3rem);
+        font-weight: 900;
+        letter-spacing: -0.06em;
+      }
+
+      .score-separator {
+        font-size: 1.4rem;
+        color: var(--muted);
+        font-weight: 700;
+      }
+
+      .game-meta {
+        font-size: 12px;
+        color: #dfe9ff;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        text-align: right;
+      }
+
+      .court-wrap {
+        position: relative;
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        overflow: hidden;
+        min-height: 440px;
+        background:
+          linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.00)),
+          linear-gradient(180deg, #1b2d46 0%, #091822 100%);
+      }
+
+      .court {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        min-height: 440px;
+        background:
+          linear-gradient(180deg, rgba(60,110,76,0.2), rgba(42,75,68,0.2)),
+          linear-gradient(90deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.00) 100%);
+      }
+
+      .court::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(90deg, transparent 0 12%, rgba(255,255,255,0.06) 12% 13%, transparent 13% 87%, rgba(255,255,255,0.06) 87% 88%, transparent 88%),
+          linear-gradient(180deg, transparent 0 18%, rgba(255,255,255,0.08) 18% 19%, transparent 19% 81%, rgba(255,255,255,0.08) 81% 82%, transparent 82%),
+          radial-gradient(circle at center, transparent 0 16%, rgba(255,255,255,0.08) 16% 16.5%, transparent 16.5% 100%);
+        opacity: 0.9;
+      }
+
+      .half-court {
+        position: absolute;
+        left: 50%;
+        top: 0;
+        transform: translateX(-50%);
+        width: 2px;
+        height: 100%;
+        background: rgba(255,255,255,0.12);
+      }
+
+      .half-court::before,
+      .half-court::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60%;
+        height: 60%;
+        border: 2px solid rgba(255,255,255,0.12);
+        border-radius: 50%;
+      }
+
+      .half-court::before {
+        top: 20%;
+      }
+
+      .half-court::after {
+        bottom: 20%;
+      }
+
+      .shot-clock {
+        position: absolute;
+        left: 18px;
+        top: 18px;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 12px;
+        border-radius: 10px;
+        background: rgba(6,9,15,0.5);
+        border: 1px solid rgba(255,255,255,0.12);
+        font-size: 11px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .clock-value {
+        color: var(--white);
+        font-size: 1.2rem;
+        font-weight: 900;
+        letter-spacing: 0;
+      }
+
+      .moment-tag {
+        position: absolute;
+        right: 18px;
+        bottom: 18px;
+        padding: 10px 14px;
+        border-radius: 12px;
+        background: rgba(206,17,65,0.14);
+        border: 1px solid rgba(206,17,65,0.42);
+        color: #ffdce8;
+        font-size: 12px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .player-bubble {
+        position: absolute;
+        width: 74px;
+        height: 74px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        font-weight: 900;
+        border: 4px solid rgba(255,255,255,0.2);
+        box-shadow: 0 12px 25px rgba(0,0,0,0.34);
+      }
+
+      .player-bubble.red {
+        background: linear-gradient(135deg, rgba(206,17,65,0.95), rgba(206,17,65,0.78));
+        left: 18%;
+        top: 42%;
+      }
+
+      .player-bubble.blue {
+        background: linear-gradient(135deg, rgba(29,78,216,0.95), rgba(70,121,255,0.8));
+        right: 18%;
+        top: 42%;
+      }
+
+      .player-bubble .num {
+        font-size: 1.4rem;
+      }
+
+      .play-summary {
+        padding: 16px 18px 14px;
+        border-top: 1px solid var(--line);
+      }
+
+      .play-kicker {
+        color: var(--muted);
+        font-size: 11px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+      }
+
+      .play-text {
+        margin: 0;
+        font-size: clamp(2.1rem, 3vw, 3.6rem);
+        line-height: 0.95;
+        letter-spacing: -0.05em;
+        font-weight: 900;
+      }
+
+      .play-sub {
+        margin-top: 12px;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      .side-panel {
+        background: rgba(255,255,255,0.02);
+        padding: 18px 18px 12px;
+      }
+
+      .panel-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 12px;
+      }
+
+      .panel-title {
+        font-size: 11px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .mini-badge {
+        font-size: 11px;
+        color: #dfe9ff;
+        padding: 6px 8px;
+        border: 1px solid rgba(255,255,255,0.12);
+        border-radius: 999px;
+        background: rgba(255,255,255,0.02);
+      }
+
+      .playlist {
+        display: grid;
+        gap: 10px;
+        max-height: 400px;
+        overflow: auto;
+        padding-right: 2px;
+      }
+
+      .play-item {
+        display: grid;
+        grid-template-columns: 22px 1fr auto;
+        gap: 10px;
+        align-items: center;
+        background: rgba(255,255,255,0.02);
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 12px;
+        padding: 10px 10px;
+        transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+      }
+
+      .play-item.active {
+        border-color: rgba(206,17,65,0.52);
+        background: rgba(206,17,65,0.12);
+        transform: translateX(2px);
+      }
+
+      .play-index {
+        display: grid;
+        place-items: center;
+        width: 22px;
+        height: 22px;
+        border-radius: 8px;
+        font-size: 10px;
+        font-weight: 800;
+        background: rgba(255,255,255,0.04);
+        color: var(--muted);
+      }
+
+      .play-item.active .play-index {
+        background: rgba(206,17,65,0.22);
+        color: #ffeaf0;
+      }
+
+      .play-copy {
+        font-size: 0.84rem;
+        line-height: 1.35;
+        color: #edf3ff;
+      }
+
+      .play-score {
+        font-size: 0.78rem;
+        color: var(--muted);
+      }
+
+      .stats-box {
+        margin-top: 16px;
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 14px;
+        padding: 12px 12px 10px;
+      }
+
+      .stats-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+      }
+
+      .stat-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 14px;
+        padding: 8px 0;
+        border-top: 1px solid rgba(255,255,255,0.08);
+        color: var(--muted);
+      }
+
+      .stat-row strong {
+        color: var(--text);
+      }
+
+      @media (max-width: 920px) {
+        .game-shell {
+          grid-template-columns: 1fr;
+        }
+
+        .main-stage {
+          border-right: 0;
+          border-bottom: 1px solid var(--line);
+        }
+      }
+
+      @media (max-width: 620px) {
+        .topbar {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .score-row {
+          align-items: flex-start;
+          gap: 12px;
+          flex-wrap: wrap;
+        }
+
+        .team {
+          min-width: auto;
+        }
+
+        .game-meta {
+          width: 100%;
+          text-align: left;
+        }
+
+        .play-text {
+          font-size: 2.6rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <div class="topbar">
+        <div class="brand">
+          <span class="live-pill"><span class="live-dot"></span> Live</span>
+          <span>NBA</span>
+        </div>
+        <div class="status">Raptors @ Timberwolves • 3rd quarter • 08:42</div>
       </div>
-      <div id="scoreboard" class="quarter-board" aria-label="Quarter-by-quarter score"></div>
-    </div>
-    <div>
-      <div id="clock" class="clock">Ready</div>
-      <div id="playText" class="play-text">Select a game and press Start.</div>
-    </div>
-    <div>
-      <div class="head-row" style="margin-bottom:8px">
-        <span id="counter" style="font-weight:700">0 / 0</span>
-        <span id="playState" style="color:var(--muted)">Paused</span>
+
+      <div class="game-shell">
+        <div class="main-stage">
+          <div class="score-row">
+            <div class="team">
+              <div class="team-mark red">TOR</div>
+              <div>
+                <div class="team-name">Toronto</div>
+                <div class="team-score">117</div>
+              </div>
+            </div>
+
+            <div class="score-separator">:</div>
+
+            <div class="team" style="justify-content:flex-end; text-align:right;">
+              <div>
+                <div class="team-name">Minnesota</div>
+                <div class="team-score">112</div>
+              </div>
+              <div class="team-mark blue">MIN</div>
+            </div>
+          </div>
+
+          <div class="game-meta">
+            3Q • 08:42 • Target center • Tied game in the stretch run
+          </div>
+
+          <div class="court-wrap">
+            <div class="court">
+              <div class="half-court"></div>
+              <div class="shot-clock"><span>Shot Clock</span> <span class="clock-value">09</span></div>
+              <div class="player-bubble red"><span class="num">4</span></div>
+              <div class="player-bubble blue"><span class="num">5</span></div>
+              <div class="moment-tag">Momentum • TOR</div>
+            </div>
+          </div>
+
+          <div class="play-summary">
+            <div class="play-kicker">Play-by-play</div>
+            <p id="playText" class="play-text">Barnes drives baseline and drops it to Siakam for the floater.</p>
+            <div id="playSub" class="play-sub">Toronto opens the lane, forces the switch, and Siakam gets the clean look.</div>
+          </div>
+        </div>
+
+        <aside class="side-panel">
+          <div class="panel-top">
+            <div class="panel-title">Game Feed</div>
+            <div class="mini-badge">Q3</div>
+          </div>
+
+          <div id="playlist" class="playlist" aria-live="polite"></div>
+
+          <div class="stats-box">
+            <div class="stats-header">
+              <div class="panel-title">Leaders</div>
+              <div class="mini-badge">Live</div>
+            </div>
+
+            <div class="stat-row"><span>Siakam</span><strong>28 PTS</strong></div>
+            <div class="stat-row"><span>Harden</span><strong>9 AST</strong></div>
+            <div class="stat-row"><span>Gobert</span><strong>14 REB</strong></div>
+          </div>
+        </aside>
       </div>
-      <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
     </div>
-  </section>
 
-  <section id="controls" class="controls" hidden aria-label="Replay controls">
-    <button id="back10" title="Back 10 plays">⏪ RWD 10</button>
-    <button id="back1" title="Previous play">◀ Prev</button>
-    <button id="pauseButton">▶ Play</button>
-    <button id="next1" title="Next play">Next ▶</button>
-    <button id="forward10" title="Forward 10 plays">FWD 10 ⏩</button>
-    <label>Speed
-      <select id="speedSelect" aria-label="Playback speed">
-        <option value="3000">0.5×</option><option value="1500" selected>1×</option>
-        <option value="750">2×</option><option value="375">4×</option>
-      </select>
-    </label>
-  </section>
-</main>
-<script>
-  const INDEX_URL = "data/index.json";
-  const $ = id => document.getElementById(id);
-  let games = [], plays = [], index = 0, timer = null, playing = false, requestToken = 0;
+    <script>
+      const plays = [
+        {
+          text: "Barnes drives baseline and drops it to Siakam for the floater.",
+          sub: "Toronto opens the lane, forces the switch, and Siakam gets the clean look.",
+          score: "TOR 117 - MIN 112",
+          index: 1
+        },
+        {
+          text: "Raptors force a turnover and push ahead in transition.",
+          sub: "Quick outlet, one pass, and the defense is sprinting back to create the fast break.",
+          score: "TOR 115 - MIN 110",
+          index: 2
+        },
+        {
+          text: "McDaniels buries the corner three and the crowd erupts.",
+          sub: "The defense rotates too late and the spot-up look is wide open.",
+          score: "TOR 112 - MIN 108",
+          index: 3
+        },
+        {
+          text: "Siakam takes the contact and converts at the rim.",
+          sub: "The Timberwolves are sending help, but he still finds the clean lane to finish.",
+          score: "TOR 109 - MIN 106",
+          index: 4
+        },
+        {
+          text: "Bennett swats the attempt and starts the break.",
+          sub: "The Raptors are getting stops with energy and scrappiness on the glass.",
+          score: "TOR 107 - MIN 104",
+          index: 5
+        },
+        {
+          text: "The offense resets, and the ball finds the open wing shooter.",
+          sub: "A patient possession ends with a clean triple from the right arc.",
+          score: "TOR 104 - MIN 101",
+          index: 6
+        }
+      ];
 
-  function textValue(value, fallback = "") {
-    if (value == null) return fallback;
-    if (typeof value === "object") return value.displayValue ?? value.value ?? value.number ?? fallback;
-    return value;
-  }
-  function normalizePlay(play, i) {
-    const period = textValue(play.period?.number, textValue(play.period, textValue(play.quarter, textValue(play.periodNumber, "1"))));
-    const clock = textValue(play.clock?.displayValue, textValue(play.clock, textValue(play.gameClock, textValue(play.time, "00:00"))));
-    return {
-      period:String(period), clock:String(clock),
-      description:String(play.text ?? play.description ?? play.desc ?? play.playText ?? play.actionDescription ?? `Play ${i+1}`),
-      homeScore:play.homeScore ?? play.home_score ?? play.score?.home ?? play.score?.homeScore ?? null,
-      awayScore:play.awayScore ?? play.away_score ?? play.score?.away ?? play.score?.awayScore ?? null
-    };
-  }
-  function getPlays(payload) {
-    const source=[payload?.plays,payload?.playByPlay,payload?.play_by_play,payload?.events,payload?.actions].find(Array.isArray);
-    return source ? source.map(normalizePlay) : [];
-  }
-  function formatDate(value) {
-    if (!value) return "Date unavailable";
-    const date=new Date(value);
-    return Number.isNaN(date.getTime()) ? String(value) : date.toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric",year:"numeric"});
-  }
-  function buildQuarterScoreboard() {
-    const board=$("scoreboard"); board.replaceChildren();
-    const periods=[...new Set(["1","2","3","4",...plays.map(p=>String(p.period))])].sort((a,b)=>Number(a)-Number(b));
-    periods.forEach(period=>{
-      const box=document.createElement("div");
-      box.className="quarter-box"+(period===String(plays[index]?.period||"1")?" active":"");
-      const label=document.createElement("span"); label.className="quarter-label";
-      label.textContent=Number(period)>4?`OT${Number(period)-4}`:`Q${period}`;
-      const score=document.createElement("span"); score.className="quarter-score"; score.textContent="0 - 0";
-      box.append(label,score); board.appendChild(box);
-    });
-    updateQuarterScores();
-  }
-  function updateQuarterScores() {
-    const byPeriod={"1":"0 - 0","2":"0 - 0","3":"0 - 0","4":"0 - 0"};
-    plays.forEach(play=>{
-      const q=String(play.period||"1");
-      if (q in byPeriod) byPeriod[q]=`${play.awayScore ?? play.homeScore ?? 0} - ${play.homeScore ?? play.awayScore ?? 0}`;
-    });
-    [...document.querySelectorAll(".quarter-box")].forEach((box,i)=>{
-      const q=String(i+1), score=box.querySelector(".quarter-score");
-      if (score) score.textContent=byPeriod[q]||"0 - 0";
-      box.classList.toggle("active",String(plays[index]?.period||"1")===q);
-    });
-  }
-  function render() {
-    if (!plays.length) return;
-    index=Math.max(0,Math.min(index,plays.length-1));
-    const item=plays[index];
-    $("clock").textContent=`QUARTER ${item.period}  ·  ${item.clock||""}`;
-    $("playText").textContent=item.description;
-    $("counter").textContent=`${index+1} / ${plays.length} plays`;
-    $("progressBar").style.width=`${((index+1)/plays.length)*100}%`;
-    $("playState").textContent=playing?"Playing":"Paused";
-    updateQuarterScores();
-  }
-  function stop() {
-    clearInterval(timer); timer=null; playing=false;
-    $("playState").textContent="Paused"; $("pauseButton").textContent="▶ Play";
-  }
-  function step(amount) {
-    if (!plays.length) return;
-    stop(); index=Math.max(0,Math.min(index+amount,plays.length-1)); render();
-  }
-  function tick() {
-    if (index>=plays.length-1) { stop(); return; }
-    index++; render();
-  }
-  function play() {
-    if (!plays.length) return;
-    clearInterval(timer); playing=true;
-    $("playState").textContent="Playing"; $("pauseButton").textContent="Ⅱ Pause";
-    timer=setInterval(tick,Number($("speedSelect").value));
-    render();
-  }
-  async function loadSelectedGame() {
-    stop();
-    const game=games[Number($("gameSelect").value)];
-    if (!game) return;
-    const token=++requestToken;
-    $("startButton").disabled=true; $("status").textContent="Loading game play-by-play…";
-    $("jumbotron").hidden=true; $("controls").hidden=true; plays=[];
-    try {
-      if (!game.file) throw new Error("This game entry has no JSON file path.");
-      const response=await fetch(new URL(game.file,document.baseURI).toString()+`?t=${Date.now()}`);
-      if (!response.ok) throw new Error(`Game JSON request failed (${response.status}).`);
-      const payload=await response.json();
-      if (token!==requestToken) return;
-      plays=getPlays(payload);
-      if (!plays.length) throw new Error("The game JSON loaded, but no play array was found.");
-      index=0;
-      $("gameTitle").textContent=game.short_name||game.name||game.game_id||"Raptors game";
-      $("gameDate").textContent=formatDate(game.date);
-      buildQuarterScoreboard(); render();
-      $("status").textContent=`${plays.length} plays loaded. Press Start Jumbotron to begin.`;
-      $("startButton").disabled=false;
-    } catch (error) {
-      if (token!==requestToken) return;
-      $("status").textContent=`Could not load plays: ${error.message}`;
-      $("startButton").disabled=true;
-    }
-  }
-  async function loadIndex() {
-    try {
-      const response=await fetch(INDEX_URL+`?t=${Date.now()}`);
-      if (!response.ok) throw new Error(`Index request failed (${response.status}).`);
-      const data=await response.json(); games=Array.isArray(data.games)?data.games:[];
-      const select=$("gameSelect"); select.replaceChildren();
-      games.forEach((game,i)=>{
-        const option=document.createElement("option"); option.value=i;
-        option.textContent=game.short_name||game.name||game.game_id||`Game ${i+1}`; select.appendChild(option);
-      });
-      if (!games.length) throw new Error("No games listed in data/index.json.");
-      select.addEventListener("change",loadSelectedGame); await loadSelectedGame();
-    } catch (error) {
-      $("status").textContent=`Could not load games: ${error.message}`;
-      $("gameSelect").innerHTML="<option>No games available</option>";
-    }
-  }
-  $("startButton").addEventListener("click",()=>{
-    $("jumbotron").hidden=false; $("controls").hidden=false; index=0; render(); play();
-  });
-  $("pauseButton").addEventListener("click",()=>playing?stop():play());
-  $("back10").addEventListener("click",()=>step(-10));
-  $("back1").addEventListener("click",()=>step(-1));
-  $("next1").addEventListener("click",()=>step(1));
-  $("forward10").addEventListener("click",()=>step(10));
-  $("speedSelect").addEventListener("change",()=>{if(playing)play();});
-  loadIndex();
-</script>
-</body>
+      const playlistEl = document.getElementById('playlist');
+      const playTextEl = document.getElementById('playText');
+      const playSubEl = document.getElementById('playSub');
+
+      function renderPlaylist(activeIndex = 0) {
+        playlistEl.innerHTML = plays
+          .map((play, idx) => `
+            <div class="play-item ${idx === activeIndex ? 'active' : ''}">
+              <div class="play-index">${play.index}</div>
+              <div class="play-copy">${play.text}</div>
+              <div class="play-score">${play.score}</div>
+            </div>
+          `)
+          .join('');
+      }
+
+      let activePlay = 0;
+      function updatePlay() {
+        const play = plays[activePlay];
+        playTextEl.textContent = play.text;
+        playSubEl.textContent = play.sub;
+        renderPlaylist(activePlay);
+      }
+
+      renderPlaylist(activePlay);
+      updatePlay();
+
+      setInterval(() => {
+        activePlay = (activePlay + 1) % plays.length;
+        updatePlay();
+      }, 2600);
+    </script>
+  </body>
 </html>
