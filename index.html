@@ -304,8 +304,8 @@
   <body>
     <main class="player">
       <header class="game-heading" aria-label="Game details">
-        <h1 class="game-title">Loading game…</h1>
-        <p class="game-details"><time datetime="">Loading date…</time> · Tip-off TBD</p>
+        <h1 class="game-title">Raptors at Timberwolves</h1>
+        <p class="game-details"><time datetime="2026-11-10">November 10, 2026</time> · Tip-off 7:30 PM ET</p>
       </header>
       <section class="broadcast" aria-label="Basketball broadcast">
         <div class="broadcast-screen" aria-hidden="true"></div>
@@ -313,13 +313,13 @@
         <section class="scorebug" aria-label="Game score">
           <div class="team home">
             <span class="team-accent" aria-hidden="true"></span>
-            <div class="team-info"><div class="team-label">Home</div><div class="team-name">Raptors</div></div>
-            <div class="score" id="homeScore">0</div>
+            <div class="team-info"><div class="team-label">Toronto</div><div class="team-name">Raptors</div></div>
+            <div class="score">0</div>
           </div>
           <div class="team away">
             <span class="team-accent" aria-hidden="true"></span>
-            <div class="team-info"><div class="team-label">Away</div><div class="team-name">Opponent</div></div>
-            <div class="score" id="awayScore">0</div>
+            <div class="team-info"><div class="team-label">Minnesota</div><div class="team-name">Timberwolves</div></div>
+            <div class="score">0</div>
           </div>
           <div class="game-state">
             <div class="period"><span class="period-label">Period</span><span class="period-value" id="period">1st</span></div>
@@ -359,7 +359,6 @@
     </main>
 
     <script>
-      const INDEX_URL = 'data/index.json';
       const QUARTER_SECONDS = 12 * 60;
       const GAME_SECONDS = QUARTER_SECONDS * 4;
       const clockEl = document.getElementById('gameClock');
@@ -371,21 +370,11 @@
       const elapsedEl = document.getElementById('elapsedTime');
       const speedSelect = document.getElementById('speedSelect');
       const playbackStatus = document.getElementById('playbackStatus');
-      const titleEl = document.querySelector('.game-title');
-      const detailsEl = document.querySelector('.game-details');
-      const homeScoreEl = document.getElementById('homeScore');
-      const awayScoreEl = document.getElementById('awayScore');
-      const homeNameEl = document.querySelector('.team.home .team-name');
-      const awayNameEl = document.querySelector('.team.away .team-name');
-      const homeLabelEl = document.querySelector('.team.home .team-label');
-      const awayLabelEl = document.querySelector('.team.away .team-label');
 
       let elapsed = 0;
       let isPlaying = false;
       let lastTick = 0;
       let timerId = null;
-      let plays = [];
-      let currentGame = null;
 
       function formatClock(seconds) {
         const wholeSeconds = Math.max(0, Math.ceil(seconds));
@@ -396,90 +385,6 @@
         return ['1st', '2nd', '3rd', '4th'][period] || '4th';
       }
 
-      function safeNumber(value, fallback = 0) {
-        return Number.isFinite(Number(value)) ? Number(value) : fallback;
-      }
-
-      function getPlaySource(payload) {
-        const possible = [payload?.plays, payload?.playByPlay, payload?.play_by_play, payload?.events, payload?.actions];
-        return possible.find(Array.isArray) || [];
-      }
-
-      function normalizePlay(play, index) {
-        const period = play?.period ?? play?.quarter ?? play?.periodNumber ?? 1;
-        const clock = play?.clock ?? play?.gameClock ?? play?.time ?? '12:00';
-        const text = play?.text ?? play?.description ?? play?.desc ?? play?.playText ?? play?.actionDescription ?? `Play ${index + 1}`;
-        return {
-          period: safeNumber(period, 1),
-          clock: String(clock),
-          text: String(text),
-          raw: play,
-        };
-      }
-
-      function getLatestRaptorsGame(games) {
-        return [...games]
-          .filter((game) => {
-            const teams = game?.competitors || [];
-            return teams.some((entry) => {
-              const name = String(entry?.team?.displayName || entry?.team?.shortDisplayName || '').toLowerCase();
-              const abbreviation = String(entry?.team?.abbreviation || '').toUpperCase();
-              return name.includes('raptors') || abbreviation === 'TOR';
-            });
-          })
-          .sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0))[0] || null;
-      }
-
-      function getCompetitor(game, homeAway) {
-        const teams = game?.competitors || [];
-        const team = teams.find((entry) => String(entry?.homeAway || '').toLowerCase() === String(homeAway).toLowerCase()) || teams[0] || {};
-        const meta = team?.team || {};
-        return {
-          label: meta.location || meta.shortDisplayName || 'Team',
-          name: meta.shortDisplayName || meta.displayName || 'Raptors',
-          displayName: meta.displayName || meta.shortDisplayName || 'Raptors',
-          score: safeNumber(team?.score?.displayValue ?? team?.score?.value, 0),
-          abbreviation: meta.abbreviation || 'TOR',
-        };
-      }
-
-      function updateGameHeader(game) {
-        const home = getCompetitor(game, 'home');
-        const away = getCompetitor(game, 'away');
-        const title = `${home.displayName || 'Raptors'} vs ${away.displayName || 'Opponent'}`;
-        titleEl.textContent = title;
-
-        const dateValue = game?.date || new Date().toISOString();
-        const eventDate = new Date(dateValue);
-        const formattedDate = Number.isNaN(eventDate.getTime())
-          ? 'Date unavailable'
-          : new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).format(eventDate);
-
-        detailsEl.innerHTML = `<time datetime="${dateValue}">${formattedDate}</time> · Tip-off ${game?.time || '7:30 PM ET'}`;
-
-        homeLabelEl.textContent = home.abbreviation || 'TOR';
-        awayLabelEl.textContent = away.abbreviation || 'OPP';
-        homeNameEl.textContent = home.displayName || 'Raptors';
-        awayNameEl.textContent = away.displayName || 'Opponent';
-        homeScoreEl.textContent = String(home.score || 0);
-        awayScoreEl.textContent = String(away.score || 0);
-      }
-
-      function renderFromPlays() {
-        if (!plays.length) {
-          return;
-        }
-
-        const progressRatio = Math.min(1, Math.max(0, elapsed / GAME_SECONDS));
-        const targetIndex = Math.min(plays.length - 1, Math.max(0, Math.floor(progressRatio * plays.length)));
-        const currentPlay = plays[targetIndex] || plays[0];
-        const playPeriod = Number.isFinite(Number(currentPlay.period)) ? Number(currentPlay.period) : 1;
-        const displayClock = currentPlay.clock || '12:00';
-
-        periodEl.textContent = ordinalPeriod(Math.min(3, Math.max(0, playPeriod - 1)));
-        clockEl.textContent = displayClock;
-      }
-
       function render() {
         elapsed = Math.min(GAME_SECONDS, Math.max(0, elapsed));
         const finished = elapsed >= GAME_SECONDS;
@@ -488,13 +393,8 @@
         const remaining = finished ? 0 : QUARTER_SECONDS - secondsIntoPeriod;
         const seekPosition = Math.floor(elapsed);
 
-        if (!plays.length) {
-          clockEl.textContent = formatClock(remaining);
-          periodEl.textContent = ordinalPeriod(periodIndex);
-        } else {
-          renderFromPlays();
-        }
-
+        clockEl.textContent = formatClock(remaining);
+        periodEl.textContent = ordinalPeriod(periodIndex);
         timeline.value = String(seekPosition);
         elapsedEl.textContent = formatClock(seekPosition);
         timeline.style.setProperty('--progress', `${(elapsed / GAME_SECONDS) * 100}%`);
@@ -527,51 +427,6 @@
         }
       }
 
-      async function loadGameData() {
-        try {
-          const response = await fetch(`${INDEX_URL}?t=${Date.now()}`);
-          if (!response.ok) {
-            throw new Error(`Index request failed (${response.status}).`);
-          }
-
-          const data = await response.json();
-          const games = Array.isArray(data.games) ? data.games : [];
-          const selected = getLatestRaptorsGame(games);
-          if (!selected) {
-            throw new Error('No Raptors game found in the saved data index.');
-          }
-
-          currentGame = selected;
-          updateGameHeader(selected);
-
-          const gameFileUrl = new URL(selected.file || '', window.location.href).toString();
-          const gameResponse = await fetch(`${gameFileUrl}?t=${Date.now()}`);
-          if (!gameResponse.ok) {
-            throw new Error(`Game data request failed (${gameResponse.status}).`);
-          }
-
-          const payload = await gameResponse.json();
-          const source = getPlaySource(payload);
-          plays = source.map(normalizePlay);
-
-          if (!plays.length) {
-            throw new Error('The latest Raptors game loaded, but no plays were found.');
-          }
-
-          const home = getCompetitor(selected, 'home');
-          const away = getCompetitor(selected, 'away');
-          homeScoreEl.textContent = String(home.score || 0);
-          awayScoreEl.textContent = String(away.score || 0);
-          titleEl.textContent = `${home.displayName || 'Raptors'} vs ${away.displayName || 'Opponent'}`;
-          render();
-        } catch (error) {
-          console.error(error);
-          titleEl.textContent = 'Raptors game unavailable';
-          detailsEl.textContent = 'Could not load the saved game data';
-          playbackStatus.textContent = 'Data unavailable';
-        }
-      }
-
       playButton.addEventListener('click', () => setPlaying(!isPlaying));
       restartButton.addEventListener('click', () => {
         setPlaying(false);
@@ -591,7 +446,6 @@
         if (isPlaying) lastTick = performance.now();
       });
 
-      loadGameData();
       render();
     </script>
   </body>
