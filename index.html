@@ -4,70 +4,252 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#101114" />
-    <title>Raptors Games</title>
+    <title>Raptors games</title>
     <style>
       :root {
         color-scheme: dark;
-        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-        color: #f5f5f6;
-        background: #101114;
+        --bg: #0d0f13;
+        --panel: #14171d;
+        --panel-2: #1a1d23;
+        --line: rgba(255,255,255,0.1);
+        --text: #f4f5f7;
+        --muted: #a2a7b1;
+        --muted-2: #6a6f79;
+        --accent: #ce1141;
       }
       * { box-sizing: border-box; }
-      body { min-height: 100vh; margin: 0; padding: 32px 20px; }
-      main { width: min(720px, 100%); margin: 0 auto; }
-      .topbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 28px; }
-      h1 { margin: 0; font-size: 24px; font-weight: 650; letter-spacing: -.045em; }
-      .tools { display: flex; align-items: center; gap: 8px; }
-      button, input { color: inherit; font: inherit; }
-      button { cursor: pointer; }
-      .icon-button { display: grid; width: 38px; height: 38px; place-items: center; padding: 0; background: transparent; border: 1px solid #34353a; border-radius: 8px; }
-      .icon-button:hover, .game-row:hover { background: #1c1d21; }
-      .icon-button svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
-      .date-picker { width: 42px; height: 38px; padding: 0 4px; color: transparent; background: transparent; border: 1px solid #34353a; border-radius: 8px; cursor: pointer; }
-      .date-picker::-webkit-calendar-picker-indicator { cursor: pointer; filter: invert(1); }
-      .search-wrap { display: flex; align-items: center; gap: 8px; }
-      .search { width: min(240px, 42vw); padding: 9px 11px; color: inherit; background: #17181c; border: 1px solid #34353a; border-radius: 8px; }
+      html, body { min-height: 100%; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 36px 18px;
+        background: var(--bg);
+        color: var(--text);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+      main {
+        width: min(760px, 100%);
+      }
+      .topbar {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 18px;
+        margin-bottom: 10px;
+      }
+      .eyebrow {
+        color: var(--muted);
+        font-size: 10px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+      h1 {
+        margin: 4px 0 0;
+        font-size: clamp(26px, 4vw, 42px);
+        line-height: 1;
+        font-weight: 650;
+        letter-spacing: -0.06em;
+      }
+      .controls {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      button, input {
+        font: inherit;
+      }
+      button {
+        cursor: pointer;
+      }
+      .icon-button {
+        display: grid;
+        place-items: center;
+        width: 36px;
+        height: 36px;
+        background: transparent;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        color: var(--text);
+      }
+      .icon-button:hover { background: rgba(255,255,255,0.03); }
+      .icon-button svg {
+        width: 18px;
+        height: 18px;
+        stroke: currentColor;
+        fill: none;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .calendar-wrap {
+        position: relative;
+        display: grid;
+        place-items: center;
+      }
+      .date-input {
+        position: absolute;
+        inset: 0;
+        width: 36px;
+        height: 36px;
+        opacity: 0;
+        cursor: pointer;
+      }
+      .date-input::-webkit-calendar-picker-indicator {
+        cursor: pointer;
+      }
+      .search-field {
+        width: min(220px, 38vw);
+        padding: 9px 12px;
+        color: var(--text);
+        background: rgba(255,255,255,0.02);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+      }
+      .search-field::placeholder {
+        color: var(--muted);
+      }
       [hidden] { display: none !important; }
-      .list { border-top: 1px solid #303136; }
-      .game-row { display: grid; grid-template-columns: minmax(0, 1fr) 112px minmax(0, 1fr); align-items: center; gap: 12px; width: 100%; min-height: 76px; padding: 14px 12px; text-align: left; background: transparent; border: 0; border-bottom: 1px solid #303136; border-radius: 0; }
-      .game-row[aria-pressed="true"] { background: #1c1d21; box-shadow: inset 3px 0 #ce1141; }
-      .team { min-width: 0; font-size: 15px; font-weight: 560; }
-      .team-away { text-align: right; }
-      .team-home { text-align: left; }
-      .game-date { color: #a4a5aa; text-align: center; font-size: 12px; line-height: 1.5; font-variant-numeric: tabular-nums; }
-      .game-date small { display: block; color: #777980; font-size: 10px; }
-      .message { padding: 24px 12px; color: #a4a5aa; font-size: 14px; }
-      .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
-      button:focus-visible, input:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
-      @media (max-width: 480px) {
-        body { padding: 22px 14px; }
-        h1 { font-size: 21px; }
-        .game-row { grid-template-columns: minmax(0, 1fr) 82px minmax(0, 1fr); gap: 6px; min-height: 68px; padding: 12px 8px; }
+      .legend {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 150px minmax(0, 1fr);
+        gap: 16px;
+        padding: 10px 12px 8px;
+        color: var(--muted);
+        font-size: 10px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+      .legend .center { text-align: center; }
+      .legend .home { text-align: right; }
+      .legend .away { text-align: left; }
+      .list {
+        border-top: 1px solid var(--line);
+      }
+      .game-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 150px minmax(0, 1fr);
+        align-items: center;
+        gap: 16px;
+        width: 100%;
+        min-height: 64px;
+        padding: 14px 12px;
+        background: transparent;
+        border: 0;
+        border-bottom: 1px solid var(--line);
+        color: var(--text);
+        text-align: left;
+      }
+      .game-row:hover {
+        background: rgba(255,255,255,0.02);
+      }
+      .game-row[aria-pressed="true"] {
+        background: rgba(206,17,65,0.05);
+        box-shadow: inset 3px 0 var(--accent);
+      }
+      .team {
+        min-width: 0;
+        overflow: hidden;
+        font-size: 15px;
+        font-weight: 550;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+      .team.away { text-align: left; }
+      .team.home { text-align: right; }
+      .game-date {
+        text-align: center;
+        color: var(--muted);
+        font-size: 12px;
+        font-variant-numeric: tabular-nums;
+      }
+      .game-date strong {
+        display: block;
+        color: var(--text);
+        font-size: 13px;
+        font-weight: 600;
+      }
+      .message {
+        padding: 20px 12px;
+        color: var(--muted);
+        font-size: 14px;
+      }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+      button:focus-visible, input:focus-visible {
+        outline: 2px solid rgba(255,255,255,0.9);
+        outline-offset: 2px;
+      }
+      @media (max-width: 560px) {
+        .topbar {
+          align-items: center;
+          flex-wrap: wrap;
+        }
+        .legend, .game-row {
+          grid-template-columns: minmax(0, 1fr) 120px minmax(0, 1fr);
+        }
+        .search-field {
+          width: 160px;
+        }
+      }
+      @media (max-width: 420px) {
         .team { font-size: 13px; }
-        .game-date { font-size: 11px; }
-        .search { width: min(180px, 43vw); }
+        .legend, .game-row {
+          grid-template-columns: minmax(0, 1fr) 100px minmax(0, 1fr);
+          gap: 8px;
+        }
+        .search-field { width: 130px; }
       }
     </style>
   </head>
   <body>
     <main>
       <header class="topbar">
-        <h1>Raptors games</h1>
-        <div class="tools">
-          <div class="search-wrap">
-            <label class="sr-only" for="gameSearch">Search games and teams</label>
-            <input id="gameSearch" class="search" type="search" placeholder="Search games" autocomplete="off" hidden />
-            <button id="searchToggle" class="icon-button" type="button" aria-label="Search games" aria-expanded="false">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.3"></circle><path d="m16 16 4.2 4.2"></path></svg>
+        <div>
+          <div class="eyebrow">Toronto Raptors</div>
+          <h1 id="selectedDateTitle">Loading…</h1>
+        </div>
+
+        <div class="controls">
+          <div class="calendar-wrap">
+            <button class="icon-button" id="calendarButton" type="button" aria-label="Select a date">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="3" y="5" width="18" height="16" rx="2"></rect>
+                <path d="M8 3v4M16 3v4M3 10h18"></path>
+              </svg>
             </button>
+            <input class="date-input" id="dayPicker" type="date" aria-label="Choose a game date" />
           </div>
-          <label class="sr-only" for="dayPicker">Show games on a different day</label>
-          <input id="dayPicker" class="date-picker" type="date" aria-label="Choose a game date" title="Choose a game date" />
+
+          <button class="icon-button" id="searchToggle" type="button" aria-label="Search games" aria-expanded="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="10.5" cy="10.5" r="5.5"></circle>
+              <path d="m15 15 5 5"></path>
+            </svg>
+          </button>
+
+          <label class="sr-only" for="gameSearch">Search games</label>
+          <input id="gameSearch" class="search-field" type="search" placeholder="Search games" autocomplete="off" hidden />
         </div>
       </header>
-      <section id="gameList" class="list" aria-label="Available games" aria-live="polite">
-        <div class="message">Loading games…</div>
-      </section>
+
+      <div class="legend" aria-hidden="true">
+        <span class="away">Away</span>
+        <span class="center">Date</span>
+        <span class="home">Home</span>
+      </div>
+
+      <section id="gameList" class="list" aria-live="polite" aria-label="Game list by date"></section>
     </main>
 
     <script>
@@ -76,82 +258,121 @@
       const search = document.getElementById("gameSearch");
       const searchToggle = document.getElementById("searchToggle");
       const dayPicker = document.getElementById("dayPicker");
+      const selectedDateTitle = document.getElementById("selectedDateTitle");
+      const calendarButton = document.getElementById("calendarButton");
       let games = [];
-      let selectedId = null;
+      let selectedDate = "";
 
       function dayKey(value) {
         if (!value) return "";
         const date = new Date(value);
-        return Number.isNaN(date.getTime()) ? "" : date.toISOString().slice(0, 10);
+        return Number.isNaN(date.getTime()) ? "" : new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
       }
 
-      function formatDate(value) {
-        const date = new Date(value);
-        if (Number.isNaN(date.getTime())) return { date: "Date unavailable", day: "" };
+      function formatListDate(raw) {
+        if (!raw) return { month: "—", day: "—" };
+        const date = new Date(raw);
+        if (Number.isNaN(date.getTime())) return { month: "—", day: "—" };
         return {
-          date: new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric", timeZone: "UTC" }).format(date),
-          day: new Intl.DateTimeFormat(undefined, { weekday: "short", timeZone: "UTC" }).format(date)
+          month: new Intl.DateTimeFormat(undefined, { month: "short", timeZone: "UTC" }).format(date),
+          day: new Intl.DateTimeFormat(undefined, { day: "numeric", timeZone: "UTC" }).format(date),
+          full: new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" }).format(date)
         };
       }
 
-      function teamName(game, homeAway) {
-        const competitor = (game.competitors || []).find(team => team.homeAway === homeAway);
-        return competitor?.team?.shortDisplayName || competitor?.team?.displayName || competitor?.team?.abbreviation || (homeAway === "away" ? "Away" : "Home");
+      function formatTitle(dateValue) {
+        if (!dateValue) return "Select a date";
+        const date = new Date(dateValue);
+        if (Number.isNaN(date.getTime())) return "Select a date";
+        return new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" }).format(date);
       }
 
-      function render() {
-        const query = search.value.trim().toLowerCase();
-        const day = dayPicker.value;
+      function teamName(game, homeAway) {
+        const competitor = (game.competitors || []).find(item => item.homeAway === homeAway);
+        return competitor?.team?.shortDisplayName || competitor?.team?.displayName || competitor?.team?.abbreviation || (homeAway === "home" ? "Home" : "Away");
+      }
+
+      function getLatestGameDate() {
+        const values = games.map(game => dayKey(game.date)).filter(Boolean);
+        return values.sort().at(-1) || "";
+      }
+
+      function renderList() {
+        const query = (search.value || "").trim().toLowerCase();
         const matches = games.filter(game => {
-          const teams = `${game.name || ""} ${game.short_name || ""} ${teamName(game, "away")} ${teamName(game, "home")}`.toLowerCase();
-          return (!day || dayKey(game.date) === day) && (!query || teams.includes(query));
+          const matchesDate = !selectedDate || dayKey(game.date) === selectedDate;
+          const haystack = `${game.name || ""} ${game.short_name || ""} ${teamName(game, "away")} ${teamName(game, "home")}`.toLowerCase();
+          const matchesQuery = !query || haystack.includes(query);
+          return matchesDate && matchesQuery;
         });
+
         list.replaceChildren();
+
         if (!matches.length) {
           const empty = document.createElement("div");
           empty.className = "message";
-          empty.textContent = games.length ? "No games found for this day." : "No games available.";
-          list.append(empty);
+          empty.textContent = "No games available for this date.";
+          list.appendChild(empty);
           return;
         }
-        for (const game of matches) {
+
+        matches.forEach(game => {
           const row = document.createElement("button");
           row.type = "button";
           row.className = "game-row";
           row.setAttribute("role", "listitem");
-          row.setAttribute("aria-pressed", String(game.game_id === selectedId));
-          row.setAttribute("aria-label", `${teamName(game, "away")} at ${teamName(game, "home")}, ${formatDate(game.date).date}`);
+          row.setAttribute("aria-pressed", String(game.game_id === selectedDate));
+
           const away = document.createElement("span");
-          away.className = "team team-away";
+          away.className = "team away";
           away.textContent = teamName(game, "away");
+
           const date = document.createElement("span");
           date.className = "game-date";
-          const formatted = formatDate(game.date);
-          date.append(document.createTextNode(formatted.date));
-          const weekday = document.createElement("small");
-          weekday.textContent = formatted.day;
-          date.append(weekday);
+          const formatted = formatListDate(game.date);
+          const strong = document.createElement("strong");
+          strong.textContent = `${formatted.month} ${formatted.day}`;
+          date.append(strong);
+          date.append(document.createTextNode("Game"));
+
           const home = document.createElement("span");
-          home.className = "team team-home";
+          home.className = "team home";
           home.textContent = teamName(game, "home");
+
           row.append(away, date, home);
           row.addEventListener("click", () => {
-            selectedId = game.game_id;
-            render();
+            selectedDate = dayKey(game.date);
+            dayPicker.value = selectedDate;
+            selectedDateTitle.textContent = formatTitle(selectedDate);
+            renderList();
           });
-          list.append(row);
-        }
+
+          list.appendChild(row);
+        });
+      }
+
+      function applyDate(dateValue) {
+        selectedDate = dateValue || getLatestGameDate();
+        dayPicker.value = selectedDate;
+        selectedDateTitle.textContent = formatTitle(selectedDate);
+        renderList();
       }
 
       searchToggle.addEventListener("click", () => {
-        const opening = search.hidden;
-        search.hidden = !opening;
-        searchToggle.setAttribute("aria-expanded", String(opening));
-        if (opening) search.focus();
-        else { search.value = ""; render(); }
+        const showSearch = search.hidden;
+        search.hidden = !showSearch;
+        searchToggle.setAttribute("aria-expanded", String(showSearch));
+        if (showSearch) {
+          search.focus();
+        } else {
+          search.value = "";
+          renderList();
+        }
       });
-      search.addEventListener("input", render);
-      dayPicker.addEventListener("change", render);
+
+      search.addEventListener("input", renderList);
+      dayPicker.addEventListener("change", () => applyDate(dayPicker.value));
+      calendarButton.addEventListener("click", () => dayPicker.showPicker ? dayPicker.showPicker() : dayPicker.click());
 
       async function loadGames() {
         try {
@@ -159,15 +380,18 @@
           if (!response.ok) throw new Error(`Request failed (${response.status}).`);
           const data = await response.json();
           games = Array.isArray(data.games) ? data.games.slice().sort((a, b) => (b.date || "").localeCompare(a.date || "")) : [];
-          render();
+          if (!games.length) {
+            list.innerHTML = '<div class="message">No games available.</div>';
+            selectedDateTitle.textContent = "No games";
+            return;
+          }
+          applyDate(getLatestGameDate());
         } catch (error) {
-          list.replaceChildren();
-          const message = document.createElement("div");
-          message.className = "message";
-          message.textContent = `Could not load games: ${error.message}`;
-          list.append(message);
+          list.innerHTML = `<div class="message">Could not load games: ${error.message}</div>`;
+          selectedDateTitle.textContent = "Could not load";
         }
       }
+
       loadGames();
     </script>
   </body>
