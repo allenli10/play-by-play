@@ -19,7 +19,7 @@
     button { cursor:pointer; font-weight:700; }
     button:disabled { opacity:.45; cursor:not-allowed; }
     .start { flex:1 1 200px; min-height:64px; border:0; background:linear-gradient(120deg,#ce1141,#fa4772); font-size:1.35rem; box-shadow:0 10px 30px #0006; }
-    .jumbo { margin-top:16px; padding:clamp(20px,5vw,54px); min-height:55vh; border:2px solid #ffffff20; border-radius:24px; background:linear-gradient(145deg,#222a3a,#10141e); box-shadow:0 24px 70px rgba(0,0,0,.45); }
+    .jumbo { margin-top:16px; padding:clamp(20px,5vw,54px); min-height:55vh; border:2px solid #ffffff20; border-radius:24px; background:linear-gradient(145deg,#222a3a,#10141e); box-shadow:0 24px 70px rgba(0,0,0,0.45); }
     .jumbo[hidden],.timeline[hidden],.controls[hidden] { display:none; }
     .game-meta { display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; color:var(--muted); font-weight:650; }
     .score { color:white; background:#ffffff12; border:1px solid #ffffff20; border-radius:999px; padding:9px 16px; font-size:1.15rem; }
@@ -95,6 +95,7 @@
   let timer = null;
   let playing = false;
   let requestToken = 0;
+  let selectedGame = null;
 
   function textValue(value, fallback = "") {
     if (value == null) return fallback;
@@ -184,17 +185,35 @@
     list.appendChild(fragment);
   }
 
-  async function loadSelectedGame() {
-    stop();
-    const game = games[Number($("gameSelect").value)];
+  function showGamePreview(game) {
+    const title = game?.short_name || game?.name || game?.game_id || "NBA game";
+    $("gameTitle").textContent = title;
+    const competitors = game?.competitors || [];
+    const scoreText = competitors.map((team) => {
+      const name = team.team?.abbreviation || "Team";
+      const score = team.score?.displayValue ?? team.score?.value;
+      return score == null ? name : `${name} ${score}`;
+    }).join("  ·  ");
+    $("score").textContent = scoreText || "Score unavailable";
+    $("clock").textContent = "Game ready";
+    $("playText").textContent = "Press Start to load play-by-play.";
+    $("counter").textContent = "0 / 0 plays";
+    $("progressBar").style.width = "0%";
+    $("jumbotron").hidden = false;
+    $("controls").hidden = false;
+    $("timeline").hidden = false;
+    $("pauseButton").textContent = "▶ Play";
+    $("playState").textContent = "Paused";
+    $("playList").replaceChildren();
+  }
+
+  async function loadSelectedGameData() {
+    const game = selectedGame;
     if (!game) return;
     const thisRequest = ++requestToken;
     $("startButton").disabled = true;
     $("status").textContent = "Loading game play-by-play…";
-    $("jumbotron").hidden = true;
-    $("controls").hidden = true;
-    $("timeline").hidden = true;
-    plays = [];
+    stop();
 
     try {
       if (!game.file) throw new Error("This game entry has no JSON file path.");
@@ -206,14 +225,6 @@
       if (!plays.length) throw new Error("The game JSON loaded, but no play array was found.");
 
       index = 0;
-      $("gameTitle").textContent = game.short_name || game.name || game.game_id || "NBA game";
-      const competitors = game.competitors || [];
-      const scoreText = competitors.map((team) => {
-        const name = team.team?.abbreviation || "Team";
-        const score = team.score?.displayValue ?? team.score?.value;
-        return score == null ? name : `${name} ${score}`;
-      }).join("  ·  ");
-      $("score").textContent = scoreText || "Score unavailable";
       renderList();
       render();
       $("status").textContent = `${plays.length} plays loaded. Press Start Jumbotron to begin.`;
@@ -221,8 +232,24 @@
     } catch (error) {
       if (thisRequest !== requestToken) return;
       $("status").textContent = `Could not load plays: ${error.message}`;
-      $("startButton").disabled = true;
+      $("startButton").disabled = false;
     }
+  }
+
+  async function loadSelectedGame() {
+    stop();
+    const game = games[Number($("gameSelect").value)];
+    selectedGame = game || null;
+    if (!game) {
+      $("status").textContent = "Select a game to preview the broadcast UI.";
+      $("startButton").disabled = true;
+      return;
+    }
+
+    showGamePreview(game);
+    plays = [];
+    $("status").textContent = `Selected ${game.short_name || game.name || game.game_id || "this game"}. Press Start Jumbotron to load the play-by-play JSON.`;
+    $("startButton").disabled = false;
   }
 
   async function loadIndex() {
@@ -248,10 +275,13 @@
     }
   }
 
-  $("startButton").addEventListener("click", () => {
+  $("startButton").addEventListener("click", async () => {
+    if (!selectedGame) return;
     $("jumbotron").hidden = false;
     $("controls").hidden = false;
     $("timeline").hidden = false;
+    await loadSelectedGameData();
+    if (!plays.length) return;
     index = 0;
     render();
     play();
