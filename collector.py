@@ -6,7 +6,8 @@ from pathlib import Path
 import requests
 
 BASE_URL = "https://site.api.espn.com/apis/site/v2/sports/basketball/nba"
-TEAM = None
+TEAM = "TOR"
+TEAM_ID = "28"
 OUTPUT_DIR = Path("data/raw/espn")
 
 SESSION = requests.Session()
@@ -37,12 +38,30 @@ def is_completed(event):
     return status.get("type", {}).get("completed", False)
 
 
-def get_recent_games(limit=10):
-    url = f"{BASE_URL}/scoreboard"
-    scoreboard = get_json(url)
+def includes_raptors(event):
+    """Return whether the event's competition includes Toronto."""
+    for competition in event.get("competitions", []):
+        for competitor in competition.get("competitors", []):
+            team = competitor.get("team", {})
+            if str(team.get("id", "")) == TEAM_ID or team.get("abbreviation") == TEAM:
+                return True
+    return False
 
-    events = scoreboard.get("events", [])
-    completed = [event for event in events if is_completed(event)]
+
+def get_recent_games(limit=10):
+    # The scoreboard's default date window can contain no finished games
+    # (especially on off-days). Scan recent dates so the collector can still
+    # find Toronto's latest completed games.
+    events_by_id = {}
+    today = datetime.now(timezone.utc).date()
+    for days_ago in range(7):
+        date = (today - __import__("datetime").timedelta(days=days_ago)).strftime("%Y%m%d")
+        scoreboard = get_json(f"{BASE_URL}/scoreboard?dates={date}")
+        for event in scoreboard.get("events", []):
+            if is_completed(event) and includes_raptors(event):
+                events_by_id[event.get("id")] = event
+
+    completed = list(events_by_id.values())
     completed.sort(key=lambda event: event.get("date", ""), reverse=True)
     return completed[:limit]
 
@@ -78,11 +97,11 @@ def collect_game(event):
 
 
 def main():
-    print("Starting NBA data collection...")
+    print(f"Starting {TEAM} data collection...")
 
     games = get_recent_games()
-    if len(games) < 1:
-        raise RuntimeError("No completed NBA games found.")
+    if not games:
+        raise RuntimeError(f"No completed {TEAM} games found in the last 7 days.")
 
     results = []
     for event in games:
@@ -90,8 +109,8 @@ def main():
         time.sleep(1)
 
     index = {
-        "team": "NBA",
-        "team_abbreviation": "NBA",
+        "team": "Toronto Raptors",
+        "team_abbreviation": TEAM,
         "collected_at": datetime.now(timezone.utc).isoformat(),
         "game_count": len(results),
         "games": results,
