@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#08090b">
+  <title>Raptors Replay — Game Schedule</title>
+  <style>
+    :root{color-scheme:dark;--bg:#08090b;--panel:#141519;--panel2:#1b1c21;--line:#292a30;--muted:#92939d;--text:#f6f6f7;--red:#ce1141;--blue:#6095ff}
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% -20%,#20212a 0,transparent 58%),var(--bg);color:var(--text);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    main{width:min(920px,100% - 32px);margin:0 auto;padding:56px 0 72px}.eyebrow{margin:0 0 8px;color:#ed5274;font-size:11px;font-weight:800;letter-spacing:.18em;text-transform:uppercase}h1{margin:0;font-size:clamp(30px,6vw,48px);letter-spacing:-.055em;line-height:1.04}.intro{margin:12px 0 30px;color:var(--muted)}
+    .schedule{overflow:hidden;border:1px solid var(--line);border-radius:16px;background:rgba(20,21,25,.92);box-shadow:0 22px 80px #0005}.schedule-head{display:grid;grid-template-columns:1fr 150px 1fr;align-items:center;padding:13px 22px;border-bottom:1px solid var(--line);color:#92939d;font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}.schedule-head span:last-child{text-align:right}.game-list{display:grid}.game{display:grid;grid-template-columns:minmax(0,1fr) 150px minmax(0,1fr);align-items:center;gap:12px;min-height:108px;padding:17px 22px;border-bottom:1px solid var(--line);transition:background .16s}.game:last-child{border-bottom:0}.game:hover,.game[aria-pressed=true]{background:linear-gradient(90deg,#ce11411a,transparent 48%,#6095ff12)}.team{display:flex;align-items:center;gap:13px;min-width:0}.team.home{justify-content:flex-end;text-align:right}.logo{width:46px;height:46px;object-fit:contain;flex:0 0 46px;filter:drop-shadow(0 5px 12px #0008)}.team-copy{min-width:0}.side-label{display:block;color:var(--muted);font-size:9px;font-weight:800;letter-spacing:.16em;text-transform:uppercase}.team-name{display:block;overflow:hidden;font-size:17px;font-weight:750;letter-spacing:-.025em;text-overflow:ellipsis;white-space:nowrap}.abbr{color:#777984;font-size:11px;font-weight:700;letter-spacing:.1em}.date{display:grid;justify-items:center;gap:2px;text-align:center}.date strong{font-size:14px;font-variant-numeric:tabular-nums}.date span{color:var(--muted);font-size:11px}.date .at{margin-top:5px;color:#646671;font-size:10px;font-weight:800;letter-spacing:.15em}.choose{width:100%;margin-top:7px;padding:6px 12px;border:1px solid #ffffff24;border-radius:999px;background:#ffffff08;color:#eee;font:inherit;font-size:11px;font-weight:750;cursor:pointer;transition:background .15s,border-color .15s}.choose:hover,.game[aria-pressed=true] .choose{border-color:#ce1141;background:#ce1141;color:#fff}.status{padding:28px;color:var(--muted);text-align:center}.status.error{color:#ff879d}.footer{margin-top:16px;color:#747580;font-size:12px;text-align:center}.footer a{color:#bbb;text-decoration:none}.footer a:hover{color:white}
+    @media(max-width:560px){main{width:calc(100% - 20px);padding:30px 0 48px}.schedule-head{grid-template-columns:1fr 92px 1fr;padding:12px 11px;font-size:8px}.game{grid-template-columns:minmax(0,1fr) 92px minmax(0,1fr);gap:5px;min-height:96px;padding:13px 10px}.team{gap:7px}.logo{width:32px;height:32px;flex-basis:32px}.team-name{font-size:12px}.abbr{font-size:9px}.side-label{font-size:8px}.date strong{font-size:11px}.date span{font-size:9px}.choose{padding:5px 5px;font-size:10px}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
+  </style>
+</head>
+<body>
+  <main>
+    <p class="eyebrow">Toronto Raptors · Replay library</p>
+    <h1>Pick a game.</h1>
+    <p class="intro">Choose a matchup to open its play-by-play replay. Away and home sides are labeled just like an NBA schedule.</p>
+    <section class="schedule" aria-label="Available games">
+      <div class="schedule-head"><span>Away</span><span style="text-align:center">Game date</span><span>Home</span></div>
+      <div class="game-list" id="gameList" aria-live="polite"><div class="status">Loading the schedule…</div></div>
+    </section>
+    <p class="footer">Game data from ESPN · <a href="./">Back to the replay</a></p>
+  </main>
+  <script>
+    const list = document.getElementById('gameList');
+    const teamOf = (entry) => entry?.team || {};
+    function makeTeam(entry, side) {
+      const team = teamOf(entry);
+      const wrapper = document.createElement('div'); wrapper.className = `team ${side}`;
+      if (side === 'away') {
+        const logo = document.createElement('img'); logo.className = 'logo'; logo.src = team.logo || ''; logo.alt = ''; logo.loading = 'lazy'; logo.onerror = () => { logo.hidden = true; }; wrapper.append(logo);
+      }
+      const copy = document.createElement('div'); copy.className = 'team-copy';
+      const label = document.createElement('span'); label.className = 'side-label'; label.textContent = side;
+      const name = document.createElement('span'); name.className = 'team-name'; name.textContent = team.shortDisplayName || team.name || team.displayName || 'Team';
+      const abbr = document.createElement('span'); abbr.className = 'abbr'; abbr.textContent = team.abbreviation || '';
+      copy.append(label,name,abbr); wrapper.append(copy);
+      if (side === 'home') { const logo = document.createElement('img'); logo.className = 'logo'; logo.src = team.logo || ''; logo.alt = ''; logo.loading = 'lazy'; logo.onerror = () => { logo.hidden = true; }; wrapper.append(logo); }
+      return wrapper;
+    }
+    function formatDate(value) {
+      const date = new Date(value);
+      if (!Number.isFinite(date.getTime())) return { day: 'Date unavailable', time: '' };
+      return {day:new Intl.DateTimeFormat('en-US',{weekday:'short',month:'short',day:'numeric',timeZone:'UTC'}).format(date),time:new Intl.DateTimeFormat('en-US',{year:'numeric',timeZone:'UTC'}).format(date)};
+    }
+    function render(games) {
+      list.replaceChildren();
+      if (!games.length) { list.innerHTML = '<div class="status">No games are available yet.</div>'; return; }
+      games.forEach((game,index) => {
+        const competitors = game.competitors || [];
+        const away = competitors.find(team => team.homeAway === 'away') || competitors[1];
+        const home = competitors.find(team => team.homeAway === 'home') || competitors[0];
+        const row = document.createElement('article'); row.className = 'game'; row.setAttribute('aria-pressed','false');
+        row.append(makeTeam(away,'away'));
+        const center = document.createElement('div'); center.className = 'date';
+        const date = formatDate(game.date); const day = document.createElement('strong'); day.textContent = date.day; const year = document.createElement('span'); year.textContent = date.time;
+        const at = document.createElement('span'); at.className='at'; at.textContent='VS'; center.append(day,year,at);
+        const button = document.createElement('button'); button.className='choose'; button.type='button'; button.textContent='Select game'; button.setAttribute('aria-label',`Select ${game.short_name || game.name || 'game'}`);
+        center.append(button); row.append(center,makeTeam(home,'home'));
+        button.addEventListener('click', () => selectGame(game,row,button));
+        row.addEventListener('click', event => { if (event.target !== button) selectGame(game,row,button); });
+        list.append(row);
+        if (index === 0 && new URLSearchParams(location.search).get('game') === game.game_id) selectGame(game,row,button,false);
+      });
+      const requested = new URLSearchParams(location.search).get('game');
+      if (requested && !games.some(game => game.game_id === requested)) {
+        const note=document.createElement('div');note.className='status';note.textContent='That game is not in the current schedule.';list.prepend(note);
+      }
+    }
+    function selectGame(game,row,button,updateUrl=true) {
+      document.querySelectorAll('.game').forEach(item => item.setAttribute('aria-pressed','false'));
+      row.setAttribute('aria-pressed','true'); button.textContent='Selected';
+      document.querySelectorAll('.game .choose').forEach(item => { if (item !== button) item.textContent='Select game'; });
+      if (updateUrl) history.replaceState(null,'',`?game=${encodeURIComponent(game.game_id)}`);
+      const file = game.file || `data/raw/espn/${game.game_id}.json`;
+      // Keep selection shareable and open the existing replay after confirming the matchup.
+      button.textContent='Open replay';
+      button.onclick = event => { event.stopPropagation(); location.href = `./?game=${encodeURIComponent(game.game_id)}`; };
+      button.setAttribute('aria-label',`Open replay: ${game.short_name || game.name || 'selected game'}`);
+      row.dataset.file = file;
+    }
+    fetch('data/index.json?ts='+Date.now()).then(response=>{if(!response.ok)throw new Error('Schedule unavailable');return response.json();}).then(data=>render(Array.isArray(data.games)?data.games:[])).catch(()=>{list.innerHTML='<div class="status error">Could not load the schedule. Please try again later.</div>';});
+  </script>
+</body>
+</html>
