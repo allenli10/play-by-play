@@ -1,7 +1,7 @@
 {
   "team": "Toronto Raptors",
   "team_abbreviation": "TOR",
-  "collected_at": "2026-11-19T19:21:58.941854+00:00",
+  "collected_at": "2026-11-20T18:58:09.301390+00:00",
   "game_count": 3,
   "games": [
     {
@@ -353,8 +353,8 @@
               "abbreviation": "RAT",
               "leaders": [
                 {
-                  "displayValue": "18 PTS, 7 REB, 6 AST, 3 STL",
-                  "value": 36.54999923706055,
+                  "displayValue": "18 PTS, 7 REB, 6 AST",
+                  "value": 35.54999923706055,
                   "athlete": {
                     "id": "4684272",
                     "fullName": "Ja'Kobe Walter",
@@ -799,7 +799,7 @@
           ]
         }
       ],
-      "collected_at": "2026-11-19T19:21:55.769793+00:00"
+      "collected_at": "2026-11-20T18:58:05.893240+00:00"
     },
     {
       "game_id": "401910002",
@@ -1596,7 +1596,7 @@
           ]
         }
       ],
-      "collected_at": "2026-11-19T19:21:56.844213+00:00"
+      "collected_at": "2026-11-20T18:58:07.143757+00:00"
     },
     {
       "game_id": "401909990",
@@ -2403,7 +2403,7 @@
           ]
         }
       ],
-      "collected_at": "2026-11-19T19:21:57.940917+00:00"
+      "collected_at": "2026-11-20T18:58:08.300387+00:00"
     }
   ]
 }

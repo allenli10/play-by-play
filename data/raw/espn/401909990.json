@@ -2021,26 +2021,11 @@
                   "$ref": "http://sports.core.api.espn.pvt/v2/sports/basketball/leagues/nba/seasons/2027/teams/28?lang=en&region=us",
                   "id": "28"
                 },
-                "status": "Day-To-Day",
-                "injuries": {
-                  "status": "Day-To-Day",
-                  "date": "2026-11-19T14:48Z",
-                  "type": {
-                    "id": "6",
-                    "name": "INJURY_STATUS_DAYTODAY",
-                    "description": "day-to-day",
-                    "abbreviation": "DD"
-                  },
-                  "details": {
-                    "fantasyStatus": {
-                      "description": "GTD",
-                      "abbreviation": "GTD",
-                      "displayDescription": "GTD"
-                    },
-                    "type": "Groin",
-                    "location": "Groin",
-                    "returnDate": "2026-11-20"
-                  }
+                "status": {
+                  "id": "1",
+                  "name": "Active",
+                  "type": "active",
+                  "abbreviation": "Active"
                 }
               },
               "statistics": [
@@ -2213,25 +2198,25 @@
                   "$ref": "http://sports.core.api.espn.pvt/v2/sports/basketball/leagues/nba/seasons/2027/teams/28?lang=en&region=us",
                   "id": "28"
                 },
-                "status": "Day-To-Day",
+                "status": "Out",
                 "injuries": {
-                  "status": "Day-To-Day",
-                  "date": "2026-11-19T01:34Z",
+                  "status": "Out",
+                  "date": "2026-11-19T21:41Z",
                   "type": {
-                    "id": "6",
-                    "name": "INJURY_STATUS_DAYTODAY",
-                    "description": "day-to-day",
-                    "abbreviation": "DD"
+                    "id": "4",
+                    "name": "INJURY_STATUS_OUT",
+                    "description": "out",
+                    "abbreviation": "O"
                   },
                   "details": {
                     "fantasyStatus": {
-                      "description": "GTD",
-                      "abbreviation": "GTD",
-                      "displayDescription": "GTD"
+                      "description": "OUT",
+                      "abbreviation": "OUT",
+                      "displayDescription": "Out"
                     },
-                    "type": "Illness",
-                    "location": "Other",
-                    "returnDate": "2026-11-20"
+                    "type": "Concussion",
+                    "location": "Head",
+                    "returnDate": "2026-11-23"
                   }
                 }
               },
@@ -3430,127 +3415,8 @@
       },
       "injuries": [
         {
-          "status": "Day-To-Day",
-          "date": "2026-11-19T14:48Z",
-          "athlete": {
-            "id": "4395625",
-            "uid": "s:40~l:46~a:4395625",
-            "guid": "92d6ee44-1fcc-f058-5b21-9c8dc7d2efde",
-            "lastName": "Barrett",
-            "fullName": "RJ Barrett",
-            "displayName": "RJ Barrett",
-            "shortName": "R. Barrett",
-            "links": [
-              {
-                "rel": [
-                  "playercard",
-                  "desktop",
-                  "athlete"
-                ],
-                "href": "https://www.espn.com/nba/player/_/id/4395625/rj-barrett",
-                "text": "Player Card"
-              }
-            ],
-            "headshot": {
-              "href": "https://a.espncdn.com/i/headshots/nba/players/full/4395625.png",
-              "alt": "RJ Barrett"
-            },
-            "jersey": "9",
-            "position": {
-              "name": "Forward",
-              "displayName": "Forward",
-              "abbreviation": "F"
-            },
-            "collegeAthlete": {
-              "$ref": "http://sports.core.api.espn.pvt/v2/sports/basketball/leagues/mens-college-basketball/athletes/4395625?lang=en&region=us"
-            },
-            "status": {
-              "id": "1",
-              "name": "Active",
-              "type": "active",
-              "abbreviation": "Active"
-            }
-          },
-          "type": {
-            "id": "6",
-            "name": "INJURY_STATUS_DAYTODAY",
-            "description": "day-to-day",
-            "abbreviation": "DD"
-          },
-          "details": {
-            "fantasyStatus": {
-              "description": "GTD",
-              "abbreviation": "GTD",
-              "displayDescription": "GTD"
-            },
-            "type": "Hamstring",
-            "location": "Leg",
-            "detail": "Soreness",
-            "returnDate": "2026-11-20"
-          }
-        },
-        {
-          "status": "Day-To-Day",
-          "date": "2026-11-19T14:48Z",
-          "athlete": {
-            "id": "4433134",
-            "uid": "s:40~l:46~a:4433134",
-            "guid": "dd0bb1da-07b1-3d6b-b4b7-11a9e7b70d46",
-            "lastName": "Barnes",
-            "fullName": "Scottie Barnes",
-            "displayName": "Scottie Barnes",
-            "shortName": "S. Barnes",
-            "links": [
-              {
-                "rel": [
-                  "playercard",
-                  "desktop",
-                  "athlete"
-                ],
-                "href": "https://www.espn.com/nba/player/_/id/4433134/scottie-barnes",
-                "text": "Player Card"
-              }
-            ],
-            "headshot": {
-              "href": "https://a.espncdn.com/i/headshots/nba/players/full/4433134.png",
-              "alt": "Scottie Barnes"
-            },
-            "jersey": "4",
-            "position": {
-              "name": "Forward",
-              "displayName": "Forward",
-              "abbreviation": "F"
-            },
-            "collegeAthlete": {
-              "$ref": "http://sports.core.api.espn.pvt/v2/sports/basketball/leagues/mens-college-basketball/athletes/4433134?lang=en&region=us"
-            },
-            "status": {
-              "id": "1",
-              "name": "Active",
-              "type": "active",
-              "abbreviation": "Active"
-            }
-          },
-          "type": {
-            "id": "6",
-            "name": "INJURY_STATUS_DAYTODAY",
-            "description": "day-to-day",
-            "abbreviation": "DD"
-          },
-          "details": {
-            "fantasyStatus": {
-              "description": "GTD",
-              "abbreviation": "GTD",
-              "displayDescription": "GTD"
-            },
-            "type": "Groin",
-            "location": "Groin",
-            "returnDate": "2026-11-20"
-          }
-        },
-        {
-          "status": "Day-To-Day",
-          "date": "2026-11-19T01:34Z",
+          "status": "Out",
+          "date": "2026-11-19T21:41Z",
           "athlete": {
             "id": "5093267",
             "uid": "s:40~l:46~a:5093267",
@@ -3591,20 +3457,81 @@
             }
           },
           "type": {
-            "id": "6",
-            "name": "INJURY_STATUS_DAYTODAY",
-            "description": "day-to-day",
-            "abbreviation": "DD"
+            "id": "4",
+            "name": "INJURY_STATUS_OUT",
+            "description": "out",
+            "abbreviation": "O"
           },
           "details": {
             "fantasyStatus": {
-              "description": "GTD",
-              "abbreviation": "GTD",
-              "displayDescription": "GTD"
+              "description": "OUT",
+              "abbreviation": "OUT",
+              "displayDescription": "Out"
             },
-            "type": "Illness",
-            "location": "Other",
-            "returnDate": "2026-11-20"
+            "type": "Concussion",
+            "location": "Head",
+            "returnDate": "2026-11-23"
+          }
+        },
+        {
+          "status": "Out",
+          "date": "2026-11-19T21:13Z",
+          "athlete": {
+            "id": "4395625",
+            "uid": "s:40~l:46~a:4395625",
+            "guid": "92d6ee44-1fcc-f058-5b21-9c8dc7d2efde",
+            "lastName": "Barrett",
+            "fullName": "RJ Barrett",
+            "displayName": "RJ Barrett",
+            "shortName": "R. Barrett",
+            "links": [
+              {
+                "rel": [
+                  "playercard",
+                  "desktop",
+                  "athlete"
+                ],
+                "href": "https://www.espn.com/nba/player/_/id/4395625/rj-barrett",
+                "text": "Player Card"
+              }
+            ],
+            "headshot": {
+              "href": "https://a.espncdn.com/i/headshots/nba/players/full/4395625.png",
+              "alt": "RJ Barrett"
+            },
+            "jersey": "9",
+            "position": {
+              "name": "Forward",
+              "displayName": "Forward",
+              "abbreviation": "F"
+            },
+            "collegeAthlete": {
+              "$ref": "http://sports.core.api.espn.pvt/v2/sports/basketball/leagues/mens-college-basketball/athletes/4395625?lang=en&region=us"
+            },
+            "status": {
+              "id": "1",
+              "name": "Active",
+              "type": "active",
+              "abbreviation": "Active"
+            }
+          },
+          "type": {
+            "id": "4",
+            "name": "INJURY_STATUS_OUT",
+            "description": "out",
+            "abbreviation": "O"
+          },
+          "details": {
+            "fantasyStatus": {
+              "description": "OUT",
+              "abbreviation": "OUT",
+              "displayDescription": "Out"
+            },
+            "type": "Hamstring",
+            "location": "Leg",
+            "detail": "Strain",
+            "side": "Right",
+            "returnDate": "2026-12-13"
           }
         },
         {
@@ -4174,6 +4101,1336 @@
       "records": []
     }
   ],
+  "news": {
+    "header": "NBA News",
+    "link": {
+      "language": "en",
+      "rel": [
+        "index",
+        "desktop",
+        "league"
+      ],
+      "href": "https://www.espn.com/nba/",
+      "text": "All NBA News",
+      "shortText": "All News",
+      "isExternal": false,
+      "isPremium": false
+    },
+    "articles": [
+      {
+        "id": 50541974,
+        "nowId": "1-50541974",
+        "contentKey": "50541974-1-6-1",
+        "dataSourceIdentifier": "10281aa5300e6",
+        "type": "Story",
+        "headline": "Fantasy adds, NBA bets to make for Friday: Jazz keep red-hot Bamba in lineup",
+        "description": "Andre Snellings breaks down Friday's NBA slate, highlighting the fantasy streamers to add and bets to make.",
+        "lastModified": "2026-11-20T18:37:13Z",
+        "published": "2026-11-20T18:37:13Z",
+        "images": [
+          {
+            "dataSourceIdentifier": "85f1c30740fab",
+            "id": 50542093,
+            "type": "header",
+            "name": "Mo Bamba [1296x729]",
+            "caption": "Mo Bamba is one of the most added players in ESPN Fantasy over the past week.",
+            "credit": "Juan Ocampo/NBAE via Getty Images",
+            "height": 729,
+            "width": 1296,
+            "url": "https://a.espncdn.com/photo/2026/1120/r1748594_1296x729_16-9.jpg"
+          },
+          {
+            "type": "Media",
+            "name": "Quentin Grimes gets up for the beautiful jam",
+            "caption": "Quentin Grimes gets up for the beautiful jam",
+            "height": 324,
+            "width": 576,
+            "url": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1119/5811474c-40d5-4a77-8ebf-84346fe70783/5811474c-40d5-4a77-8ebf-84346fe70783.jpg"
+          }
+        ],
+        "categories": [
+          {
+            "id": 12025,
+            "type": "league",
+            "guid": "12c6e39f-b760-49b1-8e4c-b3eb90814c34",
+            "description": "Fantasy NBA",
+            "sportId": 0,
+            "leagueId": 3090,
+            "league": {
+              "id": 3090,
+              "description": "Fantasy NBA"
+            }
+          },
+          {
+            "id": 9577,
+            "type": "league",
+            "uid": "s:40~l:46",
+            "guid": "7b3729c9-7f69-308a-bf8a-ee15a6aba154",
+            "description": "NBA",
+            "sportId": 46,
+            "leagueId": 46,
+            "league": {
+              "id": 46,
+              "description": "NBA",
+              "abbreviation": "NBA",
+              "links": {
+                "mobile": {
+                  "leagues": {
+                    "href": "https://www.espn.com/nba/"
+                  }
+                },
+                "web": {
+                  "leagues": {
+                    "href": "https://www.espn.com/nba/"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": 141870,
+            "type": "topic",
+            "guid": "ca127063-3a37-f49a-a3fc-0eeb89492361",
+            "description": "news - fantasy",
+            "sportId": 0,
+            "topicId": 240
+          },
+          {
+            "id": 611584,
+            "type": "league",
+            "guid": "550a1e9e-377e-3019-bf5e-19c027d50a49",
+            "description": "Sports Betting",
+            "sportId": 22000,
+            "leagueId": 22000,
+            "league": {
+              "id": 22000,
+              "description": "Sports Betting"
+            }
+          },
+          {
+            "id": 152380,
+            "type": "topic",
+            "guid": "db281b05-18c1-d96f-e85b-0688b06f2854",
+            "description": "news - fantasy basketball",
+            "sportId": 0,
+            "topicId": 400
+          },
+          {
+            "id": 129403,
+            "type": "topic",
+            "guid": "35ca0660-5953-cf5d-cd90-758abb379355",
+            "description": "news - nba",
+            "sportId": 0,
+            "topicId": 122
+          },
+          {
+            "id": 137817,
+            "type": "topic",
+            "guid": "14f579db-79ec-a898-9405-8fec63e16063",
+            "description": "news – sports betting",
+            "sportId": 0,
+            "topicId": 179
+          },
+          {
+            "id": 568138,
+            "type": "athlete",
+            "uid": "s:40~l:46~a:5023693",
+            "guid": "ba366ac3-bbf3-30cf-b020-70cd903b6d68",
+            "description": "Tyrese Proctor",
+            "sportId": 46,
+            "athleteId": 5023693,
+            "athlete": {
+              "id": 5023693,
+              "description": "Tyrese Proctor",
+              "links": {
+                "mobile": {
+                  "athletes": {
+                    "href": "https://www.espn.com/nba/player/_/id/5023693/tyrese-proctor"
+                  }
+                },
+                "web": {
+                  "athletes": {
+                    "href": "https://www.espn.com/nba/player/_/id/5023693/tyrese-proctor"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": 457599,
+            "type": "athlete",
+            "uid": "s:40~l:46~a:4397189",
+            "guid": "458411c9-ee62-0ad5-75bb-07fbd4864609",
+            "description": "Jalen Smith",
+            "sportId": 46,
+            "athleteId": 4397189,
+            "athlete": {
+              "id": 4397189,
+              "description": "Jalen Smith",
+              "links": {
+                "mobile": {
+                  "athletes": {
+                    "href": "https://www.espn.com/nba/player/_/id/4397189/jalen-smith"
+                  }
+                },
+                "web": {
+                  "athletes": {
+                    "href": "https://www.espn.com/nba/player/_/id/4397189/jalen-smith"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": 187332,
+            "type": "athlete",
+            "uid": "s:40~l:46~a:4277919",
+            "guid": "74c0d8a8-9086-966f-3f7a-d48490abc675",
+            "description": "Mo Bamba",
+            "sportId": 46,
+            "athleteId": 4277919,
+            "athlete": {
+              "id": 4277919,
+              "description": "Mo Bamba",
+              "links": {
+                "mobile": {
+                  "athletes": {
+                    "href": "https://www.espn.com/nba/player/_/id/4277919/mo-bamba"
+                  }
+                },
+                "web": {
+                  "athletes": {
+                    "href": "https://www.espn.com/nba/player/_/id/4277919/mo-bamba"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": 492136,
+            "type": "athlete",
+            "uid": "s:40~l:46~a:4397014",
+            "guid": "dbe4d07d-9166-07d7-19f0-52cc771d179d",
+            "description": "Quentin Grimes",
+            "sportId": 46,
+            "athleteId": 4397014,
+            "athlete": {
+              "id": 4397014,
+              "description": "Quentin Grimes",
+              "links": {
+                "mobile": {
+                  "athletes": {
+                    "href": "https://www.espn.com/nba/player/_/id/4397014/quentin-grimes"
+                  }
+                },
+                "web": {
+                  "athletes": {
+                    "href": "https://www.espn.com/nba/player/_/id/4397014/quentin-grimes"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": 699506,
+            "type": "contributor",
+            "guid": "1d9d3c1d-a782-33e0-b95c-374f8c9ceabb",
+            "description": "Andre Snellings",
+            "slug": "andre-snellings",
+            "contributor": {
+              "id": 3273,
+              "description": "Andre Snellings"
+            }
+          }
+        ],
+        "byline": "Andre Snellings",
+        "links": {
+          "api": {
+            "self": {
+              "href": "https://content.core.api.espn.com/v1/sports/news/50541974"
+            }
+          },
+          "app": {
+            "sportscenter": {
+              "href": "sportscenter://x-callback-url/showStory?uid=50541974"
+            }
+          },
+          "mobile": {
+            "href": "http://m.espn.go.com/wireless/story?storyId=50541974"
+          },
+          "web": {
+            "href": "https://www.espn.com/fantasy/basketball/story/_/id/50541974/fantasy-basketball-tips-nba-betting-picks-today"
+          }
+        },
+        "premium": false
+      },
+      {
+        "id": 50028196,
+        "nowId": "1-50028196",
+        "contentKey": "50028196-1-6-1",
+        "dataSourceIdentifier": "6c1d8d0c3198e",
+        "type": "Story",
+        "headline": "NBA buzz: Latest on trades, news, roster moves and intel",
+        "description": "The NBA is back. The buzz never left. Bookmark this page for the latest news, rumblings and analysis from ESPN's insiders.",
+        "lastModified": "2026-11-20T17:19:35Z",
+        "published": "2026-11-20T17:19:35Z",
+        "images": [
+          {
+            "dataSourceIdentifier": "ccdc023633d08",
+            "id": 43498599,
+            "type": "header",
+            "name": "Dejounte Murray  [608x342]",
+            "caption": "Dejounte Murray drives to the basket vs. Utah Jazz at Smoothie King Center in New Orleans, Louisiana, on Jan. 20, 2025.",
+            "credit": "Layne Murdoch Jr./NBAE via Getty Images",
+            "height": 342,
+            "width": 608,
+            "url": "https://a.espncdn.com/photo/2025/0121/r1441247_608x342_16-9.jpg"
+          },
+          {
+            "dataSourceIdentifier": "9794d99d85fc9",
+            "id": 50241205,
+            "type": "header",
+            "name": "porzingis [608x342] - Copy",
+            "credit": "D. Ross Cameron-Imagn Images",
+            "height": 342,
+            "width": 608,
+            "url": "https://a.espncdn.com/photo/2026/0301/r1621468_608x342_16-9.jpg"
+          },
+          {
+            "dataSourceIdentifier": "1d2dd1b0f7447",
+            "id": 50061081,
+            "type": "header",
+            "name": "kat [608x342]",
+            "credit": "Photo by Caleb Bowlin/Getty Images",
+            "height": 342,
+            "width": 608,
+            "url": "https://a.espncdn.com/photo/2026/0929/r1723601_608x342_16-9.jpg"
+          },
+          {
+            "dataSourceIdentifier": "a754860d3e38f",
+            "id": 50028282,
+            "type": "header",
+            "name": "NBA LOGO [608x342] - Copy",
+            "credit": "(Photo by Erica Denhoff/Icon Sportswire)",
+            "height": 342,
+            "width": 608,
+            "url": "https://a.espncdn.com/photo/2025/1112/r1574764_608x342_16-9.jpg"
+          },
+          {
+            "type": "Media",
+            "name": "Luka drops 43 points, adds nine assists in Lakers' eighth straight win",
+            "caption": "Luka drops 43 points, adds nine assists in Lakers' eighth straight win",
+            "height": 324,
+            "width": 576,
+            "url": "https://espnmedia-cdn.akamaized.net/espn/media/common/2026/1115/ss_20261115_191414964_3744548/ss_20261115_191414964_3744548.jpg"
+          }
+        ],
+        "categories": [
+          {
+            "id": 9577,
+            "type": "league",
+            "uid": "s:40~l:46",
+            "guid": "7b3729c9-7f69-308a-bf8a-ee15a6aba154",
+            "description": "NBA",
+            "sportId": 46,
+            "leagueId": 46,
+            "league": {
+              "id": 46,
+              "description": "NBA",
+              "abbreviation": "NBA",
+              "links": {
+                "mobile": {
+                  "leagues": {
+                    "href": "https://www.espn.com/nba/"
+                  }
+                },
+                "web": {
+                  "leagues": {
+                    "href": "https://www.espn.com/nba/"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": 409222,
+            "type": "topic",
+            "guid": "b66e959d-b64e-9bd6-7d5c-1bcb0d53c0cb",
+            "description": "daily",
+            "sportId": 0,
+            "topicId": 779
+          },
+          {
+            "id": 186377,
+            "type": "topic",
+            "guid": "ed07e700-de42-54a7-801c-285e65560e82",
+            "description": "nba free agency",
+            "sportId": 0,
+            "topicId": 677
+          },
+          {
+            "id": 128110,
+            "type": "topic",
+            "guid": "cf7d8580-5e4d-5fc2-4877-11791f7c3a90",
+            "description": "news - frontpage",
+            "sportId": 0,
+            "topicId": 92
+          },
+          {
+            "id": 701887,
+            "type": "contributor",
+            "guid": "3139123a-2bc7-3127-b40d-448cdb859378",
+            "description": "ESPN Staff Profile",
+            "slug": "espn-staff-profile",
+            "contributor": {
+              "id": 2462,
+              "description": "ESPN Staff Profile"
+            }
+          }
+        ],
+        "byline": "ESPN staff",
+        "links": {
+          "api": {
+            "self": {
+              "href": "https://content.core.api.espn.com/v1/sports/news/50028196"
+            }
+          },
+          "app": {
+            "sportscenter": {
+              "href": "sportscenter://x-callback-url/showStory?uid=50028196"
+            }
+          },
+          "mobile": {
+            "href": "http://m.espn.go.com/nba/story?storyId=50028196"
+          },
+          "web": {
+            "href": "https://www.espn.com/nba/story/_/id/50028196/2026-27-nba-buzz-latest-live-updates-news-intel-trades-deals"
+          }
+        },
+        "premium": false
+      },
+      {
+        "id": 50538678,
+        "nowId": "1-50538678",
+        "contentKey": "50538678-1-6-1",
+        "dataSourceIdentifier": "39da8237c9c03",
+        "type": "Story",
+        "headline": "NBA betting roundtable: Experts weigh in on MVP, Rookie of the Year and more",
+        "description": "The NBA betting experts share their favorite future bets, including Rookie of the Year, MVP and more.",
+        "lastModified": "2026-11-20T18:51:46Z",
+        "published": "2026-11-20T18:51:46Z",
+        "images": [
+          {
+            "dataSourceIdentifier": "6cbf40be82102",
+            "id": 50539160,
+            "type": "header",
+            "name": "Cameron Boozer [1296x729]",
+            "caption": "The Memphis Grizzlies, behind the impressive start by rookie Cameron Boozer, are a popular bet to make the playoffs.",
+            "alt": "Cameron Boozer #27 of the Memphis Grizzlies dribbles the ball during the game against the Golden State Warriors on November 19, 2026 at FedExForum in Memphis, Tennessee.",
+            "credit": "Joe Murphy/NBAE via Getty Images",
+            "height": 729,
+            "width": 1296,
+            "url": "https://a.espncdn.com/photo/2026/1120/r1748454_1296x729_16-9.jpg"
+          },
+          {
+            "dataSourceIdentifier": "88a065b9f51b6",
+            "id": 50539221,
+            "type": "header",
+            "name": "Darius Acuff Jr. [1296x729]",
+            "caption": "Kings rookie Darius Acuff Jr. has averaged over 26.0 PPG in the opening month of his NBA career.",
+            "alt": "Darius Acuff Jr. #5 of the Sacramento Kings drives to the basket during the game against the Oklahoma City Thunder on November 15, 2026 at Golden 1 Center in Sacramento, California.",
+            "credit": "Rocky Widner/NBAE via Getty Images",
+            "height": 729,
+            "width": 1296,
+            "url": "https://a.espncdn.com/photo/2026/1120/r1748457_1296x729_16-9.jpg"
+          }
+        ],
+        "categories": [
+          {
+            "id": 9577,
+            "type": "league",
+            "uid": "s:40~l:46",
+            "guid": "7b3729c9-7f69-308a-bf8a-ee15a6aba154",
+            "description": "NBA",
+            "sportId": 46,
+            "leagueId": 46,
+            "league": {
+              "id": 46,
+              "description": "NBA",
+              "abbreviation": "NBA",
+              "links": {
+                "mobile": {
+                  "leagues": {
+                    "href": "https://www.espn.com/nba/"
+                  }
+                },
+                "web": {
+                  "leagues": {
+                    "href": "https://www.espn.com/nba/"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": 129403,
+            "type": "topic",
+            "guid": "35ca0660-5953-cf5d-cd90-758abb379355",
+            "description": "news - nba",
+            "sportId": 0,
+            "topicId": 122
+          },
+          {
+            "id": 611584,
+            "type": "league",
+            "guid": "550a1e9e-377e-3019-bf5e-19c027d50a49",
+            "description": "Sports Betting",
+            "sportId": 22000,
+            "leagueId": 22000,
+            "league": {
+              "id": 22000,
+              "description": "Sports Betting"
+            }
+          }
+        ],
+        "byline": "ESPN",
+        "links": {
+          "api": {
+            "self": {
+              "href": "https://content.core.api.espn.com/v1/sports/news/50538678"
+            }
+          },
+          "app": {
+            "sportscenter": {
+              "href": "sportscenter://x-callback-url/showStory?uid=50538678"
+            }
+          },
+          "mobile": {
+            "href": "http://m.espn.go.com/wireless/story?storyId=50538678"
+          },
+          "web": {
+            "href": "https://www.espn.com/espn/betting/story/_/id/50538678/nba-betting-mvp-rookie-year-playoff-longshots-2026-2027"
+          }
+        },
+        "premium": false
+      },
+      {
+        "id": 50524821,
+        "nowId": "1-50524821",
+        "contentKey": "50524821-1-6-1",
+        "dataSourceIdentifier": "db36e3f53c01d",
+        "type": "Story",
+        "headline": "Fred VanVleet's 'fresh slate' is driving Houston's early season success",
+        "description": "A healthy Fred VanVleet is commanding the surging Rockets after an ACL injury derailed his 2025-26 season. Here's why he's so important.",
+        "lastModified": "2026-11-20T15:28:14Z",
+        "published": "2026-11-20T15:28:14Z",
+        "images": [
+          {
+            "dataSourceIdentifier": "fbc0ee8741ce4",
+            "id": 50524749,
+            "type": "header",
+            "name": "FVV Dribble\n [1296x729]",
+            "credit": "(Photo by Clicks Images/Getty Images)",
+            "height": 729,
+            "width": 1296,
+            "url": "https://a.espncdn.com/photo/2026/1118/r1747856_1296x729_16-9.jpg"
+          },
+          {
+            "dataSourceIdentifier": "5adf8abfd69bc",
+            "id": 50524726,
+            "type": "header",
+            "name": "Rockets Floor\n [1296x729]",
+            "credit": "Copyright 2026 NBAE (Photo by Logan Riely/NBAE via Getty Images)",
+            "height": 729,
+            "width": 1296,
+            "url": "https://a.espncdn.com/photo/2026/1118/r1747853_1296x729_16-9.jpg"
+          },
+          {
+            "dataSourceIdentifier": "8cf7af1b15829",
+            "id": 50524792,
+            "type": "header",
+            "name": "FVV Ime [1296x729]",
+            "caption": "Rockets coach Ime Udoka, right, considers VanVleet an extension of the coaching staff, holding everyone on staff accountable.",
+            "credit": "Copyright 2026 NBAE (Photo by Logan Riely/NBAE via Getty Images)",
+            "height": 729,
+            "width": 1296,
+            "url": "https://a.espncdn.com/photo/2026/1118/r1747854_1296x729_16-9.jpg"
+          },
+          {
+            "dataSourceIdentifier": "e996ff4ba2d8b",
+            "id": 50524770,
+            "type": "header",
+            "name": "FVV Sheppard Bench [1296x729]",
+            "caption": "Fred VanVleet, who sat out last season because of an ACL injury, discusses strategy with Reed Sheppard during a game in 2025.",
+            "credit": "Troy Taormina-Imagn Images",
+            "height": 729,
+            "width": 1296,
+            "url": "https://a.espncdn.com/photo/2026/1118/r1747855_1296x729_16-9.jpg"
+          },
+          {
+            "dataSourceIdentifier": "7fa42a76a8d58",
+            "id": 50524703,
+            "type": "header",
+            "name": "Thompson FVV\n [1296x729]",
+            "credit": "Erik Williams-USA TODAY Sports",
+            "height": 729,
+            "width": 1296,
+            "url": "https://a.espncdn.com/photo/2026/1118/r1747852_1296x729_16-9.jpg"
+          },
+          {
+            "type": "Media",
+            "name": "Houston Rockets vs. Miami Heat: Game Highlights",
+            "caption": "Houston Rockets vs. Miami Heat: Game Highlights",
+            "height": 324,
+            "width": 576,
+            "url": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1117/6d92444f-be46-440a-8dc2-f831150d181d/6d92444f-be46-440a-8dc2-f831150d181d.jpg"
+          }
+        ],
+        "categories": [
+          {
+            "id": 9577,
+            "type": "league",
+            "uid": "s:40~l:46",
+            "guid": "7b3729c9-7f69-308a-bf8a-ee15a6aba154",
+            "description": "NBA",
+            "sportId": 46,
+            "leagueId": 46,
+            "league": {
+              "id": 46,
+              "description": "NBA",
+              "abbreviation": "NBA",
+              "links": {
+                "mobile": {
+                  "leagues": {
+                    "href": "https://www.espn.com/nba/"
+                  }
+                },
+                "web": {
+                  "leagues": {
+                    "href": "https://www.espn.com/nba/"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": 4517,
+            "type": "team",
+            "uid": "s:40~l:46~t:10",
+            "guid": "78113ad4-1ac7-0c04-dada-388a6ff4e15e",
+            "description": "Houston Rockets",
+            "sportId": 46,
+            "teamId": 10,
+            "team": {
+              "id": 10,
+              "description": "Houston Rockets",
+              "abbreviation": "HOU",
+              "shortDisplayName": "Rockets",
+              "links": {
+                "mobile": {
+                  "teams": {
+                    "href": "https://www.espn.com/nba/team/_/name/hou/houston-rockets"
+                  }
+                },
+                "web": {
+                  "teams": {
+                    "href": "https://www.espn.com/nba/team/_/name/hou/houston-rockets"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": 157435,
+            "type": "athlete",
+            "uid": "s:40~l:46~a:2991230",
+            "guid": "6c6e5179-fc67-908e-bc50-0a5580d64159",
+            "description": "Fred VanVleet",
+            "sportId": 46,
+            "athleteId": 2991230,
+            "athlete": {
+              "id": 2991230,
+              "description": "Fred VanVleet",
+              "links": {
+                "mobile": {
+                  "athletes": {
+                    "href": "https://www.espn.com/nba/player/_/id/2991230/fred-vanvleet"
+                  }
+                },
+                "web": {
+                  "athletes": {
+                    "href": "https://www.espn.com/nba/player/_/id/2991230/fred-vanvleet"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": 51682,
+            "type": "athlete",
+            "uid": "s:40~l:46~a:3202",
+            "guid": "dc324fde-eee8-98e2-09ac-d31d8ad9909e",
+            "description": "Kevin Durant",
+            "sportId": 46,
+            "athleteId": 3202,
+            "athlete": {
+              "id": 3202,
+              "description": "Kevin Durant",
+              "links": {
+                "mobile": {
+                  "athletes": {
+                    "href": "https://www.espn.com/nba/player/_/id/3202/kevin-durant"
+                  }
+                },
+                "web": {
+                  "athletes": {
+                    "href": "https://www.espn.com/nba/player/_/id/3202/kevin-durant"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": 492188,
+            "type": "athlete",
+            "uid": "s:40~l:46~a:4871144",
+            "guid": "dad4f5fb-9739-38ac-b3b5-5d7937c29232",
+            "description": "Alperen Sengun",
+            "sportId": 46,
+            "athleteId": 4871144,
+            "athlete": {
+              "id": 4871144,
+              "description": "Alperen Sengun",
+              "links": {
+                "mobile": {
+                  "athletes": {
+                    "href": "https://www.espn.com/nba/player/_/id/4871144/alperen-sengun"
+                  }
+                },
+                "web": {
+                  "athletes": {
+                    "href": "https://www.espn.com/nba/player/_/id/4871144/alperen-sengun"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": 633099,
+            "type": "athlete",
+            "uid": "s:40~l:46~a:4711272",
+            "guid": "b2e3effa-a7ab-3837-8d7e-da8b05577441",
+            "description": "Reed Sheppard",
+            "sportId": 46,
+            "athleteId": 4711272,
+            "athlete": {
+              "id": 4711272,
+              "description": "Reed Sheppard",
+              "links": {
+                "mobile": {
+                  "athletes": {
+                    "href": "https://www.espn.com/nba/player/_/id/4711272/reed-sheppard"
+                  }
+                },
+                "web": {
+                  "athletes": {
+                    "href": "https://www.espn.com/nba/player/_/id/4711272/reed-sheppard"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": 533755,
+            "type": "athlete",
+            "uid": "s:40~l:46~a:4432639",
+            "guid": "177499ed-dca9-30ab-b6b2-d4162549fd6a",
+            "description": "Jabari Smith Jr",
+            "sportId": 46,
+            "athleteId": 4432639,
+            "athlete": {
+              "id": 4432639,
+              "description": "Jabari Smith Jr",
+              "links": {
+                "mobile": {
+                  "athletes": {
+                    "href": "https://www.espn.com/nba/player/_/id/4432639/jabari-smith-jr"
+                  }
+                },
+                "web": {
+                  "athletes": {
+                    "href": "https://www.espn.com/nba/player/_/id/4432639/jabari-smith-jr"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": 601969,
+            "type": "athlete",
+            "uid": "s:40~l:46~a:4684740",
+            "guid": "d46a44b0-75e5-3475-a977-c64be5aaec40",
+            "description": "Amen Thompson",
+            "sportId": 46,
+            "athleteId": 4684740,
+            "athlete": {
+              "id": 4684740,
+              "description": "Amen Thompson",
+              "links": {
+                "mobile": {
+                  "athletes": {
+                    "href": "https://www.espn.com/nba/player/_/id/4684740/amen-thompson"
+                  }
+                },
+                "web": {
+                  "athletes": {
+                    "href": "https://www.espn.com/nba/player/_/id/4684740/amen-thompson"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": 701625,
+            "type": "contributor",
+            "guid": "59e56689-5313-381e-bc03-00fcae3aa714",
+            "description": "Michael C. Wright",
+            "slug": "michael-c.-wright",
+            "contributor": {
+              "id": 2126,
+              "description": "Michael C. Wright"
+            }
+          }
+        ],
+        "byline": "Michael C. Wright",
+        "links": {
+          "api": {
+            "self": {
+              "href": "https://content.core.api.espn.com/v1/sports/news/50524821"
+            }
+          },
+          "app": {
+            "sportscenter": {
+              "href": "sportscenter://x-callback-url/showStory?uid=50524821"
+            }
+          },
+          "mobile": {
+            "href": "http://m.espn.go.com/nba/story?storyId=50524821"
+          },
+          "web": {
+            "href": "https://www.espn.com/nba/story/_/id/50524821/nba-houston-rockets-fred-vanvleet-injury-comeback"
+          }
+        },
+        "premium": false
+      },
+      {
+        "id": 50534111,
+        "nowId": "1-50534111",
+        "contentKey": "50534111-1-6-1",
+        "dataSourceIdentifier": "d7a1f567a7084",
+        "type": "Story",
+        "headline": "Windhorst and MacMahon: League execs, scouts examine nine rookie starts",
+        "description": "How has the first month unfolded for nine first-year stars? Brian Windhorst and Tim MacMahon canvass the league.",
+        "lastModified": "2026-11-20T13:34:23Z",
+        "published": "2026-11-20T13:34:23Z",
+        "images": [
+          {
+            "dataSourceIdentifier": "4f607f313c4a4",
+            "id": 50534158,
+            "type": "header",
+            "name": "Cameron Boozer, AJ Dybantsa [1296x729]",
+            "credit": "Todd Olszewski/Getty Images",
+            "height": 729,
+            "width": 1296,
+            "url": "https://a.espncdn.com/photo/2026/1119/r1748266_1296x729_16-9.jpg"
+          },
+          {
+            "type": "Media",
+            "name": "How Yaxel Lendeborg is changing the Warriors' season outlook | NBA Today",
+            "caption": "On NBA Today, Ramona Shelburne Jorge Sedano and Marc J. Spears weigh in on the Golden State Warriors' win streak and rookie Yaxel Lendeborg's addition to the team. ",
+            "height": 324,
+            "width": 576,
+            "url": "https://espnmedia-cdn.akamaized.net/espn/media/common/2026/1109/ss_20261109_162825205_37344361014/ss_20261109_162825205_37344361014.jpg"
+          }
+        ],
+        "categories": [
+          {
+            "id": 9577,
+            "type": "league",
+            "uid": "s:40~l:46",
+            "guid": "7b3729c9-7f69-308a-bf8a-ee15a6aba154",
+            "description": "NBA",
+            "sportId": 46,
+            "leagueId": 46,
+            "league": {
+              "id": 46,
+              "description": "NBA",
+              "abbreviation": "NBA",
+              "links": {
+                "mobile": {
+                  "leagues": {
+                    "href": "https://www.espn.com/nba/"
+                  }
+                },
+                "web": {
+                  "leagues": {
+                    "href": "https://www.espn.com/nba/"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": 4600,
+            "type": "team",
+            "uid": "s:40~l:46~t:9",
+            "guid": "77a8546f-24bf-a333-8161-bf9f75396c49",
+            "description": "Golden State Warriors",
+            "sportId": 46,
+            "teamId": 9,
+            "team": {
+              "id": 9,
+              "description": "Golden State Warriors",
+              "abbreviation": "GS",
+              "shortDisplayName": "Warriors",
+              "links": {
+                "mobile": {
+                  "teams": {
+                    "href": "https://www.espn.com/nba/team/_/name/gs/golden-state-warriors"
+                  }
+                },
+                "web": {
+                  "teams": {
+                    "href": "https://www.espn.com/nba/team/_/name/gs/golden-state-warriors"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": 4584,
+            "type": "team",
+            "uid": "s:40~l:46~t:29",
+            "guid": "af5d4942-aeb5-2d07-2a8a-f70b54617e51",
+            "description": "Memphis Grizzlies",
+            "sportId": 46,
+            "teamId": 29,
+            "team": {
+              "id": 29,
+              "description": "Memphis Grizzlies",
+              "abbreviation": "MEM",
+              "shortDisplayName": "Grizzlies",
+              "links": {
+                "mobile": {
+                  "teams": {
+                    "href": "https://www.espn.com/nba/team/_/name/mem/memphis-grizzlies"
+                  }
+                },
+                "web": {
+                  "teams": {
+                    "href": "https://www.espn.com/nba/team/_/name/mem/memphis-grizzlies"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": 4339,
+            "type": "team",
+            "uid": "s:40~l:46~t:27",
+            "guid": "64d73af6-b8ec-e213-87e8-a4eab3a692e7",
+            "description": "Washington Wizards",
+            "sportId": 46,
+            "teamId": 27,
+            "team": {
+              "id": 27,
+              "description": "Washington Wizards",
+              "abbreviation": "WSH",
+              "shortDisplayName": "Wizards",
+              "links": {
+                "mobile": {
+                  "teams": {
+                    "href": "https://www.espn.com/nba/team/_/name/wsh/washington-wizards"
+                  }
+                },
+                "web": {
+                  "teams": {
+                    "href": "https://www.espn.com/nba/team/_/name/wsh/washington-wizards"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": 4564,
+            "type": "team",
+            "uid": "s:40~l:46~t:26",
+            "guid": "77cea2fb-1388-b7c8-d171-2e72b3aecbfb",
+            "description": "Utah Jazz",
+            "sportId": 46,
+            "teamId": 26,
+            "team": {
+              "id": 26,
+              "description": "Utah Jazz",
+              "abbreviation": "UTAH",
+              "shortDisplayName": "Jazz",
+              "links": {
+                "mobile": {
+                  "teams": {
+                    "href": "https://www.espn.com/nba/team/_/name/utah/utah-jazz"
+                  }
+                },
+                "web": {
+                  "teams": {
+                    "href": "https://www.espn.com/nba/team/_/name/utah/utah-jazz"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": 4392,
+            "type": "team",
+            "uid": "s:40~l:46~t:4",
+            "guid": "e588ccf1-ba03-ea43-c34c-9a9c8d1895ca",
+            "description": "Chicago Bulls",
+            "sportId": 46,
+            "teamId": 4,
+            "team": {
+              "id": 4,
+              "description": "Chicago Bulls",
+              "abbreviation": "CHI",
+              "shortDisplayName": "Bulls",
+              "links": {
+                "mobile": {
+                  "teams": {
+                    "href": "https://www.espn.com/nba/team/_/name/chi/chicago-bulls"
+                  }
+                },
+                "web": {
+                  "teams": {
+                    "href": "https://www.espn.com/nba/team/_/name/chi/chicago-bulls"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": 154798,
+            "type": "team",
+            "uid": "s:40~l:46~t:12",
+            "guid": "083a58a6-b849-3501-e67b-059290d12295",
+            "description": "LA Clippers",
+            "sportId": 46,
+            "teamId": 12,
+            "team": {
+              "id": 12,
+              "description": "LA Clippers",
+              "abbreviation": "LAC",
+              "shortDisplayName": "Clippers",
+              "links": {
+                "mobile": {
+                  "teams": {
+                    "href": "https://www.espn.com/nba/team/_/name/lac/la-clippers"
+                  }
+                },
+                "web": {
+                  "teams": {
+                    "href": "https://www.espn.com/nba/team/_/name/lac/la-clippers"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": 4358,
+            "type": "team",
+            "uid": "s:40~l:46~t:1",
+            "guid": "15096a54-f015-c987-5ec8-55afedf6272f",
+            "description": "Atlanta Hawks",
+            "sportId": 46,
+            "teamId": 1,
+            "team": {
+              "id": 1,
+              "description": "Atlanta Hawks",
+              "abbreviation": "ATL",
+              "shortDisplayName": "Hawks",
+              "links": {
+                "mobile": {
+                  "teams": {
+                    "href": "https://www.espn.com/nba/team/_/name/atl/atlanta-hawks"
+                  }
+                },
+                "web": {
+                  "teams": {
+                    "href": "https://www.espn.com/nba/team/_/name/atl/atlanta-hawks"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": 104965,
+            "type": "team",
+            "uid": "s:40~l:46~t:17",
+            "guid": "926db769-d35e-e282-9d7e-a05001d774ab",
+            "description": "Brooklyn Nets",
+            "sportId": 46,
+            "teamId": 17,
+            "team": {
+              "id": 17,
+              "description": "Brooklyn Nets",
+              "abbreviation": "BKN",
+              "shortDisplayName": "Nets",
+              "links": {
+                "mobile": {
+                  "teams": {
+                    "href": "https://www.espn.com/nba/team/_/name/bkn/brooklyn-nets"
+                  }
+                },
+                "web": {
+                  "teams": {
+                    "href": "https://www.espn.com/nba/team/_/name/bkn/brooklyn-nets"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": 4676,
+            "type": "team",
+            "uid": "s:40~l:46~t:23",
+            "guid": "e266c4ea-9af3-1bd8-06fb-fd608fd30e26",
+            "description": "Sacramento Kings",
+            "sportId": 46,
+            "teamId": 23,
+            "team": {
+              "id": 23,
+              "description": "Sacramento Kings",
+              "abbreviation": "SAC",
+              "shortDisplayName": "Kings",
+              "links": {
+                "mobile": {
+                  "teams": {
+                    "href": "https://www.espn.com/nba/team/_/name/sac/sacramento-kings"
+                  }
+                },
+                "web": {
+                  "teams": {
+                    "href": "https://www.espn.com/nba/team/_/name/sac/sacramento-kings"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": 701427,
+            "type": "contributor",
+            "guid": "d364b0f5-51b3-37fe-b8e2-54fe436eb756",
+            "description": "Brian Windhorst",
+            "slug": "brian-windhorst",
+            "contributor": {
+              "id": 1883,
+              "description": "Brian Windhorst"
+            }
+          },
+          {
+            "id": 698423,
+            "type": "contributor",
+            "guid": "4ef3a72c-8433-33cc-9d1c-a89460e4a177",
+            "description": "Tim MacMahon",
+            "slug": "tim-macmahon",
+            "contributor": {
+              "id": 1808,
+              "description": "Tim MacMahon"
+            }
+          }
+        ],
+        "byline": "Brian Windhorst and Tim MacMahon",
+        "links": {
+          "api": {
+            "self": {
+              "href": "https://content.core.api.espn.com/v1/sports/news/50534111"
+            }
+          },
+          "app": {
+            "sportscenter": {
+              "href": "sportscenter://x-callback-url/showStory?uid=50534111"
+            }
+          },
+          "mobile": {
+            "href": "http://m.espn.go.com/nba/story?storyId=50534111"
+          },
+          "web": {
+            "href": "https://www.espn.com/nba/story/_/id/50534111/rookies-dybantsa-peterson-boozer-acuff-yaxel"
+          }
+        },
+        "premium": false
+      },
+      {
+        "id": 49960162,
+        "nowId": "1-49960162",
+        "contentKey": "49960162-1-6-1",
+        "dataSourceIdentifier": "d87b49108e8a7",
+        "type": "Story",
+        "headline": "Fantasy basketball points league rankings update: Lendeborg, Acuff Jr. on the rise",
+        "description": "Updated fantasy basketball rankings for points leagues, with several rookies on the rise.",
+        "lastModified": "2026-11-20T11:54:02Z",
+        "published": "2026-11-20T11:54:02Z",
+        "images": [
+          {
+            "dataSourceIdentifier": "8f05e95c11107",
+            "id": 50538267,
+            "type": "header",
+            "name": "Yaxel Lendeborg [1296x729]",
+            "caption": "In a season with many impressive rookies, Golden State's Yaxel Lendeborg is near the top of the list.",
+            "alt": "Yaxel Lendeborg #1 of the Golden State Warriors takes a shot against Jahmai Mashack #21 of the Memphis Grizzlies during the second half at FedExForum on November 19, 2026 in Memphis, Tennessee.",
+            "credit": "Justin Ford/Getty Images",
+            "height": 729,
+            "width": 1296,
+            "url": "https://a.espncdn.com/photo/2026/1120/r1748435_1296x729_16-9.jpg"
+          }
+        ],
+        "categories": [
+          {
+            "id": 141870,
+            "type": "topic",
+            "guid": "ca127063-3a37-f49a-a3fc-0eeb89492361",
+            "description": "news - fantasy",
+            "sportId": 0,
+            "topicId": 240
+          },
+          {
+            "id": 152380,
+            "type": "topic",
+            "guid": "db281b05-18c1-d96f-e85b-0688b06f2854",
+            "description": "news - fantasy basketball",
+            "sportId": 0,
+            "topicId": 400
+          },
+          {
+            "id": 12025,
+            "type": "league",
+            "guid": "12c6e39f-b760-49b1-8e4c-b3eb90814c34",
+            "description": "Fantasy NBA",
+            "sportId": 0,
+            "leagueId": 3090,
+            "league": {
+              "id": 3090,
+              "description": "Fantasy NBA"
+            }
+          },
+          {
+            "id": 634271,
+            "type": "athlete",
+            "uid": "s:40~l:46~a:5175737",
+            "guid": "b037d625-6e30-391c-a906-b39ea32c281f",
+            "description": "Yaxel Lendeborg",
+            "sportId": 46,
+            "athleteId": 5175737,
+            "athlete": {
+              "id": 5175737,
+              "description": "Yaxel Lendeborg",
+              "links": {
+                "mobile": {
+                  "athletes": {
+                    "href": "https://www.espn.com/nba/player/_/id/5175737/yaxel-lendeborg"
+                  }
+                },
+                "web": {
+                  "athletes": {
+                    "href": "https://www.espn.com/nba/player/_/id/5175737/yaxel-lendeborg"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": 737643,
+            "type": "athlete",
+            "uid": "s:40~l:46~a:5142620",
+            "guid": "2d9a5748-cbb5-3a2d-81d9-01a474f70dfd",
+            "description": "Darius Acuff Jr",
+            "sportId": 46,
+            "athleteId": 5142620,
+            "athlete": {
+              "id": 5142620,
+              "description": "Darius Acuff Jr",
+              "links": {
+                "mobile": {
+                  "athletes": {
+                    "href": "https://www.espn.com/nba/player/_/id/5142620/darius-acuff-jr"
+                  }
+                },
+                "web": {
+                  "athletes": {
+                    "href": "https://www.espn.com/nba/player/_/id/5142620/darius-acuff-jr"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": 699506,
+            "type": "contributor",
+            "guid": "1d9d3c1d-a782-33e0-b95c-374f8c9ceabb",
+            "description": "Andre Snellings",
+            "slug": "andre-snellings",
+            "contributor": {
+              "id": 3273,
+              "description": "Andre Snellings"
+            }
+          },
+          {
+            "id": 9577,
+            "type": "league",
+            "uid": "s:40~l:46",
+            "guid": "7b3729c9-7f69-308a-bf8a-ee15a6aba154",
+            "description": "NBA",
+            "sportId": 46,
+            "leagueId": 46,
+            "league": {
+              "id": 46,
+              "description": "NBA",
+              "abbreviation": "NBA",
+              "links": {
+                "mobile": {
+                  "leagues": {
+                    "href": "https://www.espn.com/nba/"
+                  }
+                },
+                "web": {
+                  "leagues": {
+                    "href": "https://www.espn.com/nba/"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "byline": "Andre Snellings",
+        "links": {
+          "api": {
+            "self": {
+              "href": "https://content.core.api.espn.com/v1/sports/news/49960162"
+            }
+          },
+          "app": {
+            "sportscenter": {
+              "href": "sportscenter://x-callback-url/showStory?uid=49960162"
+            }
+          },
+          "mobile": {
+            "href": "http://m.espn.go.com/wireless/story?storyId=49960162"
+          },
+          "web": {
+            "href": "https://www.espn.com/fantasy/basketball/story/_/id/49960162/fantasy-basketball-points-league-rankings-2026-27-nba-season"
+          }
+        },
+        "premium": false
+      }
+    ]
+  },
   "article": {
     "id": 50497509,
     "nowId": "1-50497509",
@@ -7843,1298 +9100,6 @@
       }
     }
   ],
-  "news": {
-    "header": "NBA News",
-    "link": {
-      "language": "en",
-      "rel": [
-        "index",
-        "desktop",
-        "league"
-      ],
-      "href": "https://www.espn.com/nba/",
-      "text": "All NBA News",
-      "shortText": "All News",
-      "isExternal": false,
-      "isPremium": false
-    },
-    "articles": [
-      {
-        "id": 50532808,
-        "nowId": "1-50532808",
-        "contentKey": "50532808-1-5-1",
-        "dataSourceIdentifier": "4ddd59b342f1e",
-        "type": "HeadlineNews",
-        "headline": "Timberwolves' Edwards has 'no clue' on when he will return",
-        "description": "Timberwolves guard Anthony Edwards said he has \"no clue\" when he will return to play from right knee surgery weeks ago, but was optimistic about his long-term prognosis.",
-        "lastModified": "2026-11-19T19:14:28Z",
-        "published": "2026-11-19T19:14:28Z",
-        "images": [
-          {
-            "dataSourceIdentifier": "aa824ac325d6f",
-            "id": 47467059,
-            "type": "header",
-            "name": "251231 Anthony Edwards [600x400]",
-            "credit": "Dale Zanine-Imagn Images",
-            "height": 400,
-            "width": 600,
-            "url": "https://a.espncdn.com/photo/2026/0101/r1595435_600x400_3-2.jpg"
-          },
-          {
-            "type": "Media",
-            "name": "Portland Trail Blazers vs. Minnesota Timberwolves: Game Highlights",
-            "caption": "Portland Trail Blazers vs. Minnesota Timberwolves: Game Highlights",
-            "height": 324,
-            "width": 576,
-            "url": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1118/0f9bcacd-c83f-49b2-8ac0-f2c4eddccca4/0f9bcacd-c83f-49b2-8ac0-f2c4eddccca4.jpg"
-          }
-        ],
-        "categories": [
-          {
-            "id": 9577,
-            "type": "league",
-            "uid": "s:40~l:46",
-            "guid": "7b3729c9-7f69-308a-bf8a-ee15a6aba154",
-            "description": "NBA",
-            "sportId": 46,
-            "leagueId": 46,
-            "league": {
-              "id": 46,
-              "description": "NBA",
-              "abbreviation": "NBA",
-              "links": {
-                "mobile": {
-                  "leagues": {
-                    "href": "https://www.espn.com/nba/"
-                  }
-                },
-                "web": {
-                  "leagues": {
-                    "href": "https://www.espn.com/nba/"
-                  }
-                }
-              }
-            }
-          },
-          {
-            "id": 4533,
-            "type": "team",
-            "uid": "s:40~l:46~t:16",
-            "guid": "13f727cb-254d-b484-a337-93fcc0047add",
-            "description": "Minnesota Timberwolves",
-            "sportId": 46,
-            "teamId": 16,
-            "team": {
-              "id": 16,
-              "description": "Minnesota Timberwolves",
-              "abbreviation": "MIN",
-              "shortDisplayName": "Timberwolves",
-              "links": {
-                "mobile": {
-                  "teams": {
-                    "href": "https://www.espn.com/nba/team/_/name/min/minnesota-timberwolves"
-                  }
-                },
-                "web": {
-                  "teams": {
-                    "href": "https://www.espn.com/nba/team/_/name/min/minnesota-timberwolves"
-                  }
-                }
-              }
-            }
-          },
-          {
-            "id": 457645,
-            "type": "athlete",
-            "uid": "s:40~l:46~a:4594268",
-            "guid": "a2edb458-a371-3fba-ba5a-b24dd2fd2d9e",
-            "description": "Anthony Edwards",
-            "sportId": 46,
-            "athleteId": 4594268,
-            "athlete": {
-              "id": 4594268,
-              "description": "Anthony Edwards",
-              "links": {
-                "mobile": {
-                  "athletes": {
-                    "href": "https://www.espn.com/nba/player/_/id/4594268/anthony-edwards"
-                  }
-                },
-                "web": {
-                  "athletes": {
-                    "href": "https://www.espn.com/nba/player/_/id/4594268/anthony-edwards"
-                  }
-                }
-              }
-            }
-          },
-          {
-            "id": 737430,
-            "type": "contributor",
-            "guid": "a6810773-d3f7-3f7b-b268-6dab1e4f9ede",
-            "description": "Vincent Goodwill",
-            "slug": "vincent-goodwill",
-            "contributor": {
-              "id": 4253,
-              "description": "Vincent Goodwill"
-            }
-          }
-        ],
-        "byline": "Vincent Goodwill",
-        "links": {
-          "api": {
-            "self": {
-              "href": "https://content.core.api.espn.com/v1/sports/news/50532808"
-            }
-          },
-          "app": {
-            "sportscenter": {
-              "href": "sportscenter://x-callback-url/showStory?uid=50532808"
-            }
-          },
-          "mobile": {
-            "href": "http://m.espn.go.com/nba/story?storyId=50532808"
-          },
-          "web": {
-            "href": "https://www.espn.com/nba/story/_/id/50532808/timberwolves-edwards-no-clue-return"
-          }
-        },
-        "premium": false
-      },
-      {
-        "id": 50446164,
-        "nowId": "1-50446164",
-        "contentKey": "50446164-1-6-1",
-        "dataSourceIdentifier": "74e82c4388ce0",
-        "type": "Story",
-        "headline": "Thursday's fantasy hoops adds, NBA bets to make: Spencer, Champagnie worth playing",
-        "description": "Eric Moody breaks down Thursday's NBA slate, highlighting the fantasy streamers to add and his favorite bets.",
-        "lastModified": "2026-11-19T17:21:45Z",
-        "published": "2026-11-19T17:21:45Z",
-        "images": [
-          {
-            "dataSourceIdentifier": "72dbdd1044ee5",
-            "id": 50532216,
-            "type": "header",
-            "name": "Cam Spencer [608x342]",
-            "caption": "The Grizzlies' Cam Spencer has really picked up his production with Ty Jerome sidelined.",
-            "alt": "Cam Spencer drives to the basket.",
-            "credit": "Kenny Giarla/NBAE via Getty Images",
-            "height": 342,
-            "width": 608,
-            "url": "https://a.espncdn.com/photo/2026/1119/r1748145_608x342_16-9.jpg"
-          }
-        ],
-        "categories": [
-          {
-            "id": 611584,
-            "type": "league",
-            "guid": "550a1e9e-377e-3019-bf5e-19c027d50a49",
-            "description": "Sports Betting",
-            "sportId": 22000,
-            "leagueId": 22000,
-            "league": {
-              "id": 22000,
-              "description": "Sports Betting"
-            }
-          },
-          {
-            "id": 137817,
-            "type": "topic",
-            "guid": "14f579db-79ec-a898-9405-8fec63e16063",
-            "description": "news – sports betting",
-            "sportId": 0,
-            "topicId": 179
-          },
-          {
-            "id": 129403,
-            "type": "topic",
-            "guid": "35ca0660-5953-cf5d-cd90-758abb379355",
-            "description": "news - nba",
-            "sportId": 0,
-            "topicId": 122
-          },
-          {
-            "id": 9577,
-            "type": "league",
-            "uid": "s:40~l:46",
-            "guid": "7b3729c9-7f69-308a-bf8a-ee15a6aba154",
-            "description": "NBA",
-            "sportId": 46,
-            "leagueId": 46,
-            "league": {
-              "id": 46,
-              "description": "NBA",
-              "abbreviation": "NBA",
-              "links": {
-                "mobile": {
-                  "leagues": {
-                    "href": "https://www.espn.com/nba/"
-                  }
-                },
-                "web": {
-                  "leagues": {
-                    "href": "https://www.espn.com/nba/"
-                  }
-                }
-              }
-            }
-          },
-          {
-            "id": 141870,
-            "type": "topic",
-            "guid": "ca127063-3a37-f49a-a3fc-0eeb89492361",
-            "description": "news - fantasy",
-            "sportId": 0,
-            "topicId": 240
-          },
-          {
-            "id": 152380,
-            "type": "topic",
-            "guid": "db281b05-18c1-d96f-e85b-0688b06f2854",
-            "description": "news - fantasy basketball",
-            "sportId": 0,
-            "topicId": 400
-          },
-          {
-            "id": 533846,
-            "type": "athlete",
-            "uid": "s:40~l:46~a:4592479",
-            "guid": "8724b1cd-46be-3408-bc8b-77b4ed951a59",
-            "description": "Julian Champagnie",
-            "sportId": 46,
-            "athleteId": 4592479,
-            "athlete": {
-              "id": 4592479,
-              "description": "Julian Champagnie",
-              "links": {
-                "mobile": {
-                  "athletes": {
-                    "href": "https://www.espn.com/nba/player/_/id/4592479/julian-champagnie"
-                  }
-                },
-                "web": {
-                  "athletes": {
-                    "href": "https://www.espn.com/nba/player/_/id/4592479/julian-champagnie"
-                  }
-                }
-              }
-            }
-          },
-          {
-            "id": 411368,
-            "type": "athlete",
-            "uid": "s:40~l:46~a:4433083",
-            "guid": "adb1658e-da77-38eb-8a8f-0e4b44a7b0ad",
-            "description": "Cam Spencer",
-            "sportId": 46,
-            "athleteId": 4433083,
-            "athlete": {
-              "id": 4433083,
-              "description": "Cam Spencer",
-              "links": {
-                "mobile": {
-                  "athletes": {
-                    "href": "https://www.espn.com/nba/player/_/id/4433083/cam-spencer"
-                  }
-                },
-                "web": {
-                  "athletes": {
-                    "href": "https://www.espn.com/nba/player/_/id/4433083/cam-spencer"
-                  }
-                }
-              }
-            }
-          },
-          {
-            "id": 409390,
-            "type": "athlete",
-            "uid": "s:40~l:46~a:4432847",
-            "guid": "37335dcf-ed28-c8e9-e8d8-1a6c7ff9dad6",
-            "description": "Terrence Shannon Jr",
-            "sportId": 46,
-            "athleteId": 4432847,
-            "athlete": {
-              "id": 4432847,
-              "description": "Terrence Shannon Jr",
-              "links": {
-                "mobile": {
-                  "athletes": {
-                    "href": "https://www.espn.com/nba/player/_/id/4432847/terrence-shannon-jr"
-                  }
-                },
-                "web": {
-                  "athletes": {
-                    "href": "https://www.espn.com/nba/player/_/id/4432847/terrence-shannon-jr"
-                  }
-                }
-              }
-            }
-          },
-          {
-            "id": 688428,
-            "type": "athlete",
-            "uid": "s:40~l:46~a:5214640",
-            "guid": "e2102203-397a-3ec5-848f-93af00ece3a5",
-            "description": "Kasparas Jakucionis",
-            "sportId": 46,
-            "athleteId": 5214640,
-            "athlete": {
-              "id": 5214640,
-              "description": "Kasparas Jakucionis",
-              "links": {
-                "mobile": {
-                  "athletes": {
-                    "href": "https://www.espn.com/nba/player/_/id/5214640/kasparas-jakucionis"
-                  }
-                },
-                "web": {
-                  "athletes": {
-                    "href": "https://www.espn.com/nba/player/_/id/5214640/kasparas-jakucionis"
-                  }
-                }
-              }
-            }
-          },
-          {
-            "id": 508658,
-            "type": "athlete",
-            "uid": "s:40~l:46~a:4781746",
-            "guid": "2e4bebab-0955-3885-bcbb-468c136ac425",
-            "description": "Javon Small",
-            "sportId": 46,
-            "athleteId": 4781746,
-            "athlete": {
-              "id": 4781746,
-              "description": "Javon Small",
-              "links": {
-                "mobile": {
-                  "athletes": {
-                    "href": "https://www.espn.com/nba/player/_/id/4781746/javon-small"
-                  }
-                },
-                "web": {
-                  "athletes": {
-                    "href": "https://www.espn.com/nba/player/_/id/4781746/javon-small"
-                  }
-                }
-              }
-            }
-          },
-          {
-            "id": 187353,
-            "type": "athlete",
-            "uid": "s:40~l:46~a:3914044",
-            "guid": "69fd7509-a4ad-0c68-9252-49708020e668",
-            "description": "Landry Shamet",
-            "sportId": 46,
-            "athleteId": 3914044,
-            "athlete": {
-              "id": 3914044,
-              "description": "Landry Shamet",
-              "links": {
-                "mobile": {
-                  "athletes": {
-                    "href": "https://www.espn.com/nba/player/_/id/3914044/landry-shamet"
-                  }
-                },
-                "web": {
-                  "athletes": {
-                    "href": "https://www.espn.com/nba/player/_/id/3914044/landry-shamet"
-                  }
-                }
-              }
-            }
-          },
-          {
-            "id": 457695,
-            "type": "athlete",
-            "uid": "s:40~l:46~a:4431671",
-            "guid": "b7a78718-3dc4-395f-bbc5-dc5477126c1d",
-            "description": "Jaden McDaniels",
-            "sportId": 46,
-            "athleteId": 4431671,
-            "athlete": {
-              "id": 4431671,
-              "description": "Jaden McDaniels",
-              "links": {
-                "mobile": {
-                  "athletes": {
-                    "href": "https://www.espn.com/nba/player/_/id/4431671/jaden-mcdaniels"
-                  }
-                },
-                "web": {
-                  "athletes": {
-                    "href": "https://www.espn.com/nba/player/_/id/4431671/jaden-mcdaniels"
-                  }
-                }
-              }
-            }
-          },
-          {
-            "id": 187348,
-            "type": "athlete",
-            "uid": "s:40~l:46~a:3934672",
-            "guid": "89519c75-cf8a-38e7-1151-b6247a2d4535",
-            "description": "Jalen Brunson",
-            "sportId": 46,
-            "athleteId": 3934672,
-            "athlete": {
-              "id": 3934672,
-              "description": "Jalen Brunson",
-              "links": {
-                "mobile": {
-                  "athletes": {
-                    "href": "https://www.espn.com/nba/player/_/id/3934672/jalen-brunson"
-                  }
-                },
-                "web": {
-                  "athletes": {
-                    "href": "https://www.espn.com/nba/player/_/id/3934672/jalen-brunson"
-                  }
-                }
-              }
-            }
-          },
-          {
-            "id": 737695,
-            "type": "athlete",
-            "uid": "s:40~l:46~a:5254165",
-            "guid": "3cbd8826-197e-3847-ab40-ddead19f1fb1",
-            "description": "Keaton Wagler",
-            "sportId": 46,
-            "athleteId": 5254165,
-            "athlete": {
-              "id": 5254165,
-              "description": "Keaton Wagler",
-              "links": {
-                "mobile": {
-                  "athletes": {
-                    "href": "https://www.espn.com/nba/player/_/id/5254165/keaton-wagler"
-                  }
-                },
-                "web": {
-                  "athletes": {
-                    "href": "https://www.espn.com/nba/player/_/id/5254165/keaton-wagler"
-                  }
-                }
-              }
-            }
-          },
-          {
-            "id": 557932,
-            "type": "athlete",
-            "uid": "s:40~l:46~a:4903027",
-            "guid": "3c9c5de0-5d48-3e7f-9a01-36ab9af267dc",
-            "description": "Cedric Coward",
-            "sportId": 46,
-            "athleteId": 4903027,
-            "athlete": {
-              "id": 4903027,
-              "description": "Cedric Coward",
-              "links": {
-                "mobile": {
-                  "athletes": {
-                    "href": "https://www.espn.com/nba/player/_/id/4903027/cedric-coward"
-                  }
-                },
-                "web": {
-                  "athletes": {
-                    "href": "https://www.espn.com/nba/player/_/id/4903027/cedric-coward"
-                  }
-                }
-              }
-            }
-          },
-          {
-            "id": 634271,
-            "type": "athlete",
-            "uid": "s:40~l:46~a:5175737",
-            "guid": "b037d625-6e30-391c-a906-b39ea32c281f",
-            "description": "Yaxel Lendeborg",
-            "sportId": 46,
-            "athleteId": 5175737,
-            "athlete": {
-              "id": 5175737,
-              "description": "Yaxel Lendeborg",
-              "links": {
-                "mobile": {
-                  "athletes": {
-                    "href": "https://www.espn.com/nba/player/_/id/5175737/yaxel-lendeborg"
-                  }
-                },
-                "web": {
-                  "athletes": {
-                    "href": "https://www.espn.com/nba/player/_/id/5175737/yaxel-lendeborg"
-                  }
-                }
-              }
-            }
-          }
-        ],
-        "byline": "Eric Moody",
-        "links": {
-          "api": {
-            "self": {
-              "href": "https://content.core.api.espn.com/v1/sports/news/50446164"
-            }
-          },
-          "app": {
-            "sportscenter": {
-              "href": "sportscenter://x-callback-url/showStory?uid=50446164"
-            }
-          },
-          "mobile": {
-            "href": "http://m.espn.go.com/wireless/story?storyId=50446164"
-          },
-          "web": {
-            "href": "https://www.espn.com/fantasy/basketball/story/_/id/50446164/fantasy-basketball-tips-nba-betting-picks-today"
-          }
-        },
-        "premium": false
-      },
-      {
-        "id": 50532037,
-        "nowId": "1-50532037",
-        "contentKey": "50532037-1-293-1",
-        "dataSourceIdentifier": "0dabeeb851e74",
-        "type": "Media",
-        "headline": "Luka: No excuses, I have to play better",
-        "description": "Luka: No excuses, I have to play better",
-        "lastModified": "2026-11-19T18:21:02Z",
-        "published": "2026-11-19T18:21:02Z",
-        "images": [
-          {
-            "name": "Luka: No excuses, I have to play better",
-            "caption": "Luka: No excuses, I have to play better",
-            "alt": "",
-            "height": 324,
-            "width": 576,
-            "url": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1119/eef2f490-de27-4ecc-9d94-702bde274015/eef2f490-de27-4ecc-9d94-702bde274015.jpg"
-          }
-        ],
-        "categories": [
-          {
-            "id": 159574,
-            "type": "athlete",
-            "uid": "s:40~l:46~a:3945274",
-            "guid": "583794eb-0f38-9bbd-3e25-9dd33b7f83b8",
-            "description": "Luka Doncic",
-            "sportId": 46,
-            "athleteId": 3945274,
-            "athlete": {
-              "id": 3945274,
-              "description": "Luka Doncic",
-              "links": {
-                "mobile": {
-                  "athletes": {
-                    "href": "https://www.espn.com/nba/player/_/id/3945274/luka-doncic"
-                  }
-                },
-                "web": {
-                  "athletes": {
-                    "href": "https://www.espn.com/nba/player/_/id/3945274/luka-doncic"
-                  }
-                }
-              }
-            }
-          },
-          {
-            "id": 4630,
-            "type": "team",
-            "uid": "s:40~l:46~t:13",
-            "guid": "2876e98b-b9bc-2920-4319-46e6943f8be4",
-            "description": "Los Angeles Lakers",
-            "sportId": 46,
-            "teamId": 13,
-            "team": {
-              "id": 13,
-              "description": "Los Angeles Lakers",
-              "abbreviation": "LAL",
-              "shortDisplayName": "Lakers",
-              "links": {
-                "mobile": {
-                  "teams": {
-                    "href": "https://www.espn.com/nba/team/_/name/lal/los-angeles-lakers"
-                  }
-                },
-                "web": {
-                  "teams": {
-                    "href": "https://www.espn.com/nba/team/_/name/lal/los-angeles-lakers"
-                  }
-                }
-              }
-            }
-          },
-          {
-            "id": 711826,
-            "type": "editorialindicator",
-            "guid": "122acb1b-7e9e-31cf-88a1-d2dc784385cf",
-            "description": "2 Star Rating"
-          },
-          {
-            "id": 9577,
-            "type": "league",
-            "uid": "s:40~l:46",
-            "guid": "7b3729c9-7f69-308a-bf8a-ee15a6aba154",
-            "description": "NBA",
-            "sportId": 46,
-            "leagueId": 46,
-            "league": {
-              "id": 46,
-              "description": "NBA",
-              "abbreviation": "NBA",
-              "links": {
-                "mobile": {
-                  "leagues": {
-                    "href": "https://www.espn.com/nba/"
-                  }
-                },
-                "web": {
-                  "leagues": {
-                    "href": "https://www.espn.com/nba/"
-                  }
-                }
-              }
-            }
-          },
-          {
-            "id": 711824,
-            "type": "editorialindicator",
-            "guid": "d348c764-47d9-3e31-bd75-d39dfde52c26",
-            "description": "SC4U  - Eligible"
-          },
-          {
-            "id": 718169,
-            "type": "editorialindicator",
-            "guid": "ac7b9700-debd-3cdf-90ba-4cb636d33dcb",
-            "description": "SC4U - PressConference"
-          },
-          {
-            "type": "event",
-            "uid": "s:40~l:46~e:401910017",
-            "guid": "ae8fdd0f-2f6a-3183-aaf7-20f4bdc5d1ba",
-            "description": "Utah Jazz @ Los Angeles Lakers",
-            "eventId": 401910017,
-            "event": {
-              "id": 401910017,
-              "sport": "basketball",
-              "league": "nba",
-              "description": "Utah Jazz @ Los Angeles Lakers",
-              "links": {
-                "mobile": {
-                  "event": {
-                    "href": "https://www.espn.com/nba/game/_/gameId/401910017"
-                  }
-                },
-                "web": {
-                  "event": {
-                    "href": "https://www.espn.com/nba/game/_/gameId/401910017"
-                  }
-                }
-              }
-            }
-          }
-        ],
-        "links": {
-          "api": {
-            "artwork": {
-              "href": "https://artwork.api.espn.com/artwork/collections/media/2f46d9f0-983b-433d-b008-3ef104fe2e5a"
-            },
-            "self": {
-              "href": "https://content.core.api.espn.com/v1/video/clips/50532037"
-            }
-          },
-          "sportscenter": {
-            "href": "sportscenter://x-callback-url/showVideo?videoID=50532037&videoDSI=0dabeeb851e74"
-          },
-          "web": {
-            "href": "https://www.espn.com/video/clip/_/id/50532037/no-excuses-play-better",
-            "self": {
-              "href": "https://www.espn.com/video/clip/_/id/50532037/no-excuses-play-better",
-              "dsi": {
-                "href": "https://www.espn.com/video/clip?id=0dabeeb851e74"
-              }
-            }
-          }
-        },
-        "premium": false
-      },
-      {
-        "id": 50532035,
-        "nowId": "1-50532035",
-        "contentKey": "50532035-1-293-1",
-        "dataSourceIdentifier": "eb9aa8d961c6e",
-        "type": "Media",
-        "headline": "JJ Redick not overreacting to bad offensive night",
-        "description": "JJ Redick not overreacting to bad offensive night",
-        "lastModified": "2026-11-19T18:21:22Z",
-        "published": "2026-11-19T18:21:22Z",
-        "images": [
-          {
-            "name": "JJ Redick not overreacting to bad offensive night",
-            "caption": "JJ Redick not overreacting to bad offensive night",
-            "alt": "",
-            "height": 324,
-            "width": 576,
-            "url": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1119/c4cec399-d9b6-4544-9816-99ad4187d202/c4cec399-d9b6-4544-9816-99ad4187d202.jpg"
-          }
-        ],
-        "categories": [
-          {
-            "id": 4630,
-            "type": "team",
-            "uid": "s:40~l:46~t:13",
-            "guid": "2876e98b-b9bc-2920-4319-46e6943f8be4",
-            "description": "Los Angeles Lakers",
-            "sportId": 46,
-            "teamId": 13,
-            "team": {
-              "id": 13,
-              "description": "Los Angeles Lakers",
-              "abbreviation": "LAL",
-              "shortDisplayName": "Lakers",
-              "links": {
-                "mobile": {
-                  "teams": {
-                    "href": "https://www.espn.com/nba/team/_/name/lal/los-angeles-lakers"
-                  }
-                },
-                "web": {
-                  "teams": {
-                    "href": "https://www.espn.com/nba/team/_/name/lal/los-angeles-lakers"
-                  }
-                }
-              }
-            }
-          },
-          {
-            "id": 9577,
-            "type": "league",
-            "uid": "s:40~l:46",
-            "guid": "7b3729c9-7f69-308a-bf8a-ee15a6aba154",
-            "description": "NBA",
-            "sportId": 46,
-            "leagueId": 46,
-            "league": {
-              "id": 46,
-              "description": "NBA",
-              "abbreviation": "NBA",
-              "links": {
-                "mobile": {
-                  "leagues": {
-                    "href": "https://www.espn.com/nba/"
-                  }
-                },
-                "web": {
-                  "leagues": {
-                    "href": "https://www.espn.com/nba/"
-                  }
-                }
-              }
-            }
-          },
-          {
-            "id": 711827,
-            "type": "editorialindicator",
-            "guid": "26380a67-7938-32a0-9c82-33abab9f7ad4",
-            "description": "3 Star Rating"
-          },
-          {
-            "id": 22014,
-            "type": "athlete",
-            "uid": "s:40~l:46~a:3024",
-            "guid": "1fa3143f-7dc5-66ab-5dd0-23a8af3d6ab2",
-            "description": "JJ Redick",
-            "sportId": 46,
-            "athleteId": 3024,
-            "athlete": {
-              "id": 3024,
-              "description": "JJ Redick",
-              "links": {
-                "mobile": {
-                  "athletes": {
-                    "href": "https://www.espn.com/nba/player/_/id/3024/jj-redick"
-                  }
-                },
-                "web": {
-                  "athletes": {
-                    "href": "https://www.espn.com/nba/player/_/id/3024/jj-redick"
-                  }
-                }
-              }
-            }
-          },
-          {
-            "id": 711824,
-            "type": "editorialindicator",
-            "guid": "d348c764-47d9-3e31-bd75-d39dfde52c26",
-            "description": "SC4U  - Eligible"
-          },
-          {
-            "id": 718169,
-            "type": "editorialindicator",
-            "guid": "ac7b9700-debd-3cdf-90ba-4cb636d33dcb",
-            "description": "SC4U - PressConference"
-          },
-          {
-            "type": "event",
-            "uid": "s:40~l:46~e:401910017",
-            "guid": "ae8fdd0f-2f6a-3183-aaf7-20f4bdc5d1ba",
-            "description": "Utah Jazz @ Los Angeles Lakers",
-            "eventId": 401910017,
-            "event": {
-              "id": 401910017,
-              "sport": "basketball",
-              "league": "nba",
-              "description": "Utah Jazz @ Los Angeles Lakers",
-              "links": {
-                "mobile": {
-                  "event": {
-                    "href": "https://www.espn.com/nba/game/_/gameId/401910017"
-                  }
-                },
-                "web": {
-                  "event": {
-                    "href": "https://www.espn.com/nba/game/_/gameId/401910017"
-                  }
-                }
-              }
-            }
-          }
-        ],
-        "links": {
-          "api": {
-            "artwork": {
-              "href": "https://artwork.api.espn.com/artwork/collections/media/4781f618-9416-4b52-a770-06043866e6d8"
-            },
-            "self": {
-              "href": "https://content.core.api.espn.com/v1/video/clips/50532035"
-            }
-          },
-          "sportscenter": {
-            "href": "sportscenter://x-callback-url/showVideo?videoID=50532035&videoDSI=eb9aa8d961c6e"
-          },
-          "web": {
-            "href": "https://www.espn.com/video/clip/_/id/50532035/jj-redick-not-overreacting-bad-offensive-night",
-            "self": {
-              "href": "https://www.espn.com/video/clip/_/id/50532035/jj-redick-not-overreacting-bad-offensive-night",
-              "dsi": {
-                "href": "https://www.espn.com/video/clip?id=eb9aa8d961c6e"
-              }
-            }
-          }
-        },
-        "premium": false
-      },
-      {
-        "id": 50526626,
-        "nowId": "1-50526626",
-        "contentKey": "50526626-1-6-1",
-        "dataSourceIdentifier": "4ace0a76ad525",
-        "type": "Story",
-        "headline": "Revisiting sports and pop culture from GTA V's launch",
-        "description": "\"Grand Theft Auto VI\" was released Thursday following a 13-year wait since GTA V.",
-        "lastModified": "2026-11-19T15:21:54Z",
-        "published": "2026-11-19T15:21:54Z",
-        "images": [
-          {
-            "dataSourceIdentifier": "af317c9ef78a1",
-            "id": 50526362,
-            "type": "header",
-            "name": "gta iv vice city [608x342]",
-            "credit": "(Photo by Joe Murphy/NBAE via Getty Images)",
-            "height": 342,
-            "width": 608,
-            "url": "https://a.espncdn.com/photo/2026/1119/r1747923_608x342_16-9.jpg"
-          },
-          {
-            "dataSourceIdentifier": "e1b5eba3c90b0",
-            "id": 50526328,
-            "type": "header",
-            "name": "super bowl 2014 [608x342]",
-            "caption": "Russell Wilson and the Legion of Boom took care of business in Super Bowl XLVIII.",
-            "credit": "(Photo by Rob Carr/Getty Images)",
-            "height": 342,
-            "width": 608,
-            "url": "https://a.espncdn.com/photo/2026/1119/r1747922_608x342_16-9.jpg"
-          },
-          {
-            "dataSourceIdentifier": "29a374ff6f22c",
-            "id": 50526284,
-            "type": "header",
-            "name": "minnesota lynx [608x342]",
-            "caption": "2013 in the WNBA belonged to the Minnesota Lynx.",
-            "credit": "(Photo by Kevin C. Cox/Getty Images)",
-            "height": 342,
-            "width": 608,
-            "url": "https://a.espncdn.com/photo/2026/1119/r1747920_608x342_16-9.jpg"
-          },
-          {
-            "dataSourceIdentifier": "aeb210bd49498",
-            "id": 50526245,
-            "type": "header",
-            "name": "heat 2013 [608x342]",
-            "caption": "The Heat were the team to beat back around GTA V's release.",
-            "credit": "(Photo by Mike Ehrmann/Getty Images)",
-            "height": 342,
-            "width": 608,
-            "url": "https://a.espncdn.com/photo/2026/1119/r1747919_2_608x342_16-9.jpg"
-          },
-          {
-            "dataSourceIdentifier": "1894f8862bdbe",
-            "id": 50526186,
-            "type": "header",
-            "name": "florida state 2014 [608x342]",
-            "caption": "Florida State won the final Rose Bowl of the BCS era.",
-            "credit": "(Photo by Stephen Dunn/Getty Images)",
-            "height": 342,
-            "width": 608,
-            "url": "https://a.espncdn.com/photo/2026/1119/r1747917_608x342_16-9.jpg"
-          },
-          {
-            "type": "Media",
-            "name": "Stephen Adams jokes 'GTA VI' could hurt NBA performance",
-            "caption": "Stephen Adams jokes 'GTA VI' could hurt NBA performance",
-            "height": 324,
-            "width": 576,
-            "url": "https://espnmedia-cdn.akamaized.net/espn/media/common/2026/0922/ss_20260922_163058925_3671046/ss_20260922_163058925_3671046.jpg"
-          }
-        ],
-        "categories": [
-          {
-            "id": 9577,
-            "type": "league",
-            "uid": "s:40~l:46",
-            "guid": "7b3729c9-7f69-308a-bf8a-ee15a6aba154",
-            "description": "NBA",
-            "sportId": 46,
-            "leagueId": 46,
-            "league": {
-              "id": 46,
-              "description": "NBA",
-              "abbreviation": "NBA",
-              "links": {
-                "mobile": {
-                  "leagues": {
-                    "href": "https://www.espn.com/nba/"
-                  }
-                },
-                "web": {
-                  "leagues": {
-                    "href": "https://www.espn.com/nba/"
-                  }
-                }
-              }
-            }
-          },
-          {
-            "id": 9572,
-            "type": "league",
-            "uid": "s:20~l:28",
-            "guid": "ad4c3bd2-ddb6-3f8c-8abf-744855a08fa4",
-            "description": "NFL",
-            "sportId": 28,
-            "leagueId": 28,
-            "league": {
-              "id": 28,
-              "description": "NFL",
-              "abbreviation": "NFL",
-              "links": {
-                "mobile": {
-                  "leagues": {
-                    "href": "https://www.espn.com/nfl/"
-                  }
-                },
-                "web": {
-                  "leagues": {
-                    "href": "https://www.espn.com/nfl/"
-                  }
-                }
-              }
-            }
-          },
-          {
-            "id": 9579,
-            "type": "league",
-            "uid": "s:40~l:59",
-            "guid": "f74a6d24-af0c-30a0-bc20-e987c7093a68",
-            "description": "WNBA",
-            "sportId": 59,
-            "leagueId": 59,
-            "league": {
-              "id": 59,
-              "description": "WNBA",
-              "abbreviation": "WNBA",
-              "links": {
-                "mobile": {
-                  "leagues": {
-                    "href": "https://www.espn.com/wnba/"
-                  }
-                },
-                "web": {
-                  "leagues": {
-                    "href": "https://www.espn.com/wnba/"
-                  }
-                }
-              }
-            }
-          },
-          {
-            "id": 80311,
-            "type": "league",
-            "uid": "s:1~l:10",
-            "guid": "b38f959b-7865-31ac-8841-b88355519e10",
-            "description": "MLB",
-            "sportId": 10,
-            "leagueId": 10,
-            "league": {
-              "id": 10,
-              "description": "MLB",
-              "abbreviation": "MLB",
-              "links": {
-                "mobile": {
-                  "leagues": {
-                    "href": "https://www.espn.com/mlb/"
-                  }
-                },
-                "web": {
-                  "leagues": {
-                    "href": "https://www.espn.com/mlb/"
-                  }
-                }
-              }
-            }
-          },
-          {
-            "id": 701887,
-            "type": "contributor",
-            "guid": "3139123a-2bc7-3127-b40d-448cdb859378",
-            "description": "ESPN Staff Profile",
-            "slug": "espn-staff-profile",
-            "contributor": {
-              "id": 2462,
-              "description": "ESPN Staff Profile"
-            }
-          }
-        ],
-        "byline": "ESPN staff",
-        "links": {
-          "api": {
-            "self": {
-              "href": "https://content.core.api.espn.com/v1/sports/news/50526626"
-            }
-          },
-          "app": {
-            "sportscenter": {
-              "href": "sportscenter://x-callback-url/showStory?uid=50526626"
-            }
-          },
-          "mobile": {
-            "href": "http://m.espn.go.com/nba/story?storyId=50526626"
-          },
-          "web": {
-            "href": "https://www.espn.com/nba/story/_/id/50526626/gta-sports-pop-culture-look-back"
-          }
-        },
-        "premium": false
-      },
-      {
-        "id": 50522350,
-        "nowId": "1-50522350",
-        "contentKey": "50522350-1-6-1",
-        "dataSourceIdentifier": "6a5933cf5829e",
-        "type": "Story",
-        "headline": "Historic usage rates are fueling Luka Doncic and the Lakers' offense",
-        "description": "Doncic is pushing the boundaries of basketball production. But could that actually hurt the Lakers' title hopes?",
-        "lastModified": "2026-11-19T13:46:53Z",
-        "published": "2026-11-19T13:46:53Z",
-        "images": [
-          {
-            "dataSourceIdentifier": "886aa714fa31b",
-            "id": 50528561,
-            "type": "header",
-            "name": "Luka Doncic [1296x729]",
-            "credit": "William Liang-Imagn Images",
-            "height": 729,
-            "width": 1296,
-            "url": "https://a.espncdn.com/photo/2026/1119/r1747981_1296x729_16-9.jpg"
-          },
-          {
-            "type": "Media",
-            "name": "Luka Doncic and ref exchange words at end of first half",
-            "caption": "Luka Doncic and ref exchange words at end of first half",
-            "height": 324,
-            "width": 576,
-            "url": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1119/b35965e8-bb8c-43a2-8e8d-8e924837ffc2/b35965e8-bb8c-43a2-8e8d-8e924837ffc2.jpg"
-          }
-        ],
-        "categories": [
-          {
-            "id": 9577,
-            "type": "league",
-            "uid": "s:40~l:46",
-            "guid": "7b3729c9-7f69-308a-bf8a-ee15a6aba154",
-            "description": "NBA",
-            "sportId": 46,
-            "leagueId": 46,
-            "league": {
-              "id": 46,
-              "description": "NBA",
-              "abbreviation": "NBA",
-              "links": {
-                "mobile": {
-                  "leagues": {
-                    "href": "https://www.espn.com/nba/"
-                  }
-                },
-                "web": {
-                  "leagues": {
-                    "href": "https://www.espn.com/nba/"
-                  }
-                }
-              }
-            }
-          },
-          {
-            "id": 159574,
-            "type": "athlete",
-            "uid": "s:40~l:46~a:3945274",
-            "guid": "583794eb-0f38-9bbd-3e25-9dd33b7f83b8",
-            "description": "Luka Doncic",
-            "sportId": 46,
-            "athleteId": 3945274,
-            "athlete": {
-              "id": 3945274,
-              "description": "Luka Doncic",
-              "links": {
-                "mobile": {
-                  "athletes": {
-                    "href": "https://www.espn.com/nba/player/_/id/3945274/luka-doncic"
-                  }
-                },
-                "web": {
-                  "athletes": {
-                    "href": "https://www.espn.com/nba/player/_/id/3945274/luka-doncic"
-                  }
-                }
-              }
-            }
-          },
-          {
-            "id": 4630,
-            "type": "team",
-            "uid": "s:40~l:46~t:13",
-            "guid": "2876e98b-b9bc-2920-4319-46e6943f8be4",
-            "description": "Los Angeles Lakers",
-            "sportId": 46,
-            "teamId": 13,
-            "team": {
-              "id": 13,
-              "description": "Los Angeles Lakers",
-              "abbreviation": "LAL",
-              "shortDisplayName": "Lakers",
-              "links": {
-                "mobile": {
-                  "teams": {
-                    "href": "https://www.espn.com/nba/team/_/name/lal/los-angeles-lakers"
-                  }
-                },
-                "web": {
-                  "teams": {
-                    "href": "https://www.espn.com/nba/team/_/name/lal/los-angeles-lakers"
-                  }
-                }
-              }
-            }
-          },
-          {
-            "id": 4564,
-            "type": "team",
-            "uid": "s:40~l:46~t:26",
-            "guid": "77cea2fb-1388-b7c8-d171-2e72b3aecbfb",
-            "description": "Utah Jazz",
-            "sportId": 46,
-            "teamId": 26,
-            "team": {
-              "id": 26,
-              "description": "Utah Jazz",
-              "abbreviation": "UTAH",
-              "shortDisplayName": "Jazz",
-              "links": {
-                "mobile": {
-                  "teams": {
-                    "href": "https://www.espn.com/nba/team/_/name/utah/utah-jazz"
-                  }
-                },
-                "web": {
-                  "teams": {
-                    "href": "https://www.espn.com/nba/team/_/name/utah/utah-jazz"
-                  }
-                }
-              }
-            }
-          },
-          {
-            "id": 503007,
-            "type": "athlete",
-            "uid": "s:40~l:46~a:4066457",
-            "guid": "8a9d9e1c-6174-0009-4883-3b4e16b492d0",
-            "description": "Austin Reaves",
-            "sportId": 46,
-            "athleteId": 4066457,
-            "athlete": {
-              "id": 4066457,
-              "description": "Austin Reaves",
-              "links": {
-                "mobile": {
-                  "athletes": {
-                    "href": "https://www.espn.com/nba/player/_/id/4066457/austin-reaves"
-                  }
-                },
-                "web": {
-                  "athletes": {
-                    "href": "https://www.espn.com/nba/player/_/id/4066457/austin-reaves"
-                  }
-                }
-              }
-            }
-          },
-          {
-            "id": 760098,
-            "type": "contributor",
-            "guid": "f877b8fa-3df9-3c82-b503-dc37aea5f4cb",
-            "description": "Ben Golliver",
-            "slug": "ben-golliver",
-            "contributor": {
-              "id": 4381,
-              "description": "Ben Golliver"
-            }
-          }
-        ],
-        "byline": "Ben Golliver",
-        "links": {
-          "api": {
-            "self": {
-              "href": "https://content.core.api.espn.com/v1/sports/news/50522350"
-            }
-          },
-          "app": {
-            "sportscenter": {
-              "href": "sportscenter://x-callback-url/showStory?uid=50522350"
-            }
-          },
-          "mobile": {
-            "href": "http://m.espn.go.com/nba/story?storyId=50522350"
-          },
-          "web": {
-            "href": "https://www.espn.com/nba/story/_/id/50522350/luka-doncic-lakers-offense-usage-rate"
-          }
-        },
-        "premium": false
-      }
-    ]
-  },
   "plays": [
     {
       "id": "4019099904",
@@ -34175,8 +34140,8 @@
                   "description": "Games Back",
                   "abbreviation": "GB",
                   "type": "gamesbehind",
-                  "value": 4.0,
-                  "displayValue": "4"
+                  "value": 3.5,
+                  "displayValue": "3.5"
                 },
                 {
                   "name": "losses",
@@ -34195,8 +34160,8 @@
                   "description": "Current Streak",
                   "abbreviation": "STRK",
                   "type": "streak",
-                  "value": 2.0,
-                  "displayValue": "W2"
+                  "value": 3.0,
+                  "displayValue": "W3"
                 },
                 {
                   "name": "winPercent",
@@ -34205,8 +34170,8 @@
                   "description": "Winning Percentage",
                   "abbreviation": "PCT",
                   "type": "winpercent",
-                  "value": 0.5714286,
-                  "displayValue": ".571"
+                  "value": 0.6,
+                  "displayValue": ".600"
                 },
                 {
                   "name": "wins",
@@ -34215,8 +34180,8 @@
                   "description": "Wins",
                   "abbreviation": "W",
                   "type": "wins",
-                  "value": 8.0,
-                  "displayValue": "8"
+                  "value": 9.0,
+                  "displayValue": "9"
                 }
               ],
               "logo": [
